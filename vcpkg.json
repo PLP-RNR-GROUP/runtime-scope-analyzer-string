@@ -1,0 +1,10 @@
+{
+  "name" : "runtime",
+  "version-string" : "1.0.0",
+  "builtin-baseline" : "cc97b4536ae749ec0e4f643488b600b217540fb3",
+  "dependencies" : [ {
+    "name" : "nlohmann-json",
+    "version>=" : "3.11.2",
+    "$comment" : "    find_package(nlohmann_json CONFIG REQUIRED)\n\n    target_link_libraries(main PRIVATE nlohmann_json::nlohmann_json)\n"
+  } ]
+}
