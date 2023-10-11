@@ -1,0 +1,4 @@
+add_library(construction_handlers QuoteHandler.cpp)
+
+target_include_directories(construction_handlers PUBLIC include)
+target_link_libraries(construction_handlers PUBLIC constructions)

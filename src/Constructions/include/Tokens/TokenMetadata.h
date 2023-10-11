@@ -5,8 +5,11 @@
 #ifndef RUNTIME_SRC_INCLUDE_ANALYZER_TOKENMETADATA_H_
 #define RUNTIME_SRC_INCLUDE_ANALYZER_TOKENMETADATA_H_
 
-#include <vector>
 #include "nlohmann/json.hpp"
+#include "Constructions/Construction.h"
+
+#include <vector>
+#include <set>
 
 using json = nlohmann::json;
 
@@ -20,8 +23,7 @@ struct TokenMetadata {
   bool endsWithSlash;
   bool startsWithSlash;
 
-  std::vector<int32_t> quotationMarksIndexes;
-  std::vector<int32_t> curlyBracesIndexes;
+  std::set<Construction> constructions;
 };
 
 static void from_json(const json& j, TokenMetadata& p) {
@@ -34,8 +36,7 @@ static void from_json(const json& j, TokenMetadata& p) {
   j.at("endsWithSlash").get_to(p.endsWithSlash);
   j.at("startsWithSlash").get_to(p.startsWithSlash);
 
-  j.at("quotationMarksIndexes").get_to(p.quotationMarksIndexes);
-  j.at("curlyBracesIndexes").get_to(p.curlyBracesIndexes);
+  j.at("constructions").get_to(p.constructions);
 }
 
 #endif //RUNTIME_SRC_INCLUDE_ANALYZER_TOKENMETADATA_H_
