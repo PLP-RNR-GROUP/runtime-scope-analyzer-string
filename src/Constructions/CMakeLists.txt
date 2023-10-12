@@ -1,4 +1,4 @@
-add_library(constructions ConstructionsConverter.cpp)
+add_library(constructions ConstructionsStreamExtractor.cpp)
 
 target_include_directories(constructions PUBLIC include ${CMAKE_CURRENT_SOURCE_DIR})
 
