@@ -6,13 +6,18 @@
 #define RUNTIME_SRC_INCLUDE_SCOPEANALYZER_CONSTRUCTIONS_CONSTRUCTION_H_
 
 #include "ConstructionState.h"
-#include "ConstructionTypes.h"
+#include "ConstructionType.h"
+#include "nlohmann/json.hpp"
 
 using json = nlohmann::json;
 
 struct Construction {
+  // TODO:
+  Construction() = default;
+  Construction(ConstructionState state, ConstructionType type, size_t pos) : state(state), type(type), pos(pos) {}
+
   ConstructionState state;
-  ConstructionTypes type;
+  ConstructionType type;
   size_t pos;
 
   bool operator<(const Construction& rhs) const {
@@ -26,6 +31,14 @@ struct Construction {
   }
   bool operator>=(const Construction& rhs) const {
     return !(*this < rhs);
+  }
+  bool operator==(const Construction& rhs) const {
+    return state == rhs.state &&
+        type == rhs.type &&
+        pos == rhs.pos;
+  }
+  bool operator!=(const Construction& rhs) const {
+    return !(rhs == *this);
   }
 };
 

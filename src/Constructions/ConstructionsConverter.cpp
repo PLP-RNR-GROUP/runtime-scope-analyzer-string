@@ -1,12 +1,15 @@
 //
 // Created by Даник 💪 on 10.10.2023.
 //
-#include "Constructions/ConstructionsConverter.h"
+#include "Constructions/ConstructionsStreamExtractor.h"
 #include "nlohmann/json.hpp"
 
 using json = nlohmann::json;
 
-ConstructionsConverter::ConstructionsConverter(std::ifstream& vocab_file) {
+ConstructionsStreamExtractor::ConstructionsStreamExtractor(std::ifstream& vocab_file) {
+  previous_token = nullptr;
+  sequence_length = 0;
+  
   // Deserialize std::map from JSON;
   json parsed_vocab = json::parse(vocab_file);
 
@@ -18,13 +21,25 @@ ConstructionsConverter::ConstructionsConverter(std::ifstream& vocab_file) {
     vocab_[token_key] = currentTokenMetadata;
   }
 }
-std::set<Construction> ConstructionsConverter::ParseFromToken(int32_t token) {
+std::set<Construction> ConstructionsStreamExtractor::Get(int32_t token) {
   TokenMetadata token_metadata = vocab_.at(token);
-  std::set<Construction> output_constructions;
+  if (previous_token == nullptr) return token_metadata.constructions;
 
-  std::set_union(token_metadata.curlyBraces.cbegin(), token_metadata.curlyBraces.cend(),
-                 token_metadata.quotationMarks.cbegin(), token_metadata.quotationMarks.cend(),
-                 std::inserter(output_constructions, output_constructions.begin()));
+  auto constructions = token_metadata.constructions;
+  size_t last_symbol_pos = sequence_length + previous_token->length;
 
-  return output_constructions;
+  if (previous_token->endsWithSlash && token_metadata.startsWithSlash) {
+    Construction short_comment = Construction(Opened, ShortComment, last_symbol_pos);
+    constructions.insert(short_comment);
+  }
+  else if (previous_token->endsWithStar && token_metadata.startsWithSlash) {
+    Construction end_long_comment = Construction(Closed, LongComment, last_symbol_pos);
+    constructions.insert(end_long_comment);
+  }
+  else if (previous_token->endsWithSlash && token_metadata.startsWithStar) {
+    Construction end_long_comment = Construction(Closed, LongComment, last_symbol_pos);
+    constructions.insert(end_long_comment);
+  }
+
+  return constructions;
 }

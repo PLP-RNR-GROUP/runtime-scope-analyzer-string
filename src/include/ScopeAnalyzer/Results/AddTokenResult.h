@@ -5,7 +5,7 @@
 #ifndef RUNTIME_SRC_INCLUDE_ANALYZER_RESULTS_ADDWORDRESULT_H_
 #define RUNTIME_SRC_INCLUDE_ANALYZER_RESULTS_ADDWORDRESULT_H_
 
-enum AddWordResult {
+enum AddTokenResult {
   Stop,
   Continue
 };

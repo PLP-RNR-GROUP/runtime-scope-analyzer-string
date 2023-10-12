@@ -23,6 +23,7 @@ struct TokenMetadata {
   bool endsWithSlash;
   bool startsWithSlash;
 
+  size_t length;
   std::set<Construction> constructions;
 };
 
@@ -36,6 +37,7 @@ static void from_json(const json& j, TokenMetadata& p) {
   j.at("endsWithSlash").get_to(p.endsWithSlash);
   j.at("startsWithSlash").get_to(p.startsWithSlash);
 
+  j.at("length").get_to(p.length);
   j.at("constructions").get_to(p.constructions);
 }
 

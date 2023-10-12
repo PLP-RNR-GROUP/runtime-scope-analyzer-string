@@ -12,12 +12,14 @@
 #include <map>
 #include <fstream>
 
-class ConstructionsConverter {
+class ConstructionsStreamExtractor {
  public:
-  explicit ConstructionsConverter(std::ifstream& vocab_file);
-  std::set<Construction> ParseFromToken(int32_t token);
+  explicit ConstructionsStreamExtractor(std::ifstream& vocab_file);
+  std::set<Construction> Get(int32_t token);
  private:
   std::map<int32_t, TokenMetadata> vocab_;
+  std::unique_ptr<TokenMetadata> previous_token;
+  size_t sequence_length;
 };
 
 #endif //RUNTIME_SRC_CONSTRUCTIONS_INCLUDE_CONSTRUCTIONS_TOKENTOCONSTRUCTIONSCONVERTER_H_

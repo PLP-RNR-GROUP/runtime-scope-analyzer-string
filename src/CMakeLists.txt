@@ -1,7 +1,6 @@
-add_subdirectory(ConstructionHandlers)
 add_subdirectory(Constructions)
 
 add_library(scope_lib ScopeAnalyzer.cpp)
 target_include_directories(scope_lib PUBLIC include ${CMAKE_CURRENT_SOURCE_DIR})
 
-target_link_libraries(scope_lib PUBLIC construction_handlers constructions)
+target_link_libraries(scope_lib PUBLIC constructions)
