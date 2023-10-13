@@ -7,9 +7,6 @@
 
 #include "nlohmann/json.hpp"
 #include "ScopeAnalyzer/Results/AddTokenResult.h"
-#include "Constructions/include/Tokens/TokenMetadata.h"
-
-#include "Constructions/include/Constructions/Construction.h"
 #include "Constructions/ConstructionsStreamExtractor.h"
 
 #include <fstream>

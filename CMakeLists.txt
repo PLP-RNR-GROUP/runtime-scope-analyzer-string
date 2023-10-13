@@ -4,6 +4,7 @@ project(runtime)
 set(CMAKE_CXX_STANDARD 14)
 
 add_subdirectory(src)
+add_subdirectory(lib)
 
 add_executable(runtime main.cpp)
 

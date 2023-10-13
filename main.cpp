@@ -7,7 +7,7 @@ int main() {
 
   std::ifstream vocabFile = std::ifstream(vocabPath);
 
-//  "{{{}}}\"void scope {}
+//  "{{{}}}"void scope {}
   std::vector<int32_t> tokens {7, 40210, 5768, 98, 7112, 3970, 5136, 2637};
 
   ScopeAnalyzer analyzer(vocabFile);
