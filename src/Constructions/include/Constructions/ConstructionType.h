@@ -6,7 +6,7 @@
 #define RUNTIME_SRC_INCLUDE_SCOPEANALYZER_SPECIALSYMBOLS_SPECIALSYMBOLTYPE_H_
 
 enum ConstructionType {
-  Quote,
+  Quote = 1,
   ShortComment,
   LongComment,
   Brace

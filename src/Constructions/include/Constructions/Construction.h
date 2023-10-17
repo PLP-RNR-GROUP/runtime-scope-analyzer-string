@@ -12,7 +12,6 @@
 using json = nlohmann::json;
 
 struct Construction {
-  // TODO:
   Construction() = default;
   Construction(ConstructionState state, ConstructionType type, size_t pos) : state(state), type(type), pos(pos) {}
 

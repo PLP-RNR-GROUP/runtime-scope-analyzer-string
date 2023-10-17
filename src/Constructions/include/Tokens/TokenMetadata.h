@@ -15,7 +15,6 @@ using json = nlohmann::json;
 
 struct TokenMetadata {
   bool endsWithBackslash;
-  bool startsWithBackslash;
 
   bool endsWithStar;
   bool startsWithStar;
@@ -29,7 +28,6 @@ struct TokenMetadata {
 
 static void from_json(const json& j, TokenMetadata& p) {
   j.at("endsWithBackslash").get_to(p.endsWithBackslash);
-  j.at("startsWithBackslash").get_to(p.startsWithBackslash);
 
   j.at("endsWithStar").get_to(p.endsWithStar);
   j.at("startsWithStar").get_to(p.startsWithStar);

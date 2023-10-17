@@ -6,13 +6,13 @@
 
 using json = nlohmann::json;
 
-ConstructionsStreamExtractor::ConstructionsStreamExtractor(std::ifstream& vocab_file) {
+ConstructionsStreamExtractor::ConstructionsStreamExtractor(const std::string& json_vocab) {
   previous_token = nullptr;
   sequence_length = 0;
-  
-  // Deserialize std::map from JSON;
-  json parsed_vocab = json::parse(vocab_file);
 
+  json parsed_vocab = json::parse(json_vocab);
+
+  // Deserialize std::map from JSON;
   for (json::iterator it = parsed_vocab.begin(); it != parsed_vocab.end(); ++it) {
     int32_t token_key = std::atoi(it.key().data());
 
