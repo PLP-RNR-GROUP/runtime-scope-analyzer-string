@@ -14,7 +14,7 @@
 
 class ConstructionsStreamExtractor {
  public:
-  explicit ConstructionsStreamExtractor(std::ifstream& vocab_file);
+  explicit ConstructionsStreamExtractor(const std::string& json_vocab);
   std::set<Construction> Get(int32_t token);
  private:
   std::map<int32_t, TokenMetadata> vocab_;

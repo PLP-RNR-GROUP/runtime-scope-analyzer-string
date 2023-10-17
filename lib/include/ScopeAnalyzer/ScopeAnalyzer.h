@@ -16,7 +16,7 @@ using json = nlohmann::json;
 
 class ScopeAnalyzer {
  public:
-  explicit ScopeAnalyzer(std::ifstream& vocabFile);
+  explicit ScopeAnalyzer(const std::string& json_vocab);
 
   AddTokenResult AddToken(int32_t token);
  private:
@@ -24,5 +24,18 @@ class ScopeAnalyzer {
   std::unique_ptr<Construction> waiting_for_construction_;
   int brace_balance;
 };
+
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+ScopeAnalyzer* scope_analyzer_new(const char* json_vocab);
+void scope_analyzer_del(ScopeAnalyzer* scope_analyzer);
+AddTokenResult add_token(ScopeAnalyzer* scope_analyzer, int32_t token);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif //RUNTIME_SRC_ANALYZER_H_

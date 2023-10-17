@@ -6,7 +6,7 @@
 #define RUNTIME_SRC_INCLUDE_ANALYZER_RESULTS_ADDWORDRESULT_H_
 
 enum AddTokenResult {
-  Stop,
+  Stop = 1,
   Continue
 };
 

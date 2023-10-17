@@ -6,7 +6,7 @@
 #define RUNTIME_SRC_INCLUDE_SCOPEANALYZER_CONSTRUCTIONS_CONSTRUCTIONSTATE_H_
 
 enum ConstructionState {
-  Undefined,
+  Undefined = 1,
   Closed,
   Opened
 };

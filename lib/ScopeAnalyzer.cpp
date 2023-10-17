@@ -4,7 +4,7 @@
 
 #include "ScopeAnalyzer/ScopeAnalyzer.h"
 
-ScopeAnalyzer::ScopeAnalyzer(std::ifstream& vocabFile) : constructions_extractor_(vocabFile) {
+ScopeAnalyzer::ScopeAnalyzer(const std::string& json_vocab) : constructions_extractor_(json_vocab) {
   waiting_for_construction_ = nullptr;
   brace_balance = 0;
 }
@@ -54,4 +54,18 @@ AddTokenResult ScopeAnalyzer::AddToken(int32_t token) {
     return Stop;
   }
   return Continue;
+}
+
+// Обвязка C для методов C++
+
+ScopeAnalyzer* scope_analyzer_new(const char* json_vocab) {
+  return new ScopeAnalyzer(std::string(json_vocab));
+}
+
+void scope_analyzer_del(ScopeAnalyzer* scope_analyzer) {
+  delete scope_analyzer;
+}
+
+AddTokenResult add_token(ScopeAnalyzer* scope_analyzer, int32_t token) {
+  return scope_analyzer->AddToken(token);
 }
