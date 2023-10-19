@@ -6,7 +6,7 @@
 #define RUNTIME_SRC_INCLUDE_ANALYZER_TOKENMETADATA_H_
 
 #include "nlohmann/json.hpp"
-#include "Constructions/Construction.h"
+#include "Constructions/ConstructionWithPosition.h"
 
 #include <vector>
 #include <set>
@@ -23,7 +23,7 @@ struct TokenMetadata {
   bool startsWithSlash;
 
   size_t length;
-  std::set<Construction> constructions;
+  std::set<ConstructionWithPosition> constructions;
 };
 
 static void from_json(const json& j, TokenMetadata& p) {

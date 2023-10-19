@@ -8,6 +8,7 @@
 #include "nlohmann/json.hpp"
 #include "ScopeAnalyzer/Results/AddTokenResult.h"
 #include "Constructions/ConstructionsStreamExtractor.h"
+#include "StartContext.h"
 
 #include <fstream>
 #include <list>
@@ -16,7 +17,7 @@ using json = nlohmann::json;
 
 class ScopeAnalyzer {
  public:
-  explicit ScopeAnalyzer(const std::string& json_vocab);
+  explicit ScopeAnalyzer(const std::string& json_vocab, StartContext context);
 
   AddTokenResult AddToken(int32_t token);
  private:
@@ -30,7 +31,7 @@ class ScopeAnalyzer {
 extern "C" {
 #endif
 
-ScopeAnalyzer* scope_analyzer_new(const char* json_vocab);
+ScopeAnalyzer* scope_analyzer_new(const char* json_vocab, StartContext* context);
 void scope_analyzer_del(ScopeAnalyzer* scope_analyzer);
 AddTokenResult add_token(ScopeAnalyzer* scope_analyzer, int32_t token);
 

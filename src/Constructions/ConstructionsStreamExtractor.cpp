@@ -21,7 +21,7 @@ ConstructionsStreamExtractor::ConstructionsStreamExtractor(const std::string& js
     vocab_[token_key] = currentTokenMetadata;
   }
 }
-std::set<Construction> ConstructionsStreamExtractor::Get(int32_t token) {
+std::set<ConstructionWithPosition> ConstructionsStreamExtractor::Get(int32_t token) {
   TokenMetadata token_metadata = vocab_.at(token);
   if (previous_token == nullptr) return token_metadata.constructions;
 
@@ -29,15 +29,15 @@ std::set<Construction> ConstructionsStreamExtractor::Get(int32_t token) {
   size_t last_symbol_pos = sequence_length + previous_token->length;
 
   if (previous_token->endsWithSlash && token_metadata.startsWithSlash) {
-    Construction short_comment = Construction(Opened, ShortComment, last_symbol_pos);
+    ConstructionWithPosition short_comment = ConstructionWithPosition(Opened, ShortComment, last_symbol_pos);
     constructions.insert(short_comment);
   }
   else if (previous_token->endsWithStar && token_metadata.startsWithSlash) {
-    Construction end_long_comment = Construction(Closed, LongComment, last_symbol_pos);
+    ConstructionWithPosition end_long_comment = ConstructionWithPosition(Closed, LongComment, last_symbol_pos);
     constructions.insert(end_long_comment);
   }
   else if (previous_token->endsWithSlash && token_metadata.startsWithStar) {
-    Construction end_long_comment = Construction(Closed, LongComment, last_symbol_pos);
+    ConstructionWithPosition end_long_comment = ConstructionWithPosition(Closed, LongComment, last_symbol_pos);
     constructions.insert(end_long_comment);
   }
 
