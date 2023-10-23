@@ -20,7 +20,9 @@ class ScopeAnalyzer {
   explicit ScopeAnalyzer(const std::string& json_vocab, StartContext context);
 
   AddTokenResult AddToken(int32_t token);
+  void ResetState(StartContext context);
  private:
+  void ApplyContext(StartContext context);
   ConstructionsStreamExtractor constructions_extractor_;
   std::unique_ptr<Construction> waiting_for_construction_;
   int brace_balance;
@@ -33,6 +35,7 @@ extern "C" {
 
 ScopeAnalyzer* scope_analyzer_new(const char* json_vocab, StartContext* context);
 void scope_analyzer_del(ScopeAnalyzer* scope_analyzer);
+void apply_context(ScopeAnalyzer* scope_analyzer, StartContext* context);
 AddTokenResult add_token(ScopeAnalyzer* scope_analyzer, int32_t token);
 
 #ifdef __cplusplus

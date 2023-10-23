@@ -8,37 +8,7 @@ ScopeAnalyzer::ScopeAnalyzer(const std::string& json_vocab, const StartContext c
   waiting_for_construction_ = nullptr;
   brace_balance = 0;
 
-  if (context.in_character + context.in_long_comment + context.in_short_comment + context.in_string > 1) {
-    throw std::invalid_argument("start context is invalid");
-  }
-
-  if (context.in_character) {
-    waiting_for_construction_ = std::make_unique<Construction>(
-        Undefined,
-        CharacterQuote);
-  }
-  else if (context.in_string) {
-    waiting_for_construction_ = std::make_unique<Construction>(
-        Undefined,
-        StringQuote
-        );
-  }
-  else if (context.in_short_comment) {
-    waiting_for_construction_ = std::make_unique<Construction>(
-        Closed,
-        ShortComment
-    );
-  }
-  else if (context.in_long_comment) {
-    waiting_for_construction_ = std::make_unique<Construction>(
-        Closed,
-        LongComment
-    );
-  }
-
-  if (context.scope_opened) {
-    brace_balance = 1;
-  }
+  ApplyContext(context);
 }
 
 AddTokenResult ScopeAnalyzer::AddToken(int32_t token) {
@@ -84,10 +54,54 @@ AddTokenResult ScopeAnalyzer::AddToken(int32_t token) {
   return Continue;
 }
 
+void ScopeAnalyzer::ResetState(StartContext context) {
+  waiting_for_construction_ = nullptr;
+  brace_balance = 0;
+  ApplyContext(context);
+}
+
+void ScopeAnalyzer::ApplyContext(StartContext context) {
+  if (context.in_character + context.in_long_comment + context.in_short_comment + context.in_string > 1) {
+    throw std::invalid_argument("start context is invalid");
+  }
+
+  if (context.in_character) {
+    waiting_for_construction_ = std::make_unique<Construction>(
+        Undefined,
+        CharacterQuote);
+  }
+  else if (context.in_string) {
+    waiting_for_construction_ = std::make_unique<Construction>(
+        Undefined,
+        StringQuote
+    );
+  }
+  else if (context.in_short_comment) {
+    waiting_for_construction_ = std::make_unique<Construction>(
+        Closed,
+        ShortComment
+    );
+  }
+  else if (context.in_long_comment) {
+    waiting_for_construction_ = std::make_unique<Construction>(
+        Closed,
+        LongComment
+    );
+  }
+
+  if (context.scope_opened) {
+    brace_balance = 1;
+  }
+}
+
 // Обвязка C для методов C++
 
 ScopeAnalyzer* scope_analyzer_new(const char* json_vocab, StartContext* context) {
   return new ScopeAnalyzer(std::string(json_vocab), *context);
+}
+
+void apply_context(ScopeAnalyzer* scope_analyzer, StartContext* context) {
+  scope_analyzer->ResetState(*context);
 }
 
 void scope_analyzer_del(ScopeAnalyzer* scope_analyzer) {
