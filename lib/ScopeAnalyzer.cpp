@@ -10,9 +10,9 @@
 #include "Handlers/Types/LongCommentHandler.h"
 #include "Handlers/Types/ShortCommentHandler.h"
 
-ScopeAnalyzer::ScopeAnalyzer(const std::string& json_vocab, const ScopeContext context) : constructions_extractor_(json_vocab) {
+ScopeAnalyzer::ScopeAnalyzer(const std::string& json_vocab, const ScopeContext context) : constructions_extractor_(json_vocab),
+                                                                                          state_(ScopeState(0)) {
   waiting_for_construction_ = nullptr;
-  brace_balance = 0;
 
   handlers_ = std::vector<std::unique_ptr<IHandler, IHandler::Deleter>>();
   handlers_.push_back(std::unique_ptr<StringQuoteHandler, IHandler::Deleter>(new StringQuoteHandler()));
@@ -39,10 +39,10 @@ AddTokenResult ScopeAnalyzer::AddToken(int32_t token) {
         case Undefined:
           throw std::invalid_argument("invalid state");
         case Closed:
-          --brace_balance;
+          --state_.brace_balance;
           break;
         case Opened:
-          ++brace_balance;
+          ++state_.brace_balance;
           break;
       }
       updated_brace_balance = true;
@@ -58,7 +58,7 @@ AddTokenResult ScopeAnalyzer::AddToken(int32_t token) {
     }
   }
 
-  if (updated_brace_balance && brace_balance <= 0) {
+  if (updated_brace_balance && state_.brace_balance <= 0) {
     return Stop;
   }
   return Continue;
@@ -66,7 +66,7 @@ AddTokenResult ScopeAnalyzer::AddToken(int32_t token) {
 
 void ScopeAnalyzer::ResetState(ScopeContext context) {
   waiting_for_construction_ = nullptr;
-  brace_balance = 0;
+  state_.brace_balance = 0;
   ApplyContext(context);
 }
 
@@ -101,7 +101,7 @@ void ScopeAnalyzer::ApplyContext(ScopeContext context) {
   }
 
   if (context.scope_opened) {
-    brace_balance = 1;
+    state_.brace_balance = 1;
   }
 }
 

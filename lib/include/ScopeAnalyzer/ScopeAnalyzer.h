@@ -10,6 +10,7 @@
 #include "Constructions/ConstructionsStreamExtractor.h"
 #include "ScopeContext.h"
 #include "Handlers/IHandler.h"
+#include "ScopeState/ScopeState.h"
 
 #include <fstream>
 #include <vector>
@@ -24,10 +25,12 @@ class ScopeAnalyzer {
   void ResetState(ScopeContext context);
  private:
   void ApplyContext(ScopeContext context);
+
   ConstructionsStreamExtractor constructions_extractor_;
   std::vector<std::unique_ptr<IHandler, IHandler::Deleter>> handlers_;
+
   std::unique_ptr<Construction> waiting_for_construction_;
-  int brace_balance;
+  ScopeState state_;
 };
 
 
