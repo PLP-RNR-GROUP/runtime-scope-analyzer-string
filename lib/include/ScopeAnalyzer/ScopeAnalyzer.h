@@ -9,9 +9,10 @@
 #include "ScopeAnalyzer/Results/AddTokenResult.h"
 #include "Constructions/ConstructionsStreamExtractor.h"
 #include "StartContext.h"
+#include "Handlers/IHandler.h"
 
 #include <fstream>
-#include <list>
+#include <vector>
 
 using json = nlohmann::json;
 
@@ -24,6 +25,7 @@ class ScopeAnalyzer {
  private:
   void ApplyContext(StartContext context);
   ConstructionsStreamExtractor constructions_extractor_;
+  std::vector<std::unique_ptr<IHandler, IHandler::Deleter>> handlers_;
   std::unique_ptr<Construction> waiting_for_construction_;
   int brace_balance;
 };

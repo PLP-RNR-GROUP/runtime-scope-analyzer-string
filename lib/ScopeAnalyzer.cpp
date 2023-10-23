@@ -2,11 +2,23 @@
 // Created by Даник 💪 on 09.10.2023.
 //
 
+#include <memory>
+
 #include "ScopeAnalyzer/ScopeAnalyzer.h"
+#include "Handlers/Types/StringQuoteHandler.h"
+#include "Handlers/Types/CharacterQuoteHandler.h"
+#include "Handlers/Types/LongCommentHandler.h"
+#include "Handlers/Types/ShortCommentHandler.h"
 
 ScopeAnalyzer::ScopeAnalyzer(const std::string& json_vocab, const StartContext context) : constructions_extractor_(json_vocab) {
   waiting_for_construction_ = nullptr;
   brace_balance = 0;
+
+  handlers_ = std::vector<std::unique_ptr<IHandler, IHandler::Deleter>>();
+  handlers_.push_back(std::unique_ptr<StringQuoteHandler, StringQuoteHandler::Deleter>(new StringQuoteHandler()));
+  handlers_.push_back(std::unique_ptr<CharacterQuoteHandler, CharacterQuoteHandler::Deleter>(new CharacterQuoteHandler()));
+  handlers_.push_back(std::unique_ptr<LongCommentHandler, LongCommentHandler::Deleter>(new LongCommentHandler()));
+  handlers_.push_back(std::unique_ptr<ShortCommentHandler, ShortCommentHandler::Deleter>(new ShortCommentHandler()));
 
   ApplyContext(context);
 }
@@ -25,7 +37,7 @@ AddTokenResult ScopeAnalyzer::AddToken(int32_t token) {
     if (construction.type == Brace) {
       switch (construction.state) {
         case Undefined:
-          throw std::runtime_error("invalid state");
+          throw std::invalid_argument("invalid state");
         case Closed:
           --brace_balance;
           break;
@@ -37,14 +49,12 @@ AddTokenResult ScopeAnalyzer::AddToken(int32_t token) {
       continue;
     }
 
-    if (construction.state == Opened) {
-      waiting_for_construction_ = std::make_unique<Construction>(Construction(Closed, construction.type));
-      continue;
-    }
-
-    if (construction.type == StringQuote || construction.type == CharacterQuote) {
-      waiting_for_construction_ = std::make_unique<Construction>(Construction(construction));
-      continue;
+    for (const auto& kHandler: handlers_) {
+      auto handleResult = kHandler->Handle(construction);
+      if (handleResult != nullptr) {
+        waiting_for_construction_ = std::move(handleResult);
+        break;
+      }
     }
   }
 
@@ -65,6 +75,7 @@ void ScopeAnalyzer::ApplyContext(StartContext context) {
     throw std::invalid_argument("start context is invalid");
   }
 
+  // TODO: Make interface
   if (context.in_character) {
     waiting_for_construction_ = std::make_unique<Construction>(
         Undefined,
