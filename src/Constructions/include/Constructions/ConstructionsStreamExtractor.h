@@ -7,6 +7,7 @@
 
 #include "Construction.h"
 #include "Tokens/TokenMetadata.h"
+#include "ConstructionWithPosition.h"
 
 #include <set>
 #include <map>
@@ -15,7 +16,7 @@
 class ConstructionsStreamExtractor {
  public:
   explicit ConstructionsStreamExtractor(const std::string& json_vocab);
-  std::set<Construction> Get(int32_t token);
+  std::set<ConstructionWithPosition> Get(int32_t token);
  private:
   std::map<int32_t, TokenMetadata> vocab_;
   std::unique_ptr<TokenMetadata> previous_token;

@@ -13,38 +13,18 @@ using json = nlohmann::json;
 
 struct Construction {
   Construction() = default;
-  Construction(ConstructionState state, ConstructionType type, size_t pos) : state(state), type(type), pos(pos) {}
+  Construction(ConstructionState state, ConstructionType type) : state(state), type(type) {}
 
   ConstructionState state;
   ConstructionType type;
-  size_t pos;
 
-  bool operator<(const Construction& rhs) const {
-    return pos < rhs.pos;
-  }
-  bool operator>(const Construction& rhs) const {
-    return rhs < *this;
-  }
-  bool operator<=(const Construction& rhs) const {
-    return !(rhs < *this);
-  }
-  bool operator>=(const Construction& rhs) const {
-    return !(*this < rhs);
-  }
   bool operator==(const Construction& rhs) const {
     return state == rhs.state &&
-        type == rhs.type &&
-        pos == rhs.pos;
+        type == rhs.type;
   }
   bool operator!=(const Construction& rhs) const {
     return !(rhs == *this);
   }
 };
-
-static void from_json(const json& j, Construction& p) {
-  j.at("state").get_to(p.state);
-  j.at("type").get_to(p.type);
-  j.at("pos").get_to(p.pos);
-}
 
 #endif //RUNTIME_SRC_INCLUDE_SCOPEANALYZER_CONSTRUCTIONS_CONSTRUCTION_H_
