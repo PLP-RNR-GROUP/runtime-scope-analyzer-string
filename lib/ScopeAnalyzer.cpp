@@ -2,11 +2,23 @@
 // Created by Даник 💪 on 09.10.2023.
 //
 
-#include "ScopeAnalyzer/ScopeAnalyzer.h"
+#include <memory>
 
-ScopeAnalyzer::ScopeAnalyzer(const std::string& json_vocab, const StartContext context) : constructions_extractor_(json_vocab) {
+#include "ScopeAnalyzer/ScopeAnalyzer.h"
+#include "Handlers/Types/StringQuoteHandler.h"
+#include "Handlers/Types/CharacterQuoteHandler.h"
+#include "Handlers/Types/LongCommentHandler.h"
+#include "Handlers/Types/ShortCommentHandler.h"
+
+ScopeAnalyzer::ScopeAnalyzer(const std::string& json_vocab, const ScopeContext context) : constructions_extractor_(json_vocab),
+                                                                                          state_(ScopeState(0)) {
   waiting_for_construction_ = nullptr;
-  brace_balance = 0;
+
+  handlers_ = std::vector<std::unique_ptr<IHandler, IHandler::Deleter>>();
+  handlers_.push_back(std::unique_ptr<StringQuoteHandler, IHandler::Deleter>(new StringQuoteHandler()));
+  handlers_.push_back(std::unique_ptr<CharacterQuoteHandler, IHandler::Deleter>(new CharacterQuoteHandler()));
+  handlers_.push_back(std::unique_ptr<LongCommentHandler, IHandler::Deleter>(new LongCommentHandler()));
+  handlers_.push_back(std::unique_ptr<ShortCommentHandler, IHandler::Deleter>(new ShortCommentHandler()));
 
   ApplyContext(context);
 }
@@ -25,46 +37,45 @@ AddTokenResult ScopeAnalyzer::AddToken(int32_t token) {
     if (construction.type == Brace) {
       switch (construction.state) {
         case Undefined:
-          throw std::runtime_error("invalid state");
+          throw std::invalid_argument("invalid state");
         case Closed:
-          --brace_balance;
+          --state_.brace_balance;
           break;
         case Opened:
-          ++brace_balance;
+          ++state_.brace_balance;
           break;
       }
       updated_brace_balance = true;
       continue;
     }
 
-    if (construction.state == Opened) {
-      waiting_for_construction_ = std::make_unique<Construction>(Construction(Closed, construction.type));
-      continue;
-    }
-
-    if (construction.type == StringQuote || construction.type == CharacterQuote) {
-      waiting_for_construction_ = std::make_unique<Construction>(Construction(construction));
-      continue;
+    for (const auto& kHandler: handlers_) {
+      auto handleResult = kHandler->Handle(construction, state_);
+      if (handleResult != nullptr) {
+        waiting_for_construction_ = std::move(handleResult);
+        break;
+      }
     }
   }
 
-  if (updated_brace_balance && brace_balance <= 0) {
+  if (updated_brace_balance && state_.brace_balance <= 0) {
     return Stop;
   }
   return Continue;
 }
 
-void ScopeAnalyzer::ResetState(StartContext context) {
+void ScopeAnalyzer::ResetState(ScopeContext context) {
   waiting_for_construction_ = nullptr;
-  brace_balance = 0;
+  state_.brace_balance = 0;
   ApplyContext(context);
 }
 
-void ScopeAnalyzer::ApplyContext(StartContext context) {
+void ScopeAnalyzer::ApplyContext(ScopeContext context) {
   if (context.in_character + context.in_long_comment + context.in_short_comment + context.in_string > 1) {
     throw std::invalid_argument("start context is invalid");
   }
 
+  // TODO: Make interface
   if (context.in_character) {
     waiting_for_construction_ = std::make_unique<Construction>(
         Undefined,
@@ -90,17 +101,17 @@ void ScopeAnalyzer::ApplyContext(StartContext context) {
   }
 
   if (context.scope_opened) {
-    brace_balance = 1;
+    state_.brace_balance = 1;
   }
 }
 
 // Обвязка C для методов C++
 
-ScopeAnalyzer* scope_analyzer_new(const char* json_vocab, StartContext* context) {
+ScopeAnalyzer* scope_analyzer_new(const char* json_vocab, ScopeContext* context) {
   return new ScopeAnalyzer(std::string(json_vocab), *context);
 }
 
-void apply_context(ScopeAnalyzer* scope_analyzer, StartContext* context) {
+void apply_context(ScopeAnalyzer* scope_analyzer, ScopeContext* context) {
   scope_analyzer->ResetState(*context);
 }
 
