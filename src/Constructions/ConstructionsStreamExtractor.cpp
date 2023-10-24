@@ -2,6 +2,8 @@
 // Created by Даник 💪 on 10.10.2023.
 //
 #include "Constructions/ConstructionsStreamExtractor.h"
+
+#include <utility>
 #include "nlohmann/json.hpp"
 
 using json = nlohmann::json;
@@ -21,8 +23,25 @@ ConstructionsStreamExtractor::ConstructionsStreamExtractor(const std::string& js
     vocab_[token_key] = currentTokenMetadata;
   }
 }
+
+class PrevTokenSetter{
+ public:
+  PrevTokenSetter(TokenMetadata current_token, std::unique_ptr<TokenMetadata>& previous_token)
+  : current_token(std::move(current_token)),
+    previous_token(previous_token) {}
+
+  ~PrevTokenSetter() {
+    previous_token = std::make_unique<TokenMetadata>(current_token);
+  }
+ private:
+  TokenMetadata current_token;
+  std::unique_ptr<TokenMetadata>& previous_token;
+};
+
 std::set<ConstructionWithPosition> ConstructionsStreamExtractor::Get(int32_t token) {
   TokenMetadata token_metadata = vocab_.at(token);
+  PrevTokenSetter token_setter(token_metadata, previous_token);
+
   if (previous_token == nullptr) return token_metadata.constructions;
 
   auto constructions = token_metadata.constructions;
@@ -42,12 +61,12 @@ std::set<ConstructionWithPosition> ConstructionsStreamExtractor::Get(int32_t tok
     constructions.insert(end_long_comment);
   }
 
-  if (token_metadata.constructions.empty()) return constructions;
+  if (constructions.empty()) return constructions;
 
   // Remove escaped constructions
-  ConstructionWithPosition first_construction = *token_metadata.constructions.begin();
+  ConstructionWithPosition first_construction = *constructions.begin();
   if (previous_token->endsWithBackslash && first_construction.pos == 0) {
-    token_metadata.constructions.erase(first_construction);
+    constructions.erase(first_construction);
   }
 
   return constructions;
