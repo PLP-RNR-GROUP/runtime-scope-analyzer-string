@@ -3,7 +3,7 @@
 //
 
 #include "Handlers/Types/ShortCommentHandler.h"
-std::unique_ptr<Construction> ShortCommentHandler::Handle(const Construction& construction) {
+std::unique_ptr<Construction> ShortCommentHandler::Handle(const Construction& construction, const ScopeState& state) {
   if (construction.type == ShortComment && construction.state == Opened) {
     return std::make_unique<Construction>(Opened, ShortComment);
   }

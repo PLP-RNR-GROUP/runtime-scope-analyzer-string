@@ -28,6 +28,7 @@ std::set<ConstructionWithPosition> ConstructionsStreamExtractor::Get(int32_t tok
   auto constructions = token_metadata.constructions;
   size_t last_symbol_pos = sequence_length + previous_token->length;
 
+  // TODO: abstraction
   if (previous_token->endsWithSlash && token_metadata.startsWithSlash) {
     ConstructionWithPosition short_comment = ConstructionWithPosition(Opened, ShortComment, last_symbol_pos);
     constructions.insert(short_comment);
@@ -39,6 +40,14 @@ std::set<ConstructionWithPosition> ConstructionsStreamExtractor::Get(int32_t tok
   else if (previous_token->endsWithSlash && token_metadata.startsWithStar) {
     ConstructionWithPosition end_long_comment = ConstructionWithPosition(Closed, LongComment, last_symbol_pos);
     constructions.insert(end_long_comment);
+  }
+
+  if (token_metadata.constructions.empty()) return constructions;
+
+  // Remove escaped constructions
+  ConstructionWithPosition first_construction = *token_metadata.constructions.begin();
+  if (previous_token->endsWithBackslash && first_construction.pos == 0) {
+    token_metadata.constructions.erase(first_construction);
   }
 
   return constructions;

@@ -8,7 +8,7 @@
 #include "Handlers/IHandler.h"
 class LongCommentHandler : public IHandler {
  public:
-  std::unique_ptr<Construction> Handle(const Construction& construction) override;
+  std::unique_ptr<Construction> Handle(const Construction& construction, const ScopeState& state) override;
 };
 
 #endif //RUNTIME_SRC_HANDLERS_INCLUDE_HANDLERS_TYPES_LONGCOMMENTHANDLER_H_

@@ -6,6 +6,7 @@
 #define RUNTIME_SRC_HANDLERS_INCLUDE_IHANDLER_H_
 
 #include "Constructions/Construction.h"
+#include "ScopeState/ScopeState.h"
 
 class IHandler {
  protected:
@@ -17,7 +18,7 @@ class IHandler {
   IHandler& operator=(const IHandler&) = delete;
 
   // Handle returns next waiting construction.
-  virtual std::unique_ptr<Construction> Handle(const Construction& construction) = 0;
+  virtual std::unique_ptr<Construction> Handle(const Construction& construction, const ScopeState& state) = 0;
 
   struct Deleter
   {

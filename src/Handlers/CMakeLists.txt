@@ -8,4 +8,4 @@ add_library(handlers
 
 target_include_directories(constructions PUBLIC include ${CMAKE_CURRENT_SOURCE_DIR})
 
-target_link_libraries(handlers PUBLIC constructions)
+target_link_libraries(handlers PUBLIC constructions scope_state)
