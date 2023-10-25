@@ -4,6 +4,8 @@ add_library(handlers
         Types/ShortCommentHandler.cpp
         Types/LongCommentHandler.cpp
         IHandler.cpp
+        HandlersList.cpp
+        include/Handlers/HandlersList.h
 )
 
 target_include_directories(constructions PUBLIC include ${CMAKE_CURRENT_SOURCE_DIR})

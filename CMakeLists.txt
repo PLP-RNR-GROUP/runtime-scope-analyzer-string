@@ -9,7 +9,7 @@ add_subdirectory(lib)
 add_executable(runtime main.cpp
         src/ScopeState/include/ScopeState/ScopeState.h
         src/Languages/LanguageHandlersSelector.cpp
-        src/Languages/LanguageHandlersSelector.h)
+        src/Languages/include/Languages/LanguageHandlersSelector.h)
 
 find_package(nlohmann_json CONFIG REQUIRED)
 target_link_libraries(runtime PUBLIC scope_lib nlohmann_json)

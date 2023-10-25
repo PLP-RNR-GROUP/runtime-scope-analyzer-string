@@ -5,6 +5,8 @@
 #ifndef RUNTIME_SRC_LANGUAGES_LANGUAGE_H_
 #define RUNTIME_SRC_LANGUAGES_LANGUAGE_H_
 
+const int languages_amount = 10;
+
 enum Language {
   Javascript,
   Java,
