@@ -11,6 +11,8 @@
 #include "ScopeContext.h"
 #include "Handlers/IHandler.h"
 #include "ScopeState/ScopeState.h"
+#include "Languages/Language.h"
+#include "Languages/LanguageHandlersSelector.h"
 
 #include <fstream>
 #include <vector>
@@ -19,15 +21,18 @@ using json = nlohmann::json;
 
 class ScopeAnalyzer {
  public:
-  explicit ScopeAnalyzer(const std::string& json_vocab, ScopeContext context);
+  explicit ScopeAnalyzer(const std::string& json_vocab,
+                         ScopeContext context,
+                         Language selected_language);
 
   AddTokenResult AddToken(int32_t token);
   void ResetState(ScopeContext context);
  private:
   void ApplyContext(ScopeContext context);
-
   ConstructionsStreamExtractor constructions_extractor_;
-  std::vector<std::unique_ptr<IHandler, IHandler::Deleter>> handlers_;
+
+  const handlers_list* handlers_;
+  LanguageHandlersSelector handlers_selector_;
 
   std::unique_ptr<Construction> waiting_for_construction_;
   ScopeState state_;
@@ -38,7 +43,7 @@ class ScopeAnalyzer {
 extern "C" {
 #endif
 
-ScopeAnalyzer* scope_analyzer_new(const char* json_vocab, ScopeContext* context);
+ScopeAnalyzer* scope_analyzer_new(const char* json_vocab, ScopeContext* context, Language selected_language);
 void scope_analyzer_del(ScopeAnalyzer* scope_analyzer);
 void apply_context(ScopeAnalyzer* scope_analyzer, ScopeContext* context);
 AddTokenResult add_token(ScopeAnalyzer* scope_analyzer, int32_t token);

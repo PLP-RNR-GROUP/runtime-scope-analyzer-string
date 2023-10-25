@@ -5,20 +5,13 @@
 #include <memory>
 
 #include "ScopeAnalyzer/ScopeAnalyzer.h"
-#include "Handlers/Types/StringQuoteHandler.h"
-#include "Handlers/Types/CharacterQuoteHandler.h"
-#include "Handlers/Types/LongCommentHandler.h"
-#include "Handlers/Types/ShortCommentHandler.h"
 
-ScopeAnalyzer::ScopeAnalyzer(const std::string& json_vocab, const ScopeContext context) : constructions_extractor_(json_vocab),
-                                                                                          state_(ScopeState(0)) {
+ScopeAnalyzer::ScopeAnalyzer(const std::string& json_vocab, ScopeContext context, Language selected_language)
+    : constructions_extractor_(json_vocab),
+      state_(ScopeState(0)) {
   waiting_for_construction_ = nullptr;
 
-  handlers_ = std::vector<std::unique_ptr<IHandler, IHandler::Deleter>>();
-  handlers_.push_back(std::unique_ptr<StringQuoteHandler, IHandler::Deleter>(new StringQuoteHandler()));
-  handlers_.push_back(std::unique_ptr<CharacterQuoteHandler, IHandler::Deleter>(new CharacterQuoteHandler()));
-  handlers_.push_back(std::unique_ptr<LongCommentHandler, IHandler::Deleter>(new LongCommentHandler()));
-  handlers_.push_back(std::unique_ptr<ShortCommentHandler, IHandler::Deleter>(new ShortCommentHandler()));
+  handlers_ = handlers_selector_.Get(selected_language);
 
   ApplyContext(context);
 }
@@ -49,7 +42,7 @@ AddTokenResult ScopeAnalyzer::AddToken(int32_t token) {
       continue;
     }
 
-    for (const auto& kHandler: handlers_) {
+    for (const auto& kHandler: *handlers_) {
       auto handleResult = kHandler->Handle(construction, state_);
       if (handleResult != nullptr) {
         waiting_for_construction_ = std::move(handleResult);
@@ -107,8 +100,8 @@ void ScopeAnalyzer::ApplyContext(ScopeContext context) {
 
 // Обвязка C для методов C++
 
-ScopeAnalyzer* scope_analyzer_new(const char* json_vocab, ScopeContext* context) {
-  return new ScopeAnalyzer(std::string(json_vocab), *context);
+ScopeAnalyzer* scope_analyzer_new(const char* json_vocab, ScopeContext* context, Language selected_language) {
+  return new ScopeAnalyzer(std::string(json_vocab), *context, selected_language);
 }
 
 void apply_context(ScopeAnalyzer* scope_analyzer, ScopeContext* context) {
