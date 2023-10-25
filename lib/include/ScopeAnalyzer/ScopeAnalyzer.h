@@ -31,7 +31,7 @@ class ScopeAnalyzer {
   void ApplyContext(ScopeContext context);
   ConstructionsStreamExtractor constructions_extractor_;
 
-  const HandlersList* handlers_;
+  const handlers_list* handlers_;
   LanguageHandlersSelector handlers_selector_;
 
   std::unique_ptr<Construction> waiting_for_construction_;

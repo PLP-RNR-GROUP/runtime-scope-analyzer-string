@@ -42,7 +42,7 @@ AddTokenResult ScopeAnalyzer::AddToken(int32_t token) {
       continue;
     }
 
-    for (const auto& kHandler: handlers_->GetHandlers()) {
+    for (const auto& kHandler: *handlers_) {
       auto handleResult = kHandler->Handle(construction, state_);
       if (handleResult != nullptr) {
         waiting_for_construction_ = std::move(handleResult);

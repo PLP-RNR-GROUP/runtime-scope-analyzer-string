@@ -3,9 +3,9 @@
 //
 
 #include "include/Languages/LanguageHandlersSelector.h"
-void LanguageHandlersSelector::Add(Language language, HandlersList handlers) {
+void LanguageHandlersSelector::Add(Language language, handlers_list_ptr handlers) {
   languages_handlers_.insert({language, std::move(handlers)});
 }
-const HandlersList* LanguageHandlersSelector::Get(Language language) {
-  return &languages_handlers_.at(language);
+const handlers_list* LanguageHandlersSelector::Get(Language language) {
+  return languages_handlers_.at(language).get();
 }
