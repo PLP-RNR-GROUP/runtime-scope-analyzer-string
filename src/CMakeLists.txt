@@ -1,3 +1,4 @@
 add_subdirectory(Constructions)
 add_subdirectory(Handlers)
 add_subdirectory(ScopeState)
+add_subdirectory(Languages)
