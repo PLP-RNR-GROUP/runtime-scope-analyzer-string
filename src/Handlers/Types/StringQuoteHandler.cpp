@@ -15,6 +15,7 @@ TryAddConstructionResult StringQuoteHandler::TryAddConstructionTo(char character
                                                                   ConstructionStreamExtractorState& state,
                                                                   std::list<Construction>& constructions) {
   if (character != '"') return {true};
+  if (!state.buffer_.empty() && state.buffer_[0] == '\\') return {false};
 
   constructions.emplace_back(Undefined, StringQuote);
   return {true};
