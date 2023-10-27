@@ -41,10 +41,10 @@ std::set<ConstructionWithPosition> ConstructionsStreamExtractor::Get(int32_t tok
       ConstructionWithPosition construction_to_add = ConstructionWithPosition(Closed, ShortComment, pos_);
       constructions.insert(construction_to_add);
     } else if (character == '/' && !buffer_.empty() && buffer_[0] == '*') {
-      ConstructionWithPosition construction_to_add = ConstructionWithPosition(Opened, LongComment, pos_);
+      ConstructionWithPosition construction_to_add = ConstructionWithPosition(Closed, LongComment, pos_);
       constructions.insert(construction_to_add);
     } else if (character == '*' && !buffer_.empty() && buffer_[0] == '/') {
-      ConstructionWithPosition construction_to_add = ConstructionWithPosition(Closed, LongComment, pos_);
+      ConstructionWithPosition construction_to_add = ConstructionWithPosition(Opened, LongComment, pos_);
       constructions.insert(construction_to_add);
     } else if (character == '{') {
       ConstructionWithPosition construction_to_add = ConstructionWithPosition(Opened, Brace, pos_);
