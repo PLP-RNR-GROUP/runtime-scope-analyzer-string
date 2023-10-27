@@ -28,33 +28,44 @@ std::set<ConstructionWithPosition> ConstructionsStreamExtractor::Get(int32_t tok
   std::string token_metadata = vocab_.at(token);
   std::set<ConstructionWithPosition> constructions;
   for (char character: token_metadata) {
+    bool add_current_char = true;
     if (character == '\'') {
       ConstructionWithPosition construction_to_add = ConstructionWithPosition(Undefined, CharacterQuote, pos_);
       constructions.insert(construction_to_add);
+      add_current_char = false;
     } else if (character == '"') {
       ConstructionWithPosition construction_to_add = ConstructionWithPosition(Undefined, StringQuote, pos_);
       constructions.insert(construction_to_add);
     } else if (character == '/' && !buffer_.empty() && buffer_[0] == '/') {
+      add_current_char = false;
       ConstructionWithPosition construction_to_add = ConstructionWithPosition(Opened, ShortComment, pos_);
       constructions.insert(construction_to_add);
+      buffer_.pop_front();
     } else if (character == '\n') {
       ConstructionWithPosition construction_to_add = ConstructionWithPosition(Closed, ShortComment, pos_);
       constructions.insert(construction_to_add);
+      add_current_char = false;
     } else if (character == '/' && !buffer_.empty() && buffer_[0] == '*') {
       ConstructionWithPosition construction_to_add = ConstructionWithPosition(Closed, LongComment, pos_);
       constructions.insert(construction_to_add);
+      buffer_.pop_front();
+      add_current_char = false;
     } else if (character == '*' && !buffer_.empty() && buffer_[0] == '/') {
       ConstructionWithPosition construction_to_add = ConstructionWithPosition(Opened, LongComment, pos_);
       constructions.insert(construction_to_add);
+      buffer_.pop_front();
+      add_current_char = false;
     } else if (character == '{') {
       ConstructionWithPosition construction_to_add = ConstructionWithPosition(Opened, Brace, pos_);
       constructions.insert(construction_to_add);
+      add_current_char = false;
     } else if (character == '}') {
       ConstructionWithPosition construction_to_add = ConstructionWithPosition(Closed, Brace, pos_);
       constructions.insert(construction_to_add);
+      add_current_char = false;
     }
 
-    buffer_.push_front(character);
+    if (add_current_char) buffer_.push_front(character);
     ++pos_;
   }
 
