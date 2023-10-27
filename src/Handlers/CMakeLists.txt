@@ -3,6 +3,7 @@ add_library(handlers
         Types/CharacterQuoteHandler.cpp
         Types/ShortCommentHandler.cpp
         Types/LongCommentHandler.cpp
+        Types/BraceHandler.cpp
         IHandler.cpp
 )
 

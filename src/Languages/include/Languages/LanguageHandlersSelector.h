@@ -12,6 +12,7 @@
 #include "Handlers/Types/ShortCommentHandler.h"
 #include "Handlers/Types/LongCommentHandler.h"
 #include "Handlers/IHandlerList.h"
+#include "Handlers/Types/BraceHandler.h"
 
 #include <vector>
 #include <unordered_map>
@@ -24,6 +25,7 @@ class LanguageHandlersSelector {
     javaHandlers.push_back(handler(new CharacterQuoteHandler()));
     javaHandlers.push_back(handler(new ShortCommentHandler()));
     javaHandlers.push_back(handler(new LongCommentHandler()));
+    javaHandlers.push_back(handler(new BraceHandler()));
 
     Add(Java, handlers_list_ptr(std::make_unique<const std::vector<handler>>(std::move(javaHandlers))));
 

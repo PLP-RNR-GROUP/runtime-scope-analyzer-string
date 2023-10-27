@@ -29,13 +29,16 @@ std::list<Construction> ConstructionsStreamExtractor::Get(int32_t token) {
   std::string token_metadata = vocab_.at(token);
   std::list<Construction> constructions;
   for (char character: token_metadata) {
-    if (character == '\'') {
-      for (const auto& kHandler : *handlers_) {
-        TryAddConstructionResult result = kHandler->TryAddConstructionTo(character, state_, constructions);
-        if (result.save_current_character) {
-          state_.buffer_.push_front(character);
-        }
+    bool save_current_character = true;
+    for (const auto& kHandler : *handlers_) {
+      TryAddConstructionResult result = kHandler->TryAddConstructionTo(character, state_, constructions);
+      if (!result.save_current_character) {
+        save_current_character = false;
       }
+    }
+
+    if (save_current_character) {
+      state_.buffer_.push_front(character);
     }
   }
 
