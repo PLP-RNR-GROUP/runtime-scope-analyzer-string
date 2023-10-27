@@ -98,6 +98,12 @@ void ScopeAnalyzer::ApplyContext(ScopeContext context) {
     brace_balance = 1;
   }
 }
+int ScopeAnalyzer::GetBraceBalance() const {
+  return brace_balance;
+}
+const Construction* ScopeAnalyzer::GetWaitingForConstruction() const {
+  return waiting_for_construction_.get();
+}
 
 // Обвязка C для методов C++
 
@@ -115,4 +121,12 @@ void scope_analyzer_del(ScopeAnalyzer* scope_analyzer) {
 
 AddTokenResult add_token(ScopeAnalyzer* scope_analyzer, int32_t token) {
   return scope_analyzer->AddToken(token);
+}
+
+int get_brace_balance(ScopeAnalyzer* scope_analyzer) {
+  return scope_analyzer->GetBraceBalance();
+}
+
+const Construction* get_waiting_for_construction(ScopeAnalyzer* scope_analyzer) {
+  return scope_analyzer->GetWaitingForConstruction();
 }

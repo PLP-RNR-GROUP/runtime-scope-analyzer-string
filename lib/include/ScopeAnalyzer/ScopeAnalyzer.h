@@ -26,6 +26,8 @@ class ScopeAnalyzer {
 
   AddTokenResult AddToken(int32_t token);
   void ResetState(ScopeContext context);
+  int GetBraceBalance() const;
+  const Construction* GetWaitingForConstruction() const;
  private:
   void ApplyContext(ScopeContext context);
   std::unique_ptr<ConstructionsStreamExtractor> constructions_stream_extractor_;
@@ -33,9 +35,9 @@ class ScopeAnalyzer {
   const handlers_list* handlers_;
   LanguageHandlersSelector handlers_selector_;
   boost::circular_buffer<char> chars_buffer;
-  std::unique_ptr<Construction> waiting_for_construction_;
 
   int brace_balance;
+  std::unique_ptr<Construction> waiting_for_construction_;
 };
 
 
@@ -47,6 +49,9 @@ ScopeAnalyzer* scope_analyzer_new(const char* json_vocab, ScopeContext* context,
 void scope_analyzer_del(ScopeAnalyzer* scope_analyzer);
 void apply_context(ScopeAnalyzer* scope_analyzer, ScopeContext* context);
 AddTokenResult add_token(ScopeAnalyzer* scope_analyzer, int32_t token);
+
+int get_brace_balance(ScopeAnalyzer* scope_analyzer);
+const Construction* get_waiting_for_construction(ScopeAnalyzer* scope_analyzer);
 
 #ifdef __cplusplus
 }
