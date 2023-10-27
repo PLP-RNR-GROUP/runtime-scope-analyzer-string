@@ -7,7 +7,7 @@
 #include "ScopeAnalyzer/ScopeAnalyzer.h"
 
 ScopeAnalyzer::ScopeAnalyzer(const std::string& json_vocab, ScopeContext context, Language selected_language)
-    : constructions_extractor_(json_vocab),
+    : constructions_stream_extractor_(json_vocab),
       state_(ScopeState(0)) {
   waiting_for_construction_ = nullptr;
 
@@ -18,7 +18,7 @@ ScopeAnalyzer::ScopeAnalyzer(const std::string& json_vocab, ScopeContext context
 
 AddTokenResult ScopeAnalyzer::AddToken(int32_t token) {
   bool updated_brace_balance = false;
-  for (const auto& construction : constructions_extractor_.Get(token)) {
+  for (const auto& construction : constructions_stream_extractor_.Get(token)) {
     if (waiting_for_construction_ != nullptr) {
       if (construction.type == waiting_for_construction_->type
           && construction.state == waiting_for_construction_->state) {

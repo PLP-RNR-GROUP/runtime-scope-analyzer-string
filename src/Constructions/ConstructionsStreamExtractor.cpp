@@ -9,8 +9,8 @@
 using json = nlohmann::json;
 
 ConstructionsStreamExtractor::ConstructionsStreamExtractor(const std::string& json_vocab) {
-  previous_token = nullptr;
-  sequence_length = 0;
+  pos_ = 0;
+  buffer_ = boost::circular_buffer<char>(3);
 
   json parsed_vocab = json::parse(json_vocab);
 
@@ -18,55 +18,44 @@ ConstructionsStreamExtractor::ConstructionsStreamExtractor(const std::string& js
   for (json::iterator it = parsed_vocab.begin(); it != parsed_vocab.end(); ++it) {
     int32_t token_key = std::atoi(it.key().data());
 
-    TokenMetadata currentTokenMetadata = it.value().template get<TokenMetadata>();
+    std::string current_token_string = it.value().template get<std::string>();
 
-    vocab_[token_key] = currentTokenMetadata;
+    vocab_[token_key] = current_token_string;
   }
 }
 
-class PrevTokenSetter{
- public:
-  PrevTokenSetter(TokenMetadata current_token, std::unique_ptr<TokenMetadata>& previous_token)
-  : current_token(std::move(current_token)),
-    previous_token(previous_token) {}
-
-  ~PrevTokenSetter() {
-    previous_token = std::make_unique<TokenMetadata>(current_token);
-  }
- private:
-  TokenMetadata current_token;
-  std::unique_ptr<TokenMetadata>& previous_token;
-};
-
 std::set<ConstructionWithPosition> ConstructionsStreamExtractor::Get(int32_t token) {
-  TokenMetadata token_metadata = vocab_.at(token);
-  PrevTokenSetter token_setter(token_metadata, previous_token);
+  std::string token_metadata = vocab_.at(token);
+  std::set<ConstructionWithPosition> constructions;
+  for (char character: token_metadata) {
+    if (character == '\'') {
+      ConstructionWithPosition construction_to_add = ConstructionWithPosition(Undefined, CharacterQuote, pos_);
+      constructions.insert(construction_to_add);
+    } else if (character == '"') {
+      ConstructionWithPosition construction_to_add = ConstructionWithPosition(Undefined, StringQuote, pos_);
+      constructions.insert(construction_to_add);
+    } else if (character == '/' && !buffer_.empty() && buffer_[0] == '/') {
+      ConstructionWithPosition construction_to_add = ConstructionWithPosition(Opened, ShortComment, pos_);
+      constructions.insert(construction_to_add);
+    } else if (character == '\n') {
+      ConstructionWithPosition construction_to_add = ConstructionWithPosition(Closed, ShortComment, pos_);
+      constructions.insert(construction_to_add);
+    } else if (character == '/' && !buffer_.empty() && buffer_[0] == '*') {
+      ConstructionWithPosition construction_to_add = ConstructionWithPosition(Opened, LongComment, pos_);
+      constructions.insert(construction_to_add);
+    } else if (character == '*' && !buffer_.empty() && buffer_[0] == '/') {
+      ConstructionWithPosition construction_to_add = ConstructionWithPosition(Closed, LongComment, pos_);
+      constructions.insert(construction_to_add);
+    } else if (character == '{') {
+      ConstructionWithPosition construction_to_add = ConstructionWithPosition(Opened, Brace, pos_);
+      constructions.insert(construction_to_add);
+    } else if (character == '}') {
+      ConstructionWithPosition construction_to_add = ConstructionWithPosition(Closed, Brace, pos_);
+      constructions.insert(construction_to_add);
+    }
 
-  if (previous_token == nullptr) return token_metadata.constructions;
-
-  auto constructions = token_metadata.constructions;
-  size_t last_symbol_pos = sequence_length + previous_token->length;
-
-  // TODO: abstraction
-  if (previous_token->endsWithSlash && token_metadata.startsWithSlash) {
-    ConstructionWithPosition short_comment = ConstructionWithPosition(Opened, ShortComment, last_symbol_pos);
-    constructions.insert(short_comment);
-  }
-  else if (previous_token->endsWithStar && token_metadata.startsWithSlash) {
-    ConstructionWithPosition end_long_comment = ConstructionWithPosition(Closed, LongComment, last_symbol_pos);
-    constructions.insert(end_long_comment);
-  }
-  else if (previous_token->endsWithSlash && token_metadata.startsWithStar) {
-    ConstructionWithPosition end_long_comment = ConstructionWithPosition(Closed, LongComment, last_symbol_pos);
-    constructions.insert(end_long_comment);
-  }
-
-  if (constructions.empty()) return constructions;
-
-  // Remove escaped constructions
-  ConstructionWithPosition first_construction = *constructions.begin();
-  if (previous_token->endsWithBackslash && first_construction.pos == 0) {
-    constructions.erase(first_construction);
+    buffer_.push_front(character);
+    ++pos_;
   }
 
   return constructions;

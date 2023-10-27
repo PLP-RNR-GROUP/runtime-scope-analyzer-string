@@ -6,6 +6,11 @@
 #define RUNTIME_SRC_CONSTRUCTIONS_INCLUDE_CONSTRUCTIONS_CONSTRUCTIONWITHPOSITION_H_
 
 #include "Constructions/Construction.h"
+#include <cstddef>
+
+#include "nlohmann/json.hpp"
+
+using json = nlohmann::json;
 
 struct ConstructionWithPosition : public Construction {
   ConstructionWithPosition() : Construction() {

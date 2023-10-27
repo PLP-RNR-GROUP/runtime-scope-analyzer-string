@@ -8,6 +8,8 @@
 #include "Constructions/Construction.h"
 #include "ScopeState/ScopeState.h"
 
+#include <memory>
+
 class IHandler {
  protected:
   IHandler() = default;

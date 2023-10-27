@@ -6,7 +6,7 @@
 #include <sstream>
 
 int main() {
-  const std::string vocabPath = "./analyzed_vocab.json";
+  const std::string vocabPath = "/Users/katsushooter/Projects/sber-scope/preprocessing-scope-analyzer-string/string_vocab.json";
 
   std::ifstream vocabFile = std::ifstream(vocabPath);
   std::stringstream buffer;

@@ -7,9 +7,6 @@
 
 #include "ConstructionState.h"
 #include "ConstructionType.h"
-#include "nlohmann/json.hpp"
-
-using json = nlohmann::json;
 
 struct Construction {
   Construction() = default;

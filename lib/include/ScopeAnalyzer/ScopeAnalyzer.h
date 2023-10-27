@@ -29,12 +29,13 @@ class ScopeAnalyzer {
   void ResetState(ScopeContext context);
  private:
   void ApplyContext(ScopeContext context);
-  ConstructionsStreamExtractor constructions_extractor_;
+  ConstructionsStreamExtractor constructions_stream_extractor_;
 
   const handlers_list* handlers_;
   LanguageHandlersSelector handlers_selector_;
-
+  boost::circular_buffer<char> chars_buffer;
   std::unique_ptr<Construction> waiting_for_construction_;
+
   ScopeState state_;
 };
 

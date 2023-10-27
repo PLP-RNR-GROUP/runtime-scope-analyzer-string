@@ -8,7 +8,7 @@
 const int languages_amount = 10;
 
 enum Language {
-  Javascript,
+  Javascript = 1,
   Java,
   ObjectiveC,
   CSharp,
