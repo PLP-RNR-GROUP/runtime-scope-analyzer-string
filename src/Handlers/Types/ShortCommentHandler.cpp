@@ -10,17 +10,22 @@ std::unique_ptr<Construction> ShortCommentHandler::Handle(const Construction& co
 
   return nullptr;
 }
-void ShortCommentHandler::TryAddConstructionTo(char character,
-                                               ConstructionStreamExtractorState& state,
-                                               std::list<Construction>& constructions) {
+TryAddConstructionResult ShortCommentHandler::TryAddConstructionTo(char character,
+                                                                   ConstructionStreamExtractorState& state,
+                                                                   std::list<Construction>& constructions) {
   if (character == '\n') {
-    constructions.push_back(Construction(Closed, ShortComment));
-    return;
+    constructions.emplace_back(Closed, ShortComment);
+    return {false};
   }
 
-  if (character != '/') return;
+  bool add_current_char = true;
+  if (character != '/') return {add_current_char};
+
   if (!state.buffer_.empty() && state.buffer_[0] == '/') {
-    constructions.push_back(Construction(Opened, ShortComment));
+    add_current_char = false;
+    constructions.emplace_back(Opened, ShortComment);
     state.buffer_.pop_front();
   }
+
+  return {add_current_char};
 }

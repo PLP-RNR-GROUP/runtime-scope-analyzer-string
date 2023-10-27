@@ -7,6 +7,7 @@
 
 #include "Constructions/Construction.h"
 #include "Constructions/ConstructionStreamExtractorState.h"
+#include "TryAddConstructionResult.h"
 
 #include <memory>
 #include <list>
@@ -21,9 +22,9 @@ class IHandler {
 
   // Handle returns next waiting construction.
   virtual std::unique_ptr<Construction> Handle(const Construction& construction) = 0;
-  virtual void TryAddConstructionTo(char character,
-                                    ConstructionStreamExtractorState& state,
-                                    std::list<Construction>& constructions) = 0;
+  virtual TryAddConstructionResult TryAddConstructionTo(char character,
+                                                        ConstructionStreamExtractorState& state,
+                                                        std::list<Construction>& constructions) = 0;
 
   struct Deleter
   {

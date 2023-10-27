@@ -9,9 +9,9 @@
 class StringQuoteHandler : public IHandler {
  public:
   std::unique_ptr<Construction> Handle(const Construction& construction) override;
-  void TryAddConstructionTo(char character,
-                            ConstructionStreamExtractorState& state,
-                            std::list<Construction>& constructions) override;
+  TryAddConstructionResult TryAddConstructionTo(char character,
+                                                ConstructionStreamExtractorState& state,
+                                                std::list<Construction>& constructions) override;
 };
 
 #endif //RUNTIME_SRC_HANDLERS_INCLUDE_STRINGQUOTEHANDLER_H_

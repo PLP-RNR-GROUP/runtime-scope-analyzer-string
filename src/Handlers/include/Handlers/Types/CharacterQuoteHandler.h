@@ -6,12 +6,13 @@
 #define RUNTIME_SRC_HANDLERS_TYPES_CHARACTERQUOTEHANDLER_H_
 
 #include "Handlers/IHandler.h"
+#include "Handlers/TryAddConstructionResult.h"
 class CharacterQuoteHandler : public IHandler {
  public:
   std::unique_ptr<Construction> Handle(const Construction& construction) override;
-  void TryAddConstructionTo(char character,
-                            ConstructionStreamExtractorState& state,
-                            std::list<Construction>& constructions) override;
+  TryAddConstructionResult TryAddConstructionTo(char character,
+                                                ConstructionStreamExtractorState& state,
+                                                std::list<Construction>& constructions) override;
 };
 
 #endif //RUNTIME_SRC_HANDLERS_TYPES_CHARACTERQUOTEHANDLER_H_

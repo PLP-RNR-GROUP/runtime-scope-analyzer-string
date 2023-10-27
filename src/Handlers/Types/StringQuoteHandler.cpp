@@ -11,9 +11,11 @@ std::unique_ptr<Construction> StringQuoteHandler::Handle(const Construction& con
 
   return nullptr;
 }
-void StringQuoteHandler::TryAddConstructionTo(char character,
-                                              ConstructionStreamExtractorState& state,
-                                              std::list<Construction>& constructions) {
-  if (character != '"') return;
-  constructions.push_back(Construction(Undefined, StringQuote));
+TryAddConstructionResult StringQuoteHandler::TryAddConstructionTo(char character,
+                                                                  ConstructionStreamExtractorState& state,
+                                                                  std::list<Construction>& constructions) {
+  if (character != '"') return {true};
+
+  constructions.emplace_back(Undefined, StringQuote);
+  return {true};
 }

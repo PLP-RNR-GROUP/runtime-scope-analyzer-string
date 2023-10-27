@@ -31,7 +31,10 @@ std::list<Construction> ConstructionsStreamExtractor::Get(int32_t token) {
   for (char character: token_metadata) {
     if (character == '\'') {
       for (const auto& kHandler : *handlers_) {
-        kHandler->TryAddConstructionTo(character, state_, constructions);
+        TryAddConstructionResult result = kHandler->TryAddConstructionTo(character, state_, constructions);
+        if (result.save_current_character) {
+          state_.buffer_.push_front(character);
+        }
       }
     }
   }
