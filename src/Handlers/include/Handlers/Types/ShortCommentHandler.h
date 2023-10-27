@@ -8,7 +8,10 @@
 #include "Handlers/IHandler.h"
 class ShortCommentHandler : public IHandler {
  public:
-  std::unique_ptr<Construction> Handle(const Construction& construction, const ScopeState& state) override;
+  std::unique_ptr<Construction> Handle(const Construction& construction) override;
+  void TryAddConstructionTo(char character,
+                            ConstructionStreamExtractorState& state,
+                            std::list<Construction>& constructions) override;
 };
 
 #endif //RUNTIME_SRC_HANDLERS_INCLUDE_HANDLERS_TYPES_SHORTCOMMENTHANDLER_H_

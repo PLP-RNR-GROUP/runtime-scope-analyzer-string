@@ -10,7 +10,6 @@
 #include "Constructions/ConstructionsStreamExtractor.h"
 #include "ScopeContext.h"
 #include "Handlers/IHandler.h"
-#include "ScopeState/ScopeState.h"
 #include "Languages/Language.h"
 #include "Languages/LanguageHandlersSelector.h"
 
@@ -29,14 +28,14 @@ class ScopeAnalyzer {
   void ResetState(ScopeContext context);
  private:
   void ApplyContext(ScopeContext context);
-  ConstructionsStreamExtractor constructions_stream_extractor_;
+  std::unique_ptr<ConstructionsStreamExtractor> constructions_stream_extractor_;
 
   const handlers_list* handlers_;
   LanguageHandlersSelector handlers_selector_;
   boost::circular_buffer<char> chars_buffer;
   std::unique_ptr<Construction> waiting_for_construction_;
 
-  ScopeState state_;
+  int brace_balance;
 };
 
 

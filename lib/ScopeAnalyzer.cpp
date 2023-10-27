@@ -6,19 +6,20 @@
 
 #include "ScopeAnalyzer/ScopeAnalyzer.h"
 
-ScopeAnalyzer::ScopeAnalyzer(const std::string& json_vocab, ScopeContext context, Language selected_language)
-    : constructions_stream_extractor_(json_vocab),
-      state_(ScopeState(0)) {
+ScopeAnalyzer::ScopeAnalyzer(const std::string& json_vocab, ScopeContext context, Language selected_language){
   waiting_for_construction_ = nullptr;
+  brace_balance = 0;
 
   handlers_ = handlers_selector_.Get(selected_language);
+  // TODO: put on stack
+  constructions_stream_extractor_ = std::make_unique<ConstructionsStreamExtractor>(json_vocab, handlers_);
 
   ApplyContext(context);
 }
 
 AddTokenResult ScopeAnalyzer::AddToken(int32_t token) {
   bool updated_brace_balance = false;
-  for (const auto& construction : constructions_stream_extractor_.Get(token)) {
+  for (const auto& construction : constructions_stream_extractor_->Get(token)) {
     if (waiting_for_construction_ != nullptr) {
       if (construction.type == waiting_for_construction_->type
           && construction.state == waiting_for_construction_->state) {
@@ -32,10 +33,10 @@ AddTokenResult ScopeAnalyzer::AddToken(int32_t token) {
         case Undefined:
           throw std::invalid_argument("invalid state");
         case Closed:
-          --state_.brace_balance;
+          --brace_balance;
           break;
         case Opened:
-          ++state_.brace_balance;
+          ++brace_balance;
           break;
       }
       updated_brace_balance = true;
@@ -43,7 +44,7 @@ AddTokenResult ScopeAnalyzer::AddToken(int32_t token) {
     }
 
     for (const auto& kHandler: *handlers_) {
-      auto handleResult = kHandler->Handle(construction, state_);
+      auto handleResult = kHandler->Handle(construction);
       if (handleResult != nullptr) {
         waiting_for_construction_ = std::move(handleResult);
         break;
@@ -51,7 +52,7 @@ AddTokenResult ScopeAnalyzer::AddToken(int32_t token) {
     }
   }
 
-  if (updated_brace_balance && state_.brace_balance <= 0) {
+  if (updated_brace_balance && brace_balance <= 0) {
     return Stop;
   }
   return Continue;
@@ -59,7 +60,7 @@ AddTokenResult ScopeAnalyzer::AddToken(int32_t token) {
 
 void ScopeAnalyzer::ResetState(ScopeContext context) {
   waiting_for_construction_ = nullptr;
-  state_.brace_balance = 0;
+  brace_balance = 0;
   ApplyContext(context);
 }
 
@@ -94,7 +95,7 @@ void ScopeAnalyzer::ApplyContext(ScopeContext context) {
   }
 
   if (context.scope_opened) {
-    state_.brace_balance = 1;
+    brace_balance = 1;
   }
 }
 

@@ -6,10 +6,10 @@
 #define RUNTIME_SRC_HANDLERS_INCLUDE_IHANDLER_H_
 
 #include "Constructions/Construction.h"
-#include "ScopeState/ScopeState.h"
+#include "Constructions/ConstructionStreamExtractorState.h"
 
 #include <memory>
-
+#include <list>
 class IHandler {
  protected:
   IHandler() = default;
@@ -20,7 +20,10 @@ class IHandler {
   IHandler& operator=(const IHandler&) = delete;
 
   // Handle returns next waiting construction.
-  virtual std::unique_ptr<Construction> Handle(const Construction& construction, const ScopeState& state) = 0;
+  virtual std::unique_ptr<Construction> Handle(const Construction& construction) = 0;
+  virtual void TryAddConstructionTo(char character,
+                                    ConstructionStreamExtractorState& state,
+                                    std::list<Construction>& constructions) = 0;
 
   struct Deleter
   {

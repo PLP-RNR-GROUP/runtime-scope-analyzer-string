@@ -6,22 +6,21 @@
 #define RUNTIME_SRC_CONSTRUCTIONS_INCLUDE_CONSTRUCTIONS_TOKENTOCONSTRUCTIONSCONVERTER_H_
 
 #include "Construction.h"
-#include "ConstructionWithPosition.h"
-#include "boost/circular_buffer.hpp"
+#include "ConstructionStreamExtractorState.h"
+#include "Handlers/IHandlerList.h"
 
-#include <set>
 #include <map>
 #include <fstream>
+#include <list>
 
 class ConstructionsStreamExtractor {
  public:
-  explicit ConstructionsStreamExtractor(const std::string& json_vocab);
-  std::set<ConstructionWithPosition> Get(int32_t token);
+  explicit ConstructionsStreamExtractor(const std::string& json_vocab, const handlers_list* handlers);
+  std::list<Construction> Get(int32_t token);
  private:
   std::map<int32_t, std::string> vocab_;
-  boost::circular_buffer<char> buffer_;
-  size_t sequence_length;
-  size_t pos_;
+  ConstructionStreamExtractorState state_;
+  const handlers_list* handlers_;
 };
 
 #endif //RUNTIME_SRC_CONSTRUCTIONS_INCLUDE_CONSTRUCTIONS_TOKENTOCONSTRUCTIONSCONVERTER_H_

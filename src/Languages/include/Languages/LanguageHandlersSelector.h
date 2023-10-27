@@ -11,13 +11,10 @@
 #include "Handlers/Types/CharacterQuoteHandler.h"
 #include "Handlers/Types/ShortCommentHandler.h"
 #include "Handlers/Types/LongCommentHandler.h"
+#include "Handlers/IHandlerList.h"
 
 #include <vector>
 #include <unordered_map>
-
-typedef std::unique_ptr<IHandler, IHandler::Deleter> handler;
-typedef const std::vector<handler> handlers_list;
-typedef std::unique_ptr<handlers_list> handlers_list_ptr;
 
 class LanguageHandlersSelector {
  public:
