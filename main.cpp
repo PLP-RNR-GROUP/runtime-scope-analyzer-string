@@ -13,7 +13,7 @@ int main() {
   buffer << vocabFile.rdbuf();
 
 ////  "{{{}}}"void scope {}
-  std::vector<int32_t> tokens {355, 308, 8050, 98, 3766, 83, 2637};
+  std::vector<int32_t> tokens {355, 308, 8050, 98, 585, 2637};
 
   ScopeAnalyzer analyzer(buffer.str(), ScopeContext(false, false, false, false, false), Java);
   for (const auto token: tokens) {

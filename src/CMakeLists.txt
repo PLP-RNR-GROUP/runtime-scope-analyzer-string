@@ -1,3 +1,4 @@
 add_subdirectory(Constructions)
 add_subdirectory(Handlers)
 add_subdirectory(Languages)
+add_subdirectory(Tokenizers)
