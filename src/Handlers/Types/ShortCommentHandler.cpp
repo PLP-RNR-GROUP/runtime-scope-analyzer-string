@@ -13,7 +13,9 @@ std::unique_ptr<Construction> ShortCommentHandler::Handle(const Construction& co
 TryAddConstructionResult ShortCommentHandler::TryAddConstructionTo(char character,
                                                                    ConstructionStreamExtractorState& state,
                                                                    std::list<Construction>& constructions) {
-  if (character == '\n') {
+  if (
+      character == '\n' ||
+      (character == 'n' && !state.buffer_.empty() && state.buffer_[0] == '\\')) {
     constructions.emplace_back(Closed, ShortComment);
     return {false};
   }
