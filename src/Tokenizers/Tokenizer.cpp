@@ -10,14 +10,11 @@
 std::string Tokenizer::Decode(int32_t token) {
   std::wstring coded_token = vocab_.at(token);
 
-  std::string decoded_token;
-  decoded_token.reserve(coded_token.size());
-
-  std::transform(coded_token.begin(), coded_token.end(), std::back_inserter(decoded_token), [this](wchar_t character) {
-    return char(byte_decoder_[character]);
+  std::for_each(coded_token.begin(), coded_token.end(), [this](wchar_t& character) {
+    character = char(byte_decoder_[character]);
   });
 
-  return decoded_token;
+  return {coded_token.begin(), coded_token.end()};
 }
 
 Tokenizer::Tokenizer(const std::string& json_vocab) {
