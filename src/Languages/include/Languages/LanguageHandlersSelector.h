@@ -41,8 +41,14 @@ class LanguageHandlersSelector {
 
     std::vector<handler> javascriptHandlers(base_handlers);
     javascriptHandlers.push_back(backtick_handler);
-
     Add(Javascript, handlers_list_ptr(std::make_unique<handlers_list>(std::move(javascriptHandlers))));
+
+    std::vector<handler> objcHandlers(base_handlers);
+    Add(ObjectiveC, handlers_list_ptr(std::make_unique<handlers_list>(std::move(objcHandlers))));
+
+    std::vector<handler> goHandlers(base_handlers);
+    goHandlers.push_back(backtick_handler);
+    Add(Go, handlers_list_ptr(std::make_unique<handlers_list>(std::move(goHandlers))));
 
 
 //    TODO: later
