@@ -14,6 +14,7 @@
 #include "Handlers/IHandlerList.h"
 #include "Handlers/Types/BraceHandler.h"
 #include "Handlers/Types/BacktickHandler.h"
+#include "Handlers/Types/ThreeDoubleQuoteHandler.h"
 
 #include <vector>
 #include <unordered_map>
@@ -27,6 +28,7 @@ class LanguageHandlersSelector {
     auto long_comment_handler = handler(new LongCommentHandler());
     auto brace_handler = handler(new BraceHandler());
     auto backtick_handler = handler(new BacktickHandler());
+    auto three_double_quote_handler = handler(new ThreeDoubleQuoteHandler());
 
     std::vector<handler> base_handlers = {
         string_quote_handler,
@@ -48,9 +50,14 @@ class LanguageHandlersSelector {
 
     std::vector<handler> goHandlers(base_handlers);
     goHandlers.push_back(backtick_handler);
+
     Add(Go, handlers_list_ptr(std::make_unique<handlers_list>(std::move(goHandlers))));
 
+    std::vector<handler> csharpHandlers(base_handlers);
+    csharpHandlers.push_back(backtick_handler);
+    csharpHandlers.push_back(three_double_quote_handler);
 
+    Add(CSharp, handlers_list_ptr(std::make_unique<handlers_list>(std::move(csharpHandlers))));
 //    TODO: later
 //    assert(languages_handlers_.size() == languages_amount);
   };
