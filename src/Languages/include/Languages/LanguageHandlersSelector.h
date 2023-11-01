@@ -13,6 +13,7 @@
 #include "Handlers/Types/LongCommentHandler.h"
 #include "Handlers/IHandlerList.h"
 #include "Handlers/Types/BraceHandler.h"
+#include "Handlers/Types/BacktickHandler.h"
 
 #include <vector>
 #include <unordered_map>
@@ -27,8 +28,17 @@ class LanguageHandlersSelector {
     javaHandlers.push_back(handler(new LongCommentHandler()));
     javaHandlers.push_back(handler(new BraceHandler()));
 
-    Add(Java, handlers_list_ptr(std::make_unique<const std::vector<handler>>(std::move(javaHandlers))));
+    Add(Java, handlers_list_ptr(std::make_unique<handlers_list>(std::move(javaHandlers))));
 
+    std::vector<handler> javascriptHandlers;
+    javascriptHandlers.push_back(handler(new StringQuoteHandler()));
+    javascriptHandlers.push_back(handler(new CharacterQuoteHandler()));
+    javascriptHandlers.push_back(handler(new ShortCommentHandler()));
+    javascriptHandlers.push_back(handler(new LongCommentHandler()));
+    javascriptHandlers.push_back(handler(new BraceHandler()));
+    javascriptHandlers.push_back(handler(new BacktickHandler()));
+
+    Add(Javascript, handlers_list_ptr(std::make_unique<handlers_list>(std::move(javascriptHandlers))));
 //    TODO: later
 //    assert(languages_handlers_.size() == languages_amount);
   };

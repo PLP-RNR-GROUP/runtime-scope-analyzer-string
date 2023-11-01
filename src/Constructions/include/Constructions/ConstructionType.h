@@ -10,7 +10,8 @@ enum ConstructionType {
   CharacterQuote,
   ShortComment,
   LongComment,
-  Brace
+  Brace,
+  Backtick
 };
 
 #endif //RUNTIME_SRC_INCLUDE_SCOPEANALYZER_SPECIALSYMBOLS_SPECIALSYMBOLTYPE_H_

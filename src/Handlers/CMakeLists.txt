@@ -4,6 +4,8 @@ add_library(handlers
         Types/ShortCommentHandler.cpp
         Types/LongCommentHandler.cpp
         Types/BraceHandler.cpp
+        Types/BacktickHandler.cpp
+
         IHandler.cpp
 )
 
