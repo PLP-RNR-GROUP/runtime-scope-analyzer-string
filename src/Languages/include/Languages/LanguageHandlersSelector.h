@@ -64,6 +64,14 @@ class LanguageHandlersSelector {
     kotlinHandlers.push_back(three_double_quote_handler);
 
     Add(Kotlin, handlers_list_ptr(std::make_unique<handlers_list>(std::move(kotlinHandlers))));
+
+    std::vector<handler> scalaHandlers(base_handlers);
+    scalaHandlers.push_back(backtick_handler);
+    scalaHandlers.push_back(three_double_quote_handler);
+
+    Add(Scala, handlers_list_ptr(std::make_unique<handlers_list>(std::move(scalaHandlers))));
+
+
 //    TODO: later
 //    assert(languages_handlers_.size() == languages_amount);
   };
