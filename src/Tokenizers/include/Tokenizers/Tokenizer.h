@@ -18,7 +18,6 @@ class Tokenizer {
  private:
   std::unordered_map<wchar_t, int32_t> byte_decoder_;
   std::unordered_map<int32_t, std::wstring> vocab_;
-
 };
 
 #endif //RUNTIME_SRC_TOKENIZER_TOKENIZER_H_

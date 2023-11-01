@@ -4,8 +4,20 @@
 
 #include "Handlers/Types/BraceHandler.h"
 
-std::unique_ptr<Construction> BraceHandler::Handle(const Construction& construction) {
-  // TODO
+std::unique_ptr<Construction> BraceHandler::Handle(const Construction& construction, ScopeAnalyzerState& state) {
+  if (construction.type == Brace) {
+    switch (construction.state) {
+      case Undefined:
+        throw std::invalid_argument("invalid state");
+      case Closed:
+        --state.brace_balance;
+        break;
+      case Opened:
+        ++state.brace_balance;
+        break;
+    }
+  }
+
   return nullptr;
 }
 

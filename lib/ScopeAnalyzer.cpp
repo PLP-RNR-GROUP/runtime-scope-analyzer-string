@@ -8,7 +8,7 @@
 
 ScopeAnalyzer::ScopeAnalyzer(const std::string& json_vocab, ScopeContext context, Language selected_language){
   waiting_for_construction_ = nullptr;
-  brace_balance = 0;
+
 
   handlers_ = handlers_selector_.Get(selected_language);
   // TODO: put on stack
@@ -18,7 +18,8 @@ ScopeAnalyzer::ScopeAnalyzer(const std::string& json_vocab, ScopeContext context
 }
 
 AddTokenResult ScopeAnalyzer::AddToken(int32_t token) {
-  bool updated_brace_balance = false;
+  int prev_brace_balance = state_.brace_balance;
+
   for (const auto& construction : constructions_stream_extractor_->Get(token)) {
     if (waiting_for_construction_ != nullptr) {
       if (construction.type == waiting_for_construction_->type
@@ -28,23 +29,9 @@ AddTokenResult ScopeAnalyzer::AddToken(int32_t token) {
       continue;
     }
 
-    if (construction.type == Brace) {
-      switch (construction.state) {
-        case Undefined:
-          throw std::invalid_argument("invalid state");
-        case Closed:
-          --brace_balance;
-          break;
-        case Opened:
-          ++brace_balance;
-          break;
-      }
-      updated_brace_balance = true;
-      continue;
-    }
 
     for (const auto& kHandler: *handlers_) {
-      auto handleResult = kHandler->Handle(construction);
+      auto handleResult = kHandler->Handle(construction, state_);
       if (handleResult != nullptr) {
         waiting_for_construction_ = std::move(handleResult);
         break;
@@ -52,7 +39,7 @@ AddTokenResult ScopeAnalyzer::AddToken(int32_t token) {
     }
   }
 
-  if (updated_brace_balance && brace_balance <= 0) {
+  if (prev_brace_balance != state_.brace_balance && state_.brace_balance <= 0) {
     return Stop;
   }
   return Continue;
@@ -60,7 +47,7 @@ AddTokenResult ScopeAnalyzer::AddToken(int32_t token) {
 
 void ScopeAnalyzer::ResetState(ScopeContext context) {
   waiting_for_construction_ = nullptr;
-  brace_balance = 0;
+  state_.brace_balance = 0;
   ApplyContext(context);
 }
 
@@ -95,11 +82,11 @@ void ScopeAnalyzer::ApplyContext(ScopeContext context) {
   }
 
   if (context.scope_opened) {
-    brace_balance = 1;
+    state_.brace_balance = 1;
   }
 }
 int ScopeAnalyzer::GetBraceBalance() const {
-  return brace_balance;
+  return state_.brace_balance;
 }
 const Construction* ScopeAnalyzer::GetWaitingForConstruction() const {
   return waiting_for_construction_.get();

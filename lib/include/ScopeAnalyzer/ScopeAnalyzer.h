@@ -12,6 +12,7 @@
 #include "Handlers/IHandler.h"
 #include "Languages/Language.h"
 #include "Languages/LanguageHandlersSelector.h"
+#include "ScopeAnalyzerState/ScopeAnalyzerState.h"
 
 #include <fstream>
 #include <vector>
@@ -30,14 +31,14 @@ class ScopeAnalyzer {
   const Construction* GetWaitingForConstruction() const;
  private:
   void ApplyContext(ScopeContext context);
+
   std::unique_ptr<ConstructionsStreamExtractor> constructions_stream_extractor_;
 
   const handlers_list* handlers_;
   LanguageHandlersSelector handlers_selector_;
-  boost::circular_buffer<char> chars_buffer;
 
-  int brace_balance;
   std::unique_ptr<Construction> waiting_for_construction_;
+  ScopeAnalyzerState state_;
 };
 
 

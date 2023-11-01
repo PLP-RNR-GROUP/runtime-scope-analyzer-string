@@ -3,7 +3,6 @@
 //
 #include "Constructions/ConstructionsStreamExtractor.h"
 
-#include <utility>
 #include <list>
 #include "nlohmann/json.hpp"
 
