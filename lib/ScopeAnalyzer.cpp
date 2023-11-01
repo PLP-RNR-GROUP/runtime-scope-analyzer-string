@@ -60,12 +60,12 @@ void ScopeAnalyzer::ApplyContext(ScopeContext context) {
   if (context.in_character) {
     waiting_for_construction_ = std::make_unique<Construction>(
         Undefined,
-        CharacterQuote);
+        Quote);
   }
   else if (context.in_string) {
     waiting_for_construction_ = std::make_unique<Construction>(
         Undefined,
-        StringQuote
+        DoubleQuote
     );
   }
   else if (context.in_short_comment) {

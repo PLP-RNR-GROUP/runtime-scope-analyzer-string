@@ -5,7 +5,7 @@
 
 std::unique_ptr<Construction> CharacterQuoteHandler::Handle(const Construction& construction,
                                                             ScopeAnalyzerState& state) {
-  if (construction.type == CharacterQuote && construction.state == Undefined) {
+  if (construction.type == Quote && construction.state == Undefined) {
     return std::make_unique<Construction>(construction);
   }
 
@@ -17,6 +17,6 @@ TryAddConstructionResult CharacterQuoteHandler::TryAddConstructionTo(char charac
   if (character != '\'') return {true};
   if (!state.buffer_.empty() && state.buffer_[0] == '\\') return {false};
 
-  constructions.emplace_back(Undefined, CharacterQuote);
+  constructions.emplace_back(Undefined, Quote);
   return {true};
 }

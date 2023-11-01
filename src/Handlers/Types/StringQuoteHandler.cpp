@@ -5,7 +5,7 @@
 #include "Handlers/Types/StringQuoteHandler.h"
 
 std::unique_ptr<Construction> StringQuoteHandler::Handle(const Construction& construction, ScopeAnalyzerState& state) {
-  if (construction.type == StringQuote && construction.state == Undefined) {
+  if (construction.type == DoubleQuote && construction.state == Undefined) {
     return std::make_unique<Construction>(construction);
   }
 
@@ -17,6 +17,6 @@ TryAddConstructionResult StringQuoteHandler::TryAddConstructionTo(char character
   if (character != '"') return {true};
   if (!state.buffer_.empty() && state.buffer_[0] == '\\') return {false};
 
-  constructions.emplace_back(Undefined, StringQuote);
+  constructions.emplace_back(Undefined, DoubleQuote);
   return {true};
 }
