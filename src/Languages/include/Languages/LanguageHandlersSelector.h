@@ -71,6 +71,11 @@ class LanguageHandlersSelector {
 
     Add(Scala, handlers_list_ptr(std::make_unique<handlers_list>(std::move(scalaHandlers))));
 
+    std::vector<handler> swift_handlers(base_handlers);
+    swift_handlers.push_back(backtick_handler);
+    swift_handlers.push_back(three_double_quote_handler);
+
+    Add(Swift, handlers_list_ptr(std::make_unique<handlers_list>(std::move(swift_handlers))));
 
 //    TODO: later
 //    assert(languages_handlers_.size() == languages_amount);
