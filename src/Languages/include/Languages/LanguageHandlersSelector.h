@@ -38,44 +38,53 @@ class LanguageHandlersSelector {
         brace_handler
     };
 
-    std::vector<handler> javaHandlers(base_handlers);
-    Add(Java, handlers_list_ptr(std::make_unique<handlers_list>(std::move(javaHandlers))));
+    std::vector<handler> java_handlers(base_handlers);
+    Add(Java, handlers_list_ptr(std::make_unique<handlers_list>(std::move(java_handlers))));
 
-    std::vector<handler> javascriptHandlers(base_handlers);
-    javascriptHandlers.push_back(backtick_handler);
-    Add(Javascript, handlers_list_ptr(std::make_unique<handlers_list>(std::move(javascriptHandlers))));
+    std::vector<handler> javascript_handlers(base_handlers);
+    javascript_handlers.push_back(backtick_handler);
+    Add(Javascript, handlers_list_ptr(std::make_unique<handlers_list>(std::move(javascript_handlers))));
 
-    std::vector<handler> objcHandlers(base_handlers);
-    Add(ObjectiveC, handlers_list_ptr(std::make_unique<handlers_list>(std::move(objcHandlers))));
+    std::vector<handler> objc_handlers(base_handlers);
+    Add(ObjectiveC, handlers_list_ptr(std::make_unique<handlers_list>(std::move(objc_handlers))));
 
-    std::vector<handler> goHandlers(base_handlers);
-    goHandlers.push_back(backtick_handler);
+    std::vector<handler> go_handlers(base_handlers);
+    go_handlers.push_back(backtick_handler);
 
-    Add(Go, handlers_list_ptr(std::make_unique<handlers_list>(std::move(goHandlers))));
+    Add(Go, handlers_list_ptr(std::make_unique<handlers_list>(std::move(go_handlers))));
 
-    std::vector<handler> csharpHandlers(base_handlers);
-    csharpHandlers.push_back(backtick_handler);
-    csharpHandlers.push_back(three_double_quote_handler);
+    std::vector<handler> csharp_handlers(base_handlers);
+    csharp_handlers.push_back(backtick_handler);
+    csharp_handlers.push_back(three_double_quote_handler);
 
-    Add(CSharp, handlers_list_ptr(std::make_unique<handlers_list>(std::move(csharpHandlers))));
+    Add(CSharp, handlers_list_ptr(std::make_unique<handlers_list>(std::move(csharp_handlers))));
 
-    std::vector<handler> kotlinHandlers(base_handlers);
-    kotlinHandlers.push_back(backtick_handler);
-    kotlinHandlers.push_back(three_double_quote_handler);
+    std::vector<handler> kotlin_handlers(base_handlers);
+    kotlin_handlers.push_back(backtick_handler);
+    kotlin_handlers.push_back(three_double_quote_handler);
 
-    Add(Kotlin, handlers_list_ptr(std::make_unique<handlers_list>(std::move(kotlinHandlers))));
+    Add(Kotlin, handlers_list_ptr(std::make_unique<handlers_list>(std::move(kotlin_handlers))));
 
-    std::vector<handler> scalaHandlers(base_handlers);
-    scalaHandlers.push_back(backtick_handler);
-    scalaHandlers.push_back(three_double_quote_handler);
+    std::vector<handler> scala_handlers(base_handlers);
+    scala_handlers.push_back(backtick_handler);
+    scala_handlers.push_back(three_double_quote_handler);
 
-    Add(Scala, handlers_list_ptr(std::make_unique<handlers_list>(std::move(scalaHandlers))));
+    Add(Scala, handlers_list_ptr(std::make_unique<handlers_list>(std::move(scala_handlers))));
 
     std::vector<handler> swift_handlers(base_handlers);
     swift_handlers.push_back(backtick_handler);
     swift_handlers.push_back(three_double_quote_handler);
 
     Add(Swift, handlers_list_ptr(std::make_unique<handlers_list>(std::move(swift_handlers))));
+
+    std::vector<handler> json_handlers {
+      brace_handler,
+      string_quote_handler,
+      long_comment_handler,
+      short_comment_handler
+    };
+
+    Add(Json, handlers_list_ptr(std::make_unique<handlers_list>(std::move(json_handlers))));
 
 //    TODO: later
 //    assert(languages_handlers_.size() == languages_amount);
