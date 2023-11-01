@@ -58,6 +58,12 @@ class LanguageHandlersSelector {
     csharpHandlers.push_back(three_double_quote_handler);
 
     Add(CSharp, handlers_list_ptr(std::make_unique<handlers_list>(std::move(csharpHandlers))));
+
+    std::vector<handler> kotlinHandlers(base_handlers);
+    kotlinHandlers.push_back(backtick_handler);
+    kotlinHandlers.push_back(three_double_quote_handler);
+
+    Add(Kotlin, handlers_list_ptr(std::make_unique<handlers_list>(std::move(kotlinHandlers))));
 //    TODO: later
 //    assert(languages_handlers_.size() == languages_amount);
   };
