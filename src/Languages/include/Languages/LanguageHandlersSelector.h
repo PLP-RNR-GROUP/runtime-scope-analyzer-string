@@ -21,24 +21,30 @@
 class LanguageHandlersSelector {
  public:
   LanguageHandlersSelector() {
-    std::vector<handler> javaHandlers;
-    javaHandlers.push_back(handler(new StringQuoteHandler()));
-    javaHandlers.push_back(handler(new CharacterQuoteHandler()));
-    javaHandlers.push_back(handler(new ShortCommentHandler()));
-    javaHandlers.push_back(handler(new LongCommentHandler()));
-    javaHandlers.push_back(handler(new BraceHandler()));
+    auto string_quote_handler = handler(new StringQuoteHandler());
+    auto character_quote_handler = handler(new CharacterQuoteHandler());
+    auto short_comment_handler = handler(new ShortCommentHandler());
+    auto long_comment_handler = handler(new LongCommentHandler());
+    auto brace_handler = handler(new BraceHandler());
+    auto backtick_handler = handler(new BacktickHandler());
 
+    std::vector<handler> base_handlers = {
+        string_quote_handler,
+        character_quote_handler,
+        short_comment_handler,
+        long_comment_handler,
+        brace_handler
+    };
+
+    std::vector<handler> javaHandlers(base_handlers);
     Add(Java, handlers_list_ptr(std::make_unique<handlers_list>(std::move(javaHandlers))));
 
-    std::vector<handler> javascriptHandlers;
-    javascriptHandlers.push_back(handler(new StringQuoteHandler()));
-    javascriptHandlers.push_back(handler(new CharacterQuoteHandler()));
-    javascriptHandlers.push_back(handler(new ShortCommentHandler()));
-    javascriptHandlers.push_back(handler(new LongCommentHandler()));
-    javascriptHandlers.push_back(handler(new BraceHandler()));
-    javascriptHandlers.push_back(handler(new BacktickHandler()));
+    std::vector<handler> javascriptHandlers(base_handlers);
+    javascriptHandlers.push_back(backtick_handler);
 
     Add(Javascript, handlers_list_ptr(std::make_unique<handlers_list>(std::move(javascriptHandlers))));
+
+
 //    TODO: later
 //    assert(languages_handlers_.size() == languages_amount);
   };
