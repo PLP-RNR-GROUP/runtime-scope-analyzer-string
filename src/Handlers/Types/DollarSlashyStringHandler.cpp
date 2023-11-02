@@ -5,7 +5,7 @@
 #include "Handlers/Types/DollarSlashyStringHandler.h"
 std::unique_ptr<Construction> DollarSlashyStringHandler::Handle(const Construction& construction, ScopeAnalyzerState& state) {
   if (construction.type == DollarSlashyString && construction.state == Opened) {
-    return std::make_unique<Construction>(Closed, LongComment);
+    return std::make_unique<Construction>(Closed, DollarSlashyString);
   }
 
   return nullptr;

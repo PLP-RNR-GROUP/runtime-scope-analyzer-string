@@ -18,6 +18,7 @@ ScopeAnalyzer::ScopeAnalyzer(const std::string& json_vocab, ScopeContext context
 
 AddTokenResult ScopeAnalyzer::AddToken(int32_t token) {
   int prev_brace_balance = state_.brace_balance;
+  bool updated_brace_balance = false;
 
   for (const auto& construction : constructions_stream_extractor_->Get(token)) {
     if (waiting_for_construction_ != nullptr) {
@@ -31,6 +32,7 @@ AddTokenResult ScopeAnalyzer::AddToken(int32_t token) {
 
     for (const auto& kHandler: *handlers_) {
       auto handleResult = kHandler->Handle(construction, state_);
+      if (prev_brace_balance != state_.brace_balance) updated_brace_balance = true;
       if (handleResult != nullptr) {
         waiting_for_construction_ = std::move(handleResult);
         break;
@@ -38,7 +40,7 @@ AddTokenResult ScopeAnalyzer::AddToken(int32_t token) {
     }
   }
 
-  if (prev_brace_balance != state_.brace_balance && state_.brace_balance <= 0) {
+  if (updated_brace_balance && state_.brace_balance <= 0) {
     return Stop;
   }
   return Continue;
