@@ -9,7 +9,6 @@
 ScopeAnalyzer::ScopeAnalyzer(const std::string& json_vocab, ScopeContext context, Language selected_language){
   waiting_for_construction_ = nullptr;
 
-
   handlers_ = handlers_selector_.Get(selected_language);
   // TODO: put on stack
   constructions_stream_extractor_ = std::make_unique<ConstructionsStreamExtractor>(json_vocab, handlers_);
@@ -45,9 +44,11 @@ AddTokenResult ScopeAnalyzer::AddToken(int32_t token) {
   return Continue;
 }
 
-void ScopeAnalyzer::ResetState(ScopeContext context) {
+void ScopeAnalyzer::ResetState(ScopeContext context, Language language) {
   waiting_for_construction_ = nullptr;
   state_.brace_balance = 0;
+  handlers_ = handlers_selector_.Get(language);
+
   ApplyContext(context);
 }
 
@@ -98,8 +99,8 @@ ScopeAnalyzer* scope_analyzer_new(const char* json_vocab, ScopeContext* context,
   return new ScopeAnalyzer(std::string(json_vocab), *context, selected_language);
 }
 
-void apply_context(ScopeAnalyzer* scope_analyzer, ScopeContext* context) {
-  scope_analyzer->ResetState(*context);
+void reset(ScopeAnalyzer* scope_analyzer, ScopeContext* context, Language language) {
+  scope_analyzer->ResetState(*context, language);
 }
 
 void scope_analyzer_del(ScopeAnalyzer* scope_analyzer) {

@@ -26,7 +26,7 @@ class ScopeAnalyzer {
                          Language selected_language);
 
   AddTokenResult AddToken(int32_t token);
-  void ResetState(ScopeContext context);
+  void ResetState(ScopeContext context, Language language);
   int GetBraceBalance() const;
   const Construction* GetWaitingForConstruction() const;
  private:
@@ -48,7 +48,7 @@ extern "C" {
 
 ScopeAnalyzer* scope_analyzer_new(const char* json_vocab, ScopeContext* context, Language selected_language);
 void scope_analyzer_del(ScopeAnalyzer* scope_analyzer);
-void apply_context(ScopeAnalyzer* scope_analyzer, ScopeContext* context);
+void reset(ScopeAnalyzer* scope_analyzer, ScopeContext* context, Language language);
 AddTokenResult add_token(ScopeAnalyzer* scope_analyzer, int32_t token);
 
 int get_brace_balance(ScopeAnalyzer* scope_analyzer);
