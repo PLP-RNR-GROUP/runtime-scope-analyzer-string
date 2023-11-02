@@ -7,6 +7,8 @@ add_library(handlers
         Types/BacktickHandler.cpp
         Types/ThreeDoubleQuoteHandler.cpp
         Types/ThreeQuoteHandler.cpp
+        Types/DollarSlashyStringHandler.cpp
+
         IHandler.cpp
 )
 

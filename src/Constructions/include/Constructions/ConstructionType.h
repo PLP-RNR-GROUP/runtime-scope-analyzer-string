@@ -12,6 +12,7 @@ enum ConstructionType {
   ThreeQuote,
   ShortComment,
   LongComment,
+  DollarSlashyString,
   Brace,
   Backtick
 };
