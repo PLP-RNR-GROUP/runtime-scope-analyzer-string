@@ -34,3 +34,8 @@ std::list<Construction> ConstructionsStreamExtractor::Get(int32_t token) {
 
   return constructions;
 }
+
+void ConstructionsStreamExtractor::UpdateHandlers(const handlers_list* handlers) {
+  handlers_ = handlers;
+  state_.buffer_.clear();
+}

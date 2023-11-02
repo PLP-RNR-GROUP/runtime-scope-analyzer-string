@@ -16,10 +16,10 @@ TryAddConstructionResult ThreeDoubleQuoteHandler::TryAddConstructionTo(char char
                                                                        std::list<Construction>& constructions) {
   if (character != '"') return {true};
 
-  if (!state.buffer_.empty() && state.buffer_[0] == '"' && state.buffer_[1] == '"') {
-    // Remove the last two constructions, as they are guaranteed to be `DoubleQuote`.
-    constructions.pop_back();
-    constructions.pop_back();
+  if (state.buffer_.size() >= 2 && state.buffer_[0] == '"' && state.buffer_[1] == '"') {
+    if (!constructions.empty() && constructions.back().type == DoubleQuote) {
+      constructions.pop_back();
+    }
 
     constructions.emplace_back(Undefined, ThreeDoubleQuote);
     return {false};

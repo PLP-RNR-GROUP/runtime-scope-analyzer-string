@@ -50,7 +50,7 @@ void ScopeAnalyzer::ResetState(ScopeContext context, Language language) {
   waiting_for_construction_ = nullptr;
   state_.brace_balance = 0;
   handlers_ = handlers_selector_.Get(language);
-
+  constructions_stream_extractor_->UpdateHandlers(handlers_);
   ApplyContext(context);
 }
 
