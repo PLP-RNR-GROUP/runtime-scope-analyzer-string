@@ -9,6 +9,7 @@ enum ConstructionType {
   DoubleQuote = 1,
   Quote,
   ThreeDoubleQuote,
+  ThreeQuote,
   ShortComment,
   LongComment,
   Brace,
