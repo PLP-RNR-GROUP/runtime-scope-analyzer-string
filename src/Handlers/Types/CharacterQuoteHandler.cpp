@@ -3,8 +3,9 @@
 //
 #include "Handlers/Types/CharacterQuoteHandler.h"
 
-std::unique_ptr<Construction> CharacterQuoteHandler::Handle(const Construction& construction) {
-  if (construction.type == CharacterQuote && construction.state == Undefined) {
+std::unique_ptr<Construction> CharacterQuoteHandler::Handle(const Construction& construction,
+                                                            ScopeAnalyzerState& state) {
+  if (construction.type == Quote && construction.state == Undefined) {
     return std::make_unique<Construction>(construction);
   }
 
@@ -14,7 +15,8 @@ TryAddConstructionResult CharacterQuoteHandler::TryAddConstructionTo(char charac
                                                                      ConstructionStreamExtractorState& state,
                                                                      std::list<Construction>& constructions) {
   if (character != '\'') return {true};
+  if (!state.buffer_.empty() && state.buffer_[0] == '\\') return {false};
 
-  constructions.emplace_back(Undefined, CharacterQuote);
+  constructions.emplace_back(Undefined, Quote);
   return {true};
 }

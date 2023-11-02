@@ -12,24 +12,16 @@
 #include "Handlers/Types/ShortCommentHandler.h"
 #include "Handlers/Types/LongCommentHandler.h"
 #include "Handlers/IHandlerList.h"
+#include "Handlers/Types/BraceHandler.h"
+#include "Handlers/Types/BacktickHandler.h"
+#include "Handlers/Types/ThreeDoubleQuoteHandler.h"
 
 #include <vector>
 #include <unordered_map>
 
 class LanguageHandlersSelector {
  public:
-  LanguageHandlersSelector() {
-    std::vector<handler> javaHandlers;
-    javaHandlers.push_back(handler(new StringQuoteHandler()));
-    javaHandlers.push_back(handler(new CharacterQuoteHandler()));
-    javaHandlers.push_back(handler(new ShortCommentHandler()));
-    javaHandlers.push_back(handler(new LongCommentHandler()));
-
-    Add(Java, handlers_list_ptr(std::make_unique<const std::vector<handler>>(std::move(javaHandlers))));
-
-//    TODO: later
-//    assert(languages_handlers_.size() == languages_amount);
-  };
+  LanguageHandlersSelector();
 
   void Add(Language language, handlers_list_ptr handlers);
   const handlers_list* Get(Language language);

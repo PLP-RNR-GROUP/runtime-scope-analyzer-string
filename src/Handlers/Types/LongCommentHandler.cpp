@@ -3,9 +3,9 @@
 //
 
 #include "Handlers/Types/LongCommentHandler.h"
-std::unique_ptr<Construction> LongCommentHandler::Handle(const Construction& construction) {
+std::unique_ptr<Construction> LongCommentHandler::Handle(const Construction& construction, ScopeAnalyzerState& state) {
   if (construction.type == LongComment && construction.state == Opened) {
-    return std::make_unique<Construction>(Opened, LongComment);
+    return std::make_unique<Construction>(Closed, LongComment);
   }
 
   return nullptr;
