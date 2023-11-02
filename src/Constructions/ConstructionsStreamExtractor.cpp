@@ -11,7 +11,7 @@ using json = nlohmann::json;
 ConstructionsStreamExtractor::ConstructionsStreamExtractor(const std::string& json_vocab, const handlers_list* handlers) :
   tokenizer_(json_vocab)
 {
-  state_.buffer_ = boost::circular_buffer<char>(3);
+  state_.buffer_ = boost::circular_buffer<char>(2);
   handlers_ = handlers;
 }
 
