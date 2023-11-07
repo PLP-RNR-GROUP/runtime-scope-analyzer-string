@@ -5,52 +5,37 @@
 #include <memory>
 
 #include "ScopeAnalyzer/ScopeAnalyzer.h"
+#include "ScopeAnalyzer/Analyzers/BraceAnalyzer.h"
+#include "ScopeAnalyzer/Analyzers/IndentationAnalyzer.h"
 
-ScopeAnalyzer::ScopeAnalyzer(const std::string& json_vocab, ScopeContext context, Language selected_language){
-  waiting_for_construction_ = nullptr;
-
-  handlers_ = handlers_selector_.Get(selected_language);
+ScopeAnalyzer::ScopeAnalyzer(
+    const std::string& json_vocab, ScopeContext context, Language selected_language){
   constructions_stream_extractor_ = std::make_unique<ConstructionsStreamExtractor>(json_vocab, handlers_);
 
-  ApplyContext(context);
-}
-
-AddTokenResult ScopeAnalyzer::AddToken(int32_t token) {
-  int prev_brace_balance = state_.brace_balance;
-  bool updated_brace_balance = false;
-
-  for (const auto& construction : constructions_stream_extractor_->Get(token)) {
-    if (waiting_for_construction_ != nullptr) {
-      if (construction.type == waiting_for_construction_->type
-          && construction.state == waiting_for_construction_->state) {
-        waiting_for_construction_ = nullptr;
-      }
-      continue;
-    }
-
-
-    for (const auto& kHandler: *handlers_) {
-      auto handleResult = kHandler->Handle(construction, state_);
-      if (prev_brace_balance != state_.brace_balance) updated_brace_balance = true;
-      if (handleResult != nullptr) {
-        waiting_for_construction_ = std::move(handleResult);
-        break;
-      }
-    }
-  }
-
-  if (updated_brace_balance && state_.brace_balance <= 0) {
-    return Stop;
-  }
-  return Continue;
+  ResetState(context, selected_language);
 }
 
 void ScopeAnalyzer::ResetState(ScopeContext context, Language language) {
-  waiting_for_construction_ = nullptr;
+  state_.waiting_for_construction_ = nullptr;
   state_.brace_balance = 0;
+
   handlers_ = handlers_selector_.Get(language);
   constructions_stream_extractor_->UpdateHandlers(handlers_);
   ApplyContext(context);
+
+  if (language == Python) {
+    analyzer_ = std::unique_ptr<IAnalyzer, IAnalyzer::Deleter>(
+        new IndentationAnalyzer(
+            constructions_stream_extractor_.get(),
+            state_,
+            handlers_));
+  } else {
+    analyzer_ = std::unique_ptr<IAnalyzer, IAnalyzer::Deleter>(
+        new BraceAnalyzer(
+            constructions_stream_extractor_.get(),
+            state_,
+            handlers_));
+  }
 }
 
 void ScopeAnalyzer::ApplyContext(ScopeContext context) {
@@ -60,24 +45,24 @@ void ScopeAnalyzer::ApplyContext(ScopeContext context) {
 
   // TODO: Make interface
   if (context.in_character) {
-    waiting_for_construction_ = std::make_unique<Construction>(
+    state_.waiting_for_construction_ = std::make_unique<Construction>(
         Undefined,
         Quote);
   }
   else if (context.in_string) {
-    waiting_for_construction_ = std::make_unique<Construction>(
+    state_.waiting_for_construction_ = std::make_unique<Construction>(
         Undefined,
         DoubleQuote
     );
   }
   else if (context.in_short_comment) {
-    waiting_for_construction_ = std::make_unique<Construction>(
+    state_.waiting_for_construction_ = std::make_unique<Construction>(
         Closed,
         ShortComment
     );
   }
   else if (context.in_long_comment) {
-    waiting_for_construction_ = std::make_unique<Construction>(
+    state_.waiting_for_construction_ = std::make_unique<Construction>(
         Closed,
         LongComment
     );
@@ -87,11 +72,17 @@ void ScopeAnalyzer::ApplyContext(ScopeContext context) {
     state_.brace_balance = 1;
   }
 }
+
 int ScopeAnalyzer::GetBraceBalance() const {
   return state_.brace_balance;
 }
+
 const Construction* ScopeAnalyzer::GetWaitingForConstruction() const {
-  return waiting_for_construction_.get();
+  return state_.waiting_for_construction_.get();
+}
+
+AddTokenResult ScopeAnalyzer::AddToken(int32_t token) {
+  return analyzer_->AddToken(token);
 }
 
 // Обвязка C для методов C++

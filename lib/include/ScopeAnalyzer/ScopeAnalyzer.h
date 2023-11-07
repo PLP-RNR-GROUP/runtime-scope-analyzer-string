@@ -8,14 +8,17 @@
 #include "nlohmann/json.hpp"
 #include "ScopeAnalyzer/Results/AddTokenResult.h"
 #include "Constructions/ConstructionsStreamExtractor.h"
+#include "ScopeAnalyzerState/ScopeAnalyzerState.h"
+#include "ScopeAnalyzer/Analyzers/IAnalyzer.h"
+
 #include "ScopeContext.h"
 #include "Handlers/IHandler.h"
 #include "Languages/Language.h"
 #include "Languages/LanguageHandlersSelector.h"
-#include "ScopeAnalyzerState/ScopeAnalyzerState.h"
 
 #include <fstream>
 #include <vector>
+#include <string>
 
 using json = nlohmann::json;
 
@@ -32,12 +35,12 @@ class ScopeAnalyzer {
  private:
   void ApplyContext(ScopeContext context);
 
+  std::unique_ptr<IAnalyzer, IAnalyzer::Deleter> analyzer_;
   std::unique_ptr<ConstructionsStreamExtractor> constructions_stream_extractor_;
 
   const handlers_list* handlers_;
   LanguageHandlersSelector handlers_selector_;
 
-  std::unique_ptr<Construction> waiting_for_construction_;
   ScopeAnalyzerState state_;
 };
 

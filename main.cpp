@@ -13,9 +13,9 @@ int main() {
   buffer << vocabFile.rdbuf();
 
 ////  "{{{}}}"void scope {}
-  std::vector<int32_t> tokens {355, 308, 8050, 98, 585, 2637};
+  std::vector<int32_t> tokens {37488, 7, 308, 8050, 98, 5967, 7, 2637};
 
-  ScopeAnalyzer analyzer(buffer.str(), ScopeContext(false, false, false, false, false), Java);
+  ScopeAnalyzer analyzer(buffer.str(), ScopeContext(false, false, false, false, false), CSharp);
   for (const auto token: tokens) {
     std::cout << analyzer.AddToken(token) << '\n';
   }

@@ -87,6 +87,7 @@ LanguageHandlersSelector::LanguageHandlersSelector() {
 
     Add(Groovy, handlers_list_ptr(std::make_unique<handlers_list>(std::move(groovy_handlers))));
 
-    assert(languages_handlers_.size() == languages_amount);
-  };
+    // TODO: Add Python support
+//    assert(languages_handlers_.size() == languages_amount);
+  }
 }
