@@ -10,15 +10,13 @@
 class BraceAnalyzer : public IAnalyzer {
  public:
   BraceAnalyzer(ConstructionsStreamExtractor* constructions_stream_extractor,
-                ScopeAnalyzerState& state,
-                const handlers_list* handlers);
+                handlers_list_ptr handlers);
   AddTokenResult AddToken(int32_t token) override;
 
  private:
   ConstructionsStreamExtractor* constructions_stream_extractor_;
-  ScopeAnalyzerState& state_;
-  const handlers_list* handlers_;
-
+  ScopeAnalyzerState state_;
+  handlers_list_ptr handlers_;
 };
 
 #endif //RUNTIME_LIB_INCLUDE_SCOPEANALYZER_ANALYZERS_BRACEANALYZER_H_

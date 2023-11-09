@@ -1,7 +1,9 @@
 add_library(scope_lib SHARED
         ScopeAnalyzer.cpp
-        Analyzers/BraceAnalyzer.cpp
-        Analyzers/IndentationAnalyzer.cpp
+        AnalyzerTypes/BraceAnalyzer.cpp
+        AnalyzerTypes/IndentationAnalyzer.cpp
+
+        Analyzers/JavaAnalyzer.cpp
 )
 
 target_include_directories(scope_lib PUBLIC include ${CMAKE_CURRENT_SOURCE_DIR})

@@ -6,6 +6,9 @@
 #define RUNTIME_LIB_INCLUDE_SCOPEANALYZER_ANALYZERS_IANALYZER_H_
 
 #include "ScopeAnalyzer/Results/AddTokenResult.h"
+#include "ScopeAnalyzer/ScopeContext.h"
+#include "Languages/Language.h"
+
 #include <cstdint>
 
 class IAnalyzer {
@@ -20,6 +23,7 @@ class IAnalyzer {
   IAnalyzer& operator=(const IAnalyzer&) = delete;
 
   virtual AddTokenResult AddToken(int32_t token) = 0;
+  virtual void ResetState(ScopeContext context, Language language) = 0;
 
   struct Deleter
   {

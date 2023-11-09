@@ -5,8 +5,8 @@
 #include <memory>
 
 #include "ScopeAnalyzer/ScopeAnalyzer.h"
-#include "ScopeAnalyzer/Analyzers/BraceAnalyzer.h"
-#include "ScopeAnalyzer/Analyzers/IndentationAnalyzer.h"
+#include "ScopeAnalyzer/AnalyzerTypes/BraceAnalyzer.h"
+#include "ScopeAnalyzer/AnalyzerTypes/IndentationAnalyzer.h"
 
 ScopeAnalyzer::ScopeAnalyzer(
     const std::string& json_vocab, ScopeContext context, Language selected_language){
@@ -16,9 +16,6 @@ ScopeAnalyzer::ScopeAnalyzer(
 }
 
 void ScopeAnalyzer::ResetState(ScopeContext context, Language language) {
-  state_.waiting_for_construction_ = nullptr;
-  state_.brace_balance = 0;
-
   handlers_ = handlers_selector_.Get(language);
   constructions_stream_extractor_->UpdateHandlers(handlers_);
   ApplyContext(context);

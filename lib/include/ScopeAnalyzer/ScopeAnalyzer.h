@@ -9,7 +9,7 @@
 #include "ScopeAnalyzer/Results/AddTokenResult.h"
 #include "Constructions/ConstructionsStreamExtractor.h"
 #include "ScopeAnalyzerState/ScopeAnalyzerState.h"
-#include "ScopeAnalyzer/Analyzers/IAnalyzer.h"
+#include "ScopeAnalyzer/AnalyzerTypes/IAnalyzer.h"
 
 #include "ScopeContext.h"
 #include "Handlers/IHandler.h"
@@ -40,8 +40,6 @@ class ScopeAnalyzer {
 
   const handlers_list* handlers_;
   LanguageHandlersSelector handlers_selector_;
-
-  ScopeAnalyzerState state_;
 };
 
 

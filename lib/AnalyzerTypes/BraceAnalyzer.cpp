@@ -2,7 +2,7 @@
 // Created by Даник 💪 on 07.11.2023.
 //
 
-#include "ScopeAnalyzer/Analyzers/BraceAnalyzer.h"
+#include "ScopeAnalyzer/AnalyzerTypes/BraceAnalyzer.h"
 
 AddTokenResult BraceAnalyzer::AddToken(int32_t token) {
   int prev_brace_balance = state_.brace_balance;
@@ -34,6 +34,6 @@ AddTokenResult BraceAnalyzer::AddToken(int32_t token) {
 }
 
 BraceAnalyzer::BraceAnalyzer(ConstructionsStreamExtractor* constructions_stream_extractor,
-                             ScopeAnalyzerState& state,
-                             const handlers_list* handlers) : constructions_stream_extractor_(
-    constructions_stream_extractor), state_(state), handlers_(handlers) {};
+                             handlers_list_ptr handlers) :
+                             constructions_stream_extractor_(constructions_stream_extractor),
+                             handlers_(std::move(handlers)) {};
