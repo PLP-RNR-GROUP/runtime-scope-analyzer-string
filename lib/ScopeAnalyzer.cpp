@@ -5,94 +5,68 @@
 #include <memory>
 
 #include "ScopeAnalyzer/ScopeAnalyzer.h"
+#include "Analyzers/JavaAnalyzer.h"
+#include "Analyzers/JavascriptAnalyzer.h"
+#include "Analyzers/ObjectiveCAnalyzer.h"
+#include "Analyzers/CSharpAnalyzer.h"
+#include "Analyzers/GoAnalyzer.h"
+#include "Analyzers/GroovyAnalyzer.h"
+#include "Analyzers/KotlinAnalyzer.h"
+#include "Analyzers/ScalaAnalyzer.h"
+#include "Analyzers/SwiftAnalyzer.h"
+#include "Analyzers/JsonAnalyzer.h"
 
-ScopeAnalyzer::ScopeAnalyzer(const std::string& json_vocab, ScopeContext context, Language selected_language){
-  waiting_for_construction_ = nullptr;
-
-  handlers_ = handlers_selector_.Get(selected_language);
-  // TODO: put on stack
-  constructions_stream_extractor_ = std::make_unique<ConstructionsStreamExtractor>(json_vocab, handlers_);
-
-  ApplyContext(context);
-}
-
-AddTokenResult ScopeAnalyzer::AddToken(int32_t token) {
-  int prev_brace_balance = state_.brace_balance;
-  bool updated_brace_balance = false;
-
-  for (const auto& construction : constructions_stream_extractor_->Get(token)) {
-    if (waiting_for_construction_ != nullptr) {
-      if (construction.type == waiting_for_construction_->type
-          && construction.state == waiting_for_construction_->state) {
-        waiting_for_construction_ = nullptr;
-      }
-      continue;
-    }
-
-
-    for (const auto& kHandler: *handlers_) {
-      auto handleResult = kHandler->Handle(construction, state_);
-      if (prev_brace_balance != state_.brace_balance) updated_brace_balance = true;
-      if (handleResult != nullptr) {
-        waiting_for_construction_ = std::move(handleResult);
-        break;
-      }
-    }
-  }
-
-  if (updated_brace_balance && state_.brace_balance <= 0) {
-    return Stop;
-  }
-  return Continue;
+ScopeAnalyzer::ScopeAnalyzer(
+    const std::string& json_vocab, ScopeContext context, Language selected_language)
+    : tokenizer_(json_vocab) {
+  ResetState(context, selected_language);
 }
 
 void ScopeAnalyzer::ResetState(ScopeContext context, Language language) {
-  waiting_for_construction_ = nullptr;
-  state_.brace_balance = 0;
-  handlers_ = handlers_selector_.Get(language);
-  constructions_stream_extractor_->UpdateHandlers(handlers_);
-  ApplyContext(context);
+  analyzer_ = PickAnalyzerForLanguage(language);
+  analyzer_->ApplyContext(context);
 }
 
-void ScopeAnalyzer::ApplyContext(ScopeContext context) {
-  if (context.in_character + context.in_long_comment + context.in_short_comment + context.in_string > 1) {
-    throw std::invalid_argument("start context is invalid");
+AddTokenResult ScopeAnalyzer::AddToken(int32_t token) {
+  return analyzer_->AddToken(token);
+}
+std::unique_ptr<IAnalyzer, IAnalyzer::Deleter> ScopeAnalyzer::PickAnalyzerForLanguage(Language language) {
+  switch (language) {
+    case Java:
+      return std::unique_ptr<IAnalyzer,
+                             IAnalyzer::Deleter>(new JavaAnalyzer(tokenizer_));
+    case Javascript:
+      return std::unique_ptr<IAnalyzer,
+                             IAnalyzer::Deleter>(new JavascriptAnalyzer(tokenizer_));
+    case ObjectiveC:
+      return std::unique_ptr<IAnalyzer,
+                             IAnalyzer::Deleter>(new ObjectiveCAnalyzer(tokenizer_));
+    case CSharp:
+      return std::unique_ptr<IAnalyzer,
+                             IAnalyzer::Deleter>(new CSharpAnalyzer(tokenizer_));
+    case Go:
+      return std::unique_ptr<IAnalyzer,
+                             IAnalyzer::Deleter>(new GoAnalyzer(tokenizer_));
+    case Groovy:
+      return std::unique_ptr<IAnalyzer,
+                             IAnalyzer::Deleter>(new GroovyAnalyzer(tokenizer_));
+    case Kotlin:
+      return std::unique_ptr<IAnalyzer,
+                             IAnalyzer::Deleter>(new KotlinAnalyzer(tokenizer_));
+    case Scala:
+      return std::unique_ptr<IAnalyzer,
+                             IAnalyzer::Deleter>(new ScalaAnalyzer(tokenizer_));
+    case Swift:
+      return std::unique_ptr<IAnalyzer,
+                             IAnalyzer::Deleter>(new SwiftAnalyzer(tokenizer_));
+    case Json:
+      return std::unique_ptr<IAnalyzer,
+                             IAnalyzer::Deleter>(new JsonAnalyzer(tokenizer_));
+    case Python:
+      throw std::runtime_error("python is not implemented");
   }
 
-  // TODO: Make interface
-  if (context.in_character) {
-    waiting_for_construction_ = std::make_unique<Construction>(
-        Undefined,
-        Quote);
-  }
-  else if (context.in_string) {
-    waiting_for_construction_ = std::make_unique<Construction>(
-        Undefined,
-        DoubleQuote
-    );
-  }
-  else if (context.in_short_comment) {
-    waiting_for_construction_ = std::make_unique<Construction>(
-        Closed,
-        ShortComment
-    );
-  }
-  else if (context.in_long_comment) {
-    waiting_for_construction_ = std::make_unique<Construction>(
-        Closed,
-        LongComment
-    );
-  }
-
-  if (context.scope_opened) {
-    state_.brace_balance = 1;
-  }
-}
-int ScopeAnalyzer::GetBraceBalance() const {
-  return state_.brace_balance;
-}
-const Construction* ScopeAnalyzer::GetWaitingForConstruction() const {
-  return waiting_for_construction_.get();
+  throw std::invalid_argument("selected language is not supported");
 }
 
 // Обвязка C для методов C++
@@ -111,12 +85,4 @@ void scope_analyzer_del(ScopeAnalyzer* scope_analyzer) {
 
 AddTokenResult add_token(ScopeAnalyzer* scope_analyzer, int32_t token) {
   return scope_analyzer->AddToken(token);
-}
-
-int get_brace_balance(ScopeAnalyzer* scope_analyzer) {
-  return scope_analyzer->GetBraceBalance();
-}
-
-const Construction* get_waiting_for_construction(ScopeAnalyzer* scope_analyzer) {
-  return scope_analyzer->GetWaitingForConstruction();
 }

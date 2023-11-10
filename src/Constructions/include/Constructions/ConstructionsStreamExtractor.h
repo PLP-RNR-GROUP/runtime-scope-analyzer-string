@@ -16,11 +16,11 @@
 
 class ConstructionsStreamExtractor {
  public:
-  explicit ConstructionsStreamExtractor(const std::string& json_vocab, const handlers_list* handlers);
+  explicit ConstructionsStreamExtractor(const Tokenizer& tokenizer, const handlers_list* handlers);
   std::list<Construction> Get(int32_t token);
   void UpdateHandlers(const handlers_list* handlers);
  private:
-  Tokenizer tokenizer_;
+  const Tokenizer& tokenizer_;
   ConstructionStreamExtractorState state_;
   const handlers_list* handlers_;
 };

@@ -8,13 +8,6 @@
 
 using json = nlohmann::json;
 
-ConstructionsStreamExtractor::ConstructionsStreamExtractor(const std::string& json_vocab, const handlers_list* handlers) :
-  tokenizer_(json_vocab)
-{
-  state_.buffer_ = boost::circular_buffer<char>(2);
-  handlers_ = handlers;
-}
-
 std::list<Construction> ConstructionsStreamExtractor::Get(int32_t token) {
   std::string token_metadata = tokenizer_.Decode(token);
   std::list<Construction> constructions;
@@ -38,4 +31,10 @@ std::list<Construction> ConstructionsStreamExtractor::Get(int32_t token) {
 void ConstructionsStreamExtractor::UpdateHandlers(const handlers_list* handlers) {
   handlers_ = handlers;
   state_.buffer_.clear();
+}
+
+ConstructionsStreamExtractor::ConstructionsStreamExtractor(const Tokenizer& tokenizer, const handlers_list* handlers) :
+tokenizer_(tokenizer ){
+  state_.buffer_ = boost::circular_buffer<char>(2);
+  handlers_ = handlers;
 }

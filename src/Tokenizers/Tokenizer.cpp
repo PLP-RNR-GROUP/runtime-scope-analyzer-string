@@ -7,11 +7,16 @@
 #include <sstream>
 #include <codecvt>
 
-std::string Tokenizer::Decode(int32_t token) {
+std::string Tokenizer::Decode(int32_t token) const {
   std::wstring coded_token = vocab_.at(token);
 
   std::for_each(coded_token.begin(), coded_token.end(), [this](wchar_t& character) {
-    character = char(byte_decoder_[character]);
+    auto findResult = byte_decoder_.find(character);
+    if (findResult == byte_decoder_.end()) {
+      throw std::runtime_error("unknown character");
+    }
+
+    character = char(findResult->second);
   });
 
   return {coded_token.begin(), coded_token.end()};

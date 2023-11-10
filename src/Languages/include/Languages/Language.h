@@ -5,8 +5,6 @@
 #ifndef RUNTIME_SRC_LANGUAGES_LANGUAGE_H_
 #define RUNTIME_SRC_LANGUAGES_LANGUAGE_H_
 
-const int languages_amount = 10;
-
 enum Language {
   Javascript = 1,
   Java,
@@ -17,7 +15,8 @@ enum Language {
   Kotlin,
   Scala,
   Swift,
-  Json
+  Json,
+  Python
 };
 
 #endif //RUNTIME_SRC_LANGUAGES_LANGUAGE_H_
