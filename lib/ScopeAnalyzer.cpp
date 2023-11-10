@@ -19,7 +19,6 @@
 ScopeAnalyzer::ScopeAnalyzer(
     const std::string& json_vocab, ScopeContext context, Language selected_language)
     : tokenizer_(json_vocab) {
-
   ResetState(context, selected_language);
 }
 
@@ -27,14 +26,6 @@ void ScopeAnalyzer::ResetState(ScopeContext context, Language language) {
   analyzer_ = PickAnalyzerForLanguage(language);
   analyzer_->ApplyContext(context);
 }
-
-//int ScopeAnalyzer::GetBraceBalance() const {
-////  return state_.brace_balance;
-//}
-//
-//const Construction* ScopeAnalyzer::GetWaitingForConstruction() const {
-////  return state_.waiting_for_construction_.get();
-//}
 
 AddTokenResult ScopeAnalyzer::AddToken(int32_t token) {
   return analyzer_->AddToken(token);
@@ -95,11 +86,3 @@ void scope_analyzer_del(ScopeAnalyzer* scope_analyzer) {
 AddTokenResult add_token(ScopeAnalyzer* scope_analyzer, int32_t token) {
   return scope_analyzer->AddToken(token);
 }
-
-//int get_brace_balance(ScopeAnalyzer* scope_analyzer) {
-//  return scope_analyzer->GetBraceBalance();
-//}
-//
-//const Construction* get_waiting_for_construction(ScopeAnalyzer* scope_analyzer) {
-//  return scope_analyzer->GetWaitingForConstruction();
-//}

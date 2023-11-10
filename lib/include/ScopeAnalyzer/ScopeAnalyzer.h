@@ -29,8 +29,7 @@ class ScopeAnalyzer {
 
   AddTokenResult AddToken(int32_t token);
   void ResetState(ScopeContext context, Language language);
-//  int GetBraceBalance() const;
-//  const Construction* GetWaitingForConstruction() const;
+
  private:
   std::unique_ptr<IAnalyzer, IAnalyzer::Deleter> analyzer_;
 
@@ -47,9 +46,6 @@ ScopeAnalyzer* scope_analyzer_new(const char* json_vocab, ScopeContext* context,
 void scope_analyzer_del(ScopeAnalyzer* scope_analyzer);
 void reset(ScopeAnalyzer* scope_analyzer, ScopeContext* context, Language language);
 AddTokenResult add_token(ScopeAnalyzer* scope_analyzer, int32_t token);
-
-//int get_brace_balance(ScopeAnalyzer* scope_analyzer);
-//const Construction* get_waiting_for_construction(ScopeAnalyzer* scope_analyzer);
 
 #ifdef __cplusplus
 }
