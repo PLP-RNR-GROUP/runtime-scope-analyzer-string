@@ -15,7 +15,6 @@ static handlers_list_ptr getHandlersListPtr() {
       handler(new CharacterQuoteHandler()),
       handler(new ShortCommentHandler()),
       handler(new LongCommentHandler()),
-      handler(new BacktickHandler()),
   };
 
   std::vector<handler> registered_handlers_vector(std::make_move_iterator(std::begin(registered_handlers)),

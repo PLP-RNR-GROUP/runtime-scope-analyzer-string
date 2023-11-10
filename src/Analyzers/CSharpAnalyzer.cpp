@@ -17,7 +17,6 @@ static handlers_list_ptr getHandlersListPtr() {
       handler(new CharacterQuoteHandler()),
       handler(new ShortCommentHandler()),
       handler(new LongCommentHandler()),
-      handler(new BacktickHandler()),
       handler(new ThreeDoubleQuoteHandler())
   };
 
