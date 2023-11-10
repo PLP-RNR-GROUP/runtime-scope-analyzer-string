@@ -6,15 +6,14 @@
 #define RUNTIME_SRC_ANALYZER_H_
 
 #include "nlohmann/json.hpp"
-#include "ScopeAnalyzer/Results/AddTokenResult.h"
+#include "AnalyzerTypes/Results//AddTokenResult.h"
 #include "Constructions/ConstructionsStreamExtractor.h"
 #include "ScopeAnalyzerState/ScopeAnalyzerState.h"
-#include "ScopeAnalyzer/AnalyzerTypes/IAnalyzer.h"
+#include "AnalyzerTypes/IAnalyzer.h"
 
-#include "ScopeContext.h"
+#include "AnalyzerTypes/ScopeContext.h"
 #include "Handlers/IHandler.h"
 #include "Languages/Language.h"
-#include "Languages/LanguageHandlersSelector.h"
 
 #include <fstream>
 #include <vector>
@@ -30,16 +29,13 @@ class ScopeAnalyzer {
 
   AddTokenResult AddToken(int32_t token);
   void ResetState(ScopeContext context, Language language);
-  int GetBraceBalance() const;
-  const Construction* GetWaitingForConstruction() const;
+//  int GetBraceBalance() const;
+//  const Construction* GetWaitingForConstruction() const;
  private:
-  void ApplyContext(ScopeContext context);
-
   std::unique_ptr<IAnalyzer, IAnalyzer::Deleter> analyzer_;
-  std::unique_ptr<ConstructionsStreamExtractor> constructions_stream_extractor_;
 
-  const handlers_list* handlers_;
-  LanguageHandlersSelector handlers_selector_;
+  std::unique_ptr<IAnalyzer, IAnalyzer::Deleter> PickAnalyzerForLanguage(Language language);
+  Tokenizer tokenizer_;
 };
 
 
@@ -52,8 +48,8 @@ void scope_analyzer_del(ScopeAnalyzer* scope_analyzer);
 void reset(ScopeAnalyzer* scope_analyzer, ScopeContext* context, Language language);
 AddTokenResult add_token(ScopeAnalyzer* scope_analyzer, int32_t token);
 
-int get_brace_balance(ScopeAnalyzer* scope_analyzer);
-const Construction* get_waiting_for_construction(ScopeAnalyzer* scope_analyzer);
+//int get_brace_balance(ScopeAnalyzer* scope_analyzer);
+//const Construction* get_waiting_for_construction(ScopeAnalyzer* scope_analyzer);
 
 #ifdef __cplusplus
 }

@@ -14,7 +14,7 @@ using json = nlohmann::json;
 class Tokenizer {
  public:
   explicit Tokenizer(const std::string& json_vocab);
-  std::string Decode(int32_t token);
+  std::string Decode(int32_t token) const;
  private:
   std::unordered_map<wchar_t, int32_t> byte_decoder_;
   std::unordered_map<int32_t, std::wstring> vocab_;

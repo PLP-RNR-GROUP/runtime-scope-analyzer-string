@@ -5,25 +5,41 @@
 #ifndef RUNTIME_LIB_INCLUDE_SCOPEANALYZER_ANALYZERS_IANALYZER_H_
 #define RUNTIME_LIB_INCLUDE_SCOPEANALYZER_ANALYZERS_IANALYZER_H_
 
-#include "ScopeAnalyzer/Results/AddTokenResult.h"
-#include "ScopeAnalyzer/ScopeContext.h"
 #include "Languages/Language.h"
+#include "AnalyzerTypes/Results/AddTokenResult.h"
+#include "ScopeContext.h"
+#include "Handlers/IHandlerList.h"
+#include "Tokenizers/Tokenizer.h"
+#include "Constructions/ConstructionsStreamExtractor.h"
 
 #include <cstdint>
 
 class IAnalyzer {
  protected:
-  IAnalyzer() = default;
   virtual void Delete() {
     delete this;
   };
   virtual ~IAnalyzer() = default;
+
+  handlers_list_ptr handlers_;
+  ConstructionsStreamExtractor constructions_stream_extractor_;
+
+  explicit IAnalyzer(const Tokenizer& tokenizer, handlers_list_ptr handlers) :
+  handlers_(std::move(handlers)),
+  constructions_stream_extractor_(tokenizer, handlers_.get()) {
+  }
 
  public:
   IAnalyzer& operator=(const IAnalyzer&) = delete;
 
   virtual AddTokenResult AddToken(int32_t token) = 0;
   virtual void ResetState(ScopeContext context, Language language) = 0;
+  virtual void ApplyContext(ScopeContext context) = 0;
+
+  // TODO: move into cpp file
+  const handlers_list* GetHandlers() {
+    return handlers_.get();
+  }
 
   struct Deleter
   {

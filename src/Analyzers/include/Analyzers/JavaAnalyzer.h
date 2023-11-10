@@ -5,11 +5,11 @@
 #ifndef RUNTIME_LIB_INCLUDE_SCOPEANALYZER_ANALYZERS_JAVAANALYZER_H_
 #define RUNTIME_LIB_INCLUDE_SCOPEANALYZER_ANALYZERS_JAVAANALYZER_H_
 
-#include "ScopeAnalyzer/AnalyzerTypes/BraceAnalyzer.h"
+#include "AnalyzerTypes/BraceAnalyzer.h"
 
 class JavaAnalyzer : public BraceAnalyzer {
  public:
-  JavaAnalyzer(ConstructionsStreamExtractor* constructions_stream_extractor);
+  explicit JavaAnalyzer(const Tokenizer& tokenizer);
 };
 
 #endif //RUNTIME_LIB_INCLUDE_SCOPEANALYZER_ANALYZERS_JAVAANALYZER_H_
