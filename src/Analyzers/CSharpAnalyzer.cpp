@@ -1,11 +1,14 @@
 //
-// Created by Даник 💪 on 09.11.2023.
+// Created by Даник 💪 on 10.11.2023.
 //
-#include "Analyzers/JavaAnalyzer.h"
+
+#include "Analyzers/CSharpAnalyzer.h"
+
 #include "Handlers/Types/BacktickHandler.h"
 #include "Handlers/Types/StringQuoteHandler.h"
 #include "Handlers/Types/ShortCommentHandler.h"
 #include "Handlers/Types/LongCommentHandler.h"
+#include "Handlers/Types/ThreeDoubleQuoteHandler.h"
 
 static handlers_list_ptr getHandlersListPtr() {
   handler registered_handlers[] = {
@@ -13,6 +16,8 @@ static handlers_list_ptr getHandlersListPtr() {
       handler(new StringQuoteHandler()),
       handler(new ShortCommentHandler()),
       handler(new LongCommentHandler()),
+      handler(new BacktickHandler()),
+      handler(new ThreeDoubleQuoteHandler())
   };
 
   std::vector<handler> registered_handlers_vector(std::make_move_iterator(std::begin(registered_handlers)),
@@ -25,8 +30,6 @@ static handlers_list_ptr getHandlersListPtr() {
   return handlers_ptr;
 }
 
-
-JavaAnalyzer::JavaAnalyzer(const Tokenizer& tokenizer)
-: BraceAnalyzer(tokenizer, getHandlersListPtr()) {
-
+CSharpAnalyzer::CSharpAnalyzer(const Tokenizer& tokenizer)
+    : BraceAnalyzer(tokenizer, getHandlersListPtr()) {
 }

@@ -6,6 +6,15 @@
 
 #include "ScopeAnalyzer/ScopeAnalyzer.h"
 #include "Analyzers/JavaAnalyzer.h"
+#include "Analyzers/JavascriptAnalyzer.h"
+#include "Analyzers/ObjectiveCAnalyzer.h"
+#include "Analyzers/CSharpAnalyzer.h"
+#include "Analyzers/GoAnalyzer.h"
+#include "Analyzers/GroovyAnalyzer.h"
+#include "Analyzers/KotlinAnalyzer.h"
+#include "Analyzers/ScalaAnalyzer.h"
+#include "Analyzers/SwiftAnalyzer.h"
+#include "Analyzers/JsonAnalyzer.h"
 
 ScopeAnalyzer::ScopeAnalyzer(
     const std::string& json_vocab, ScopeContext context, Language selected_language)
@@ -35,22 +44,38 @@ std::unique_ptr<IAnalyzer, IAnalyzer::Deleter> ScopeAnalyzer::PickAnalyzerForLan
     case Java:
       return std::unique_ptr<IAnalyzer,
                              IAnalyzer::Deleter>(new JavaAnalyzer(tokenizer_));
-      break;
-
-//    case Javascript:break;
-//    case ObjectiveC:break;
-//    case CSharp:break;
-//    case Go:break;
-//    case Groovy:break;
-//    case Kotlin:break;
-//    case Scala:break;
-//    case Swift:break;
-//    case Json:break;
-//    case Python:break;
+    case Javascript:
+      return std::unique_ptr<IAnalyzer,
+                             IAnalyzer::Deleter>(new JavascriptAnalyzer(tokenizer_));
+    case ObjectiveC:
+      return std::unique_ptr<IAnalyzer,
+                             IAnalyzer::Deleter>(new ObjectiveCAnalyzer(tokenizer_));
+    case CSharp:
+      return std::unique_ptr<IAnalyzer,
+                             IAnalyzer::Deleter>(new CSharpAnalyzer(tokenizer_));
+    case Go:
+      return std::unique_ptr<IAnalyzer,
+                             IAnalyzer::Deleter>(new GoAnalyzer(tokenizer_));
+    case Groovy:
+      return std::unique_ptr<IAnalyzer,
+                             IAnalyzer::Deleter>(new GroovyAnalyzer(tokenizer_));
+    case Kotlin:
+      return std::unique_ptr<IAnalyzer,
+                             IAnalyzer::Deleter>(new KotlinAnalyzer(tokenizer_));
+    case Scala:
+      return std::unique_ptr<IAnalyzer,
+                             IAnalyzer::Deleter>(new ScalaAnalyzer(tokenizer_));
+    case Swift:
+      return std::unique_ptr<IAnalyzer,
+                             IAnalyzer::Deleter>(new SwiftAnalyzer(tokenizer_));
+    case Json:
+      return std::unique_ptr<IAnalyzer,
+                             IAnalyzer::Deleter>(new JsonAnalyzer(tokenizer_));
+    case Python:
+      throw std::runtime_error("python is not implemented");
   }
 
-  // TODO: throw exception
-  return nullptr;
+  throw std::invalid_argument("selected language is not supported");
 }
 
 // Обвязка C для методов C++

@@ -36,11 +36,6 @@ class IAnalyzer {
   virtual void ResetState(ScopeContext context, Language language) = 0;
   virtual void ApplyContext(ScopeContext context) = 0;
 
-  // TODO: move into cpp file
-  const handlers_list* GetHandlers() {
-    return handlers_.get();
-  }
-
   struct Deleter
   {
     void operator()(IAnalyzer* p) const { p->Delete(); }
