@@ -1,17 +1,17 @@
 //
-// Created by Даник 💪 on 23.10.2023.
+// Created by Даник 💪 on 11.11.2023.
 //
 
-#ifndef RUNTIME_SRC_HANDLERS_INCLUDE_STRINGQUOTEHANDLER_H_
-#define RUNTIME_SRC_HANDLERS_INCLUDE_STRINGQUOTEHANDLER_H_
+#ifndef RUNTIME_SRC_HANDLERS_TYPES_INDENTATIONENDHANDLER_H_
+#define RUNTIME_SRC_HANDLERS_TYPES_INDENTATIONENDHANDLER_H_
 
 #include "Handlers/IHandler.h"
-class StringQuoteHandler : public IHandler {
- public:
+
+class IndentationEndHandler : public IHandler {
   std::unique_ptr<Construction> Handle(const Construction& construction) override;
   TryAddConstructionResult TryAddConstructionTo(char character,
                                                 ConstructionStreamExtractorState& state,
                                                 std::list<Construction>& constructions) override;
 };
 
-#endif //RUNTIME_SRC_HANDLERS_INCLUDE_STRINGQUOTEHANDLER_H_
+#endif //RUNTIME_SRC_HANDLERS_TYPES_INDENTATIONENDHANDLER_H_

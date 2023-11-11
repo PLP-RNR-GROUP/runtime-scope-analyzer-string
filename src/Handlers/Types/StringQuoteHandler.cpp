@@ -4,7 +4,7 @@
 
 #include "Handlers/Types/StringQuoteHandler.h"
 
-std::unique_ptr<Construction> StringQuoteHandler::Handle(const Construction& construction, ScopeAnalyzerState& state) {
+std::unique_ptr<Construction> StringQuoteHandler::Handle(const Construction& construction) {
   if (construction.type == DoubleQuote && construction.state == Undefined) {
     return std::make_unique<Construction>(construction);
   }

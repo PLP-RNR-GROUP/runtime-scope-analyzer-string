@@ -21,13 +21,15 @@ class IAnalyzer {
   };
   virtual ~IAnalyzer() = default;
 
+  explicit IAnalyzer(const Tokenizer& tokenizer, handlers_list_ptr handlers, ScopeContext context) :
+  handlers_(std::move(handlers)),
+  constructions_stream_extractor_(tokenizer, handlers_.get()),
+  context_(context) {
+  }
+
   handlers_list_ptr handlers_;
   ConstructionsStreamExtractor constructions_stream_extractor_;
-
-  explicit IAnalyzer(const Tokenizer& tokenizer, handlers_list_ptr handlers) :
-  handlers_(std::move(handlers)),
-  constructions_stream_extractor_(tokenizer, handlers_.get()) {
-  }
+  ScopeContext context_;
 
  public:
   IAnalyzer& operator=(const IAnalyzer&) = delete;

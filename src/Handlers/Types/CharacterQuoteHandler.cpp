@@ -3,8 +3,7 @@
 //
 #include "Handlers/Types/CharacterQuoteHandler.h"
 
-std::unique_ptr<Construction> CharacterQuoteHandler::Handle(const Construction& construction,
-                                                            ScopeAnalyzerState& state) {
+std::unique_ptr<Construction> CharacterQuoteHandler::Handle(const Construction& construction) {
   if (construction.type == Quote && construction.state == Undefined) {
     return std::make_unique<Construction>(construction);
   }

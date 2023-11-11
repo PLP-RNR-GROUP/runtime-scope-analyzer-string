@@ -8,7 +8,7 @@
 #include "Constructions/Construction.h"
 #include "Constructions/ConstructionStreamExtractorState.h"
 #include "TryAddConstructionResult.h"
-#include "ScopeAnalyzerState/ScopeAnalyzerState.h"
+#include "ScopeAnalyzerState/BraceAnalyzerState.h"
 
 #include <memory>
 #include <list>
@@ -23,7 +23,7 @@ class IHandler {
   IHandler& operator=(const IHandler&) = delete;
 
   // Handle returns next waiting construction.
-  virtual std::unique_ptr<Construction> Handle(const Construction& construction, ScopeAnalyzerState& state) = 0;
+  virtual std::unique_ptr<Construction> Handle(const Construction& construction) = 0;
   virtual TryAddConstructionResult TryAddConstructionTo(char character,
                                                         ConstructionStreamExtractorState& state,
                                                         std::list<Construction>& constructions) = 0;

@@ -15,6 +15,7 @@
 #include "Analyzers/ScalaAnalyzer.h"
 #include "Analyzers/SwiftAnalyzer.h"
 #include "Analyzers/JsonAnalyzer.h"
+#include "Analyzers/PythonAnalyzer.h"
 
 ScopeAnalyzer::ScopeAnalyzer(
     const std::string& json_vocab, ScopeContext context, Language selected_language)
@@ -23,14 +24,16 @@ ScopeAnalyzer::ScopeAnalyzer(
 }
 
 void ScopeAnalyzer::ResetState(ScopeContext context, Language language) {
-  analyzer_ = PickAnalyzerForLanguage(language);
+  analyzer_ = PickAnalyzerForLanguage(language, ScopeContext(false, false, false, false, false, 0));
   analyzer_->ApplyContext(context);
 }
 
 AddTokenResult ScopeAnalyzer::AddToken(int32_t token) {
   return analyzer_->AddToken(token);
 }
-std::unique_ptr<IAnalyzer, IAnalyzer::Deleter> ScopeAnalyzer::PickAnalyzerForLanguage(Language language) {
+
+std::unique_ptr<IAnalyzer, IAnalyzer::Deleter> ScopeAnalyzer::PickAnalyzerForLanguage(Language language,
+                                                                                      ScopeContext context) {
   switch (language) {
     case Java:
       return std::unique_ptr<IAnalyzer,
@@ -63,7 +66,8 @@ std::unique_ptr<IAnalyzer, IAnalyzer::Deleter> ScopeAnalyzer::PickAnalyzerForLan
       return std::unique_ptr<IAnalyzer,
                              IAnalyzer::Deleter>(new JsonAnalyzer(tokenizer_));
     case Python:
-      throw std::runtime_error("python is not implemented");
+      return std::unique_ptr<IAnalyzer,
+                             IAnalyzer::Deleter>(new PythonAnalyzer(tokenizer_, context));
   }
 
   throw std::invalid_argument("selected language is not supported");

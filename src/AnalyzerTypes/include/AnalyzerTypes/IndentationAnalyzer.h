@@ -7,16 +7,19 @@
 
 #include "IAnalyzer.h"
 #include "Constructions/ConstructionsStreamExtractor.h"
+#include "ScopeAnalyzerState/IndentationAnalyzerState.h"
 
 class IndentationAnalyzer : public IAnalyzer {
  public:
   IndentationAnalyzer(
                 const Tokenizer& tokenizer,
-                handlers_list_ptr handlers);
+                handlers_list_ptr handlers,
+                ScopeContext context);
   AddTokenResult AddToken(int32_t token) override;
-
+  void ResetState(ScopeContext context, Language language) override;
+  void ApplyContext(ScopeContext context) override;
  private:
-  ScopeAnalyzerState state_;
+  IndentationAnalyzerState state_;
 };
 
 #endif //RUNTIME_LIB_INCLUDE_SCOPEANALYZER_ANALYZERS_INDENTATIONANALYZER_H_

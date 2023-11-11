@@ -3,7 +3,7 @@
 //
 
 #include "Handlers/Types/BacktickHandler.h"
-std::unique_ptr<Construction> BacktickHandler::Handle(const Construction& construction, ScopeAnalyzerState& state) {
+std::unique_ptr<Construction> BacktickHandler::Handle(const Construction& construction) {
   if (construction.type == Backtick && construction.state == Undefined) {
     return std::make_unique<Construction>(construction);
   }

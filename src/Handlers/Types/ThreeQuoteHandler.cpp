@@ -3,7 +3,7 @@
 //
 
 #include "Handlers/Types/ThreeQuoteHandler.h"
-std::unique_ptr<Construction> ThreeQuoteHandler::Handle(const Construction& construction, ScopeAnalyzerState& state) {
+std::unique_ptr<Construction> ThreeQuoteHandler::Handle(const Construction& construction) {
   if (construction.type == ThreeQuote && construction.state == Undefined) {
     return std::make_unique<Construction>(construction);
   }

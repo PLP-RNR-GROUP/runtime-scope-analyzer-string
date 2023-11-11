@@ -19,7 +19,7 @@ AddTokenResult BraceAnalyzer::AddToken(int32_t token) {
     }
 
     for (const auto& kHandler: *handlers_) {
-      auto handleResult = kHandler->Handle(construction, state_);
+      auto handleResult = kHandler->Handle(construction);
       if (prev_brace_balance != state_.brace_balance) updated_brace_balance = true;
       if (handleResult != nullptr) {
         state_.waiting_for_construction_ = std::move(handleResult);
@@ -74,6 +74,6 @@ void BraceAnalyzer::ApplyContext(ScopeContext context) {
 }
 
 BraceAnalyzer::BraceAnalyzer(const Tokenizer& tokenizer, handlers_list_ptr handlers)
-  : IAnalyzer(tokenizer, std::move(handlers)) {
-  handlers_->push_back(handler(new BraceHandler()));
+  : IAnalyzer(tokenizer, std::move(handlers), ScopeContext(false, false, false, false, false, 0)) {
+  handlers_->push_back(handler(new BraceHandler(state_)));
 };

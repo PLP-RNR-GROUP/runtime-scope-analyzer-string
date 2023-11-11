@@ -17,7 +17,7 @@ class BraceAnalyzer : public IAnalyzer {
   void ResetState(ScopeContext context, Language language) override;
   void ApplyContext(ScopeContext context) override;
  private:
-  ScopeAnalyzerState state_;
+  BraceAnalyzerState state_;
 };
 
 #endif //RUNTIME_LIB_INCLUDE_SCOPEANALYZER_ANALYZERS_BRACEANALYZER_H_

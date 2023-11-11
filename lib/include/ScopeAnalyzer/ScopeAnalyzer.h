@@ -8,7 +8,7 @@
 #include "nlohmann/json.hpp"
 #include "AnalyzerTypes/Results//AddTokenResult.h"
 #include "Constructions/ConstructionsStreamExtractor.h"
-#include "ScopeAnalyzerState/ScopeAnalyzerState.h"
+#include "ScopeAnalyzerState/BraceAnalyzerState.h"
 #include "AnalyzerTypes/IAnalyzer.h"
 
 #include "AnalyzerTypes/ScopeContext.h"
@@ -33,7 +33,8 @@ class ScopeAnalyzer {
  private:
   std::unique_ptr<IAnalyzer, IAnalyzer::Deleter> analyzer_;
 
-  std::unique_ptr<IAnalyzer, IAnalyzer::Deleter> PickAnalyzerForLanguage(Language language);
+  std::unique_ptr<IAnalyzer, IAnalyzer::Deleter> PickAnalyzerForLanguage(Language language,
+                                                                         ScopeContext context);
   Tokenizer tokenizer_;
 };
 

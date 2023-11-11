@@ -8,7 +8,7 @@
 #include "Handlers/IHandler.h"
 class ThreeDoubleQuoteHandler : public IHandler {
  public:
-  std::unique_ptr<Construction> Handle(const Construction& construction, ScopeAnalyzerState& state) override;
+  std::unique_ptr<Construction> Handle(const Construction& construction) override;
   TryAddConstructionResult TryAddConstructionTo(char character,
                                                 ConstructionStreamExtractorState& state,
                                                 std::list<Construction>& constructions) override;

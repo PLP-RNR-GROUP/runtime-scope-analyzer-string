@@ -8,6 +8,9 @@ add_library(handlers
         Types/ThreeDoubleQuoteHandler.cpp
         Types/ThreeQuoteHandler.cpp
         Types/DollarSlashyStringHandler.cpp
+        Types/TabIndentationHandler.cpp
+        Types/SpaceIndentationHandler.cpp
+        Types/IndentationEndHandler.cpp
 
         IHandler.cpp
 )

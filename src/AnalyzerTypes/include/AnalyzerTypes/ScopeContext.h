@@ -11,12 +11,14 @@ struct ScopeContext {
                bool in_short_comment,
                bool in_long_comment,
                bool scope_opened,
+               int start_indentation_level,
                int tab_in_spaces = 4)
       : in_string(in_string),
         in_character(in_character),
         in_short_comment(in_short_comment),
         in_long_comment(in_long_comment),
         scope_opened(scope_opened),
+        start_indentation_level(start_indentation_level),
         tab_in_spaces(tab_in_spaces)
         {}
 
@@ -25,6 +27,7 @@ struct ScopeContext {
   bool in_short_comment;
   bool in_long_comment;
   bool scope_opened;
+  int start_indentation_level;
   // TODO: Divide in two different contexts?
   int tab_in_spaces;
 };
