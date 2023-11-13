@@ -7,7 +7,12 @@
 #include "Handlers/Types/SpaceIndentationHandler.h"
 
 AddTokenResult IndentationAnalyzer::AddToken(int32_t token) {
-  for (const auto& construction : constructions_stream_extractor_.Get(token)) {
+  GetResult get_result = constructions_stream_extractor_.Get(token);
+  if (get_result.stop_generation) {
+    return Stop;
+  }
+
+  for (const auto& construction : get_result.constructions) {
     if (state_.waiting_for_construction_ != nullptr) {
       if (construction.type == state_.waiting_for_construction_->type
           && construction.state == state_.waiting_for_construction_->state) {
@@ -18,10 +23,15 @@ AddTokenResult IndentationAnalyzer::AddToken(int32_t token) {
 
     if (construction.type == ShortComment && construction.state == Closed) {
       state_.current_indentation_level = 0;
-    } else {
-      if (state_.current_indentation_level < context_.start_indentation_level) {
+      state_.line_no_chars_at_moment = true;
+      continue;
+    }
+    if (state_.line_no_chars_at_moment && (construction.type != TabIndentation && construction.type != SpaceIndentation)) {
+      if (state_.line_no_chars_at_moment && state_.current_indentation_level < context_.start_indentation_level) {
         return Stop;
       }
+
+      state_.line_no_chars_at_moment = false;
     }
 
     for (const auto& kHandler : *handlers_) {

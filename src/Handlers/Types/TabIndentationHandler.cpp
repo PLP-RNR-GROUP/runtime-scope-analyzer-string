@@ -4,7 +4,7 @@
 
 #include "Handlers/Types/TabIndentationHandler.h"
 std::unique_ptr<Construction> TabIndentationHandler::Handle(const Construction& construction) {
-  if (construction.type == TabIndentation && construction.state == Undefined) {
+  if (state_.line_no_chars_at_moment && construction.type == TabIndentation && construction.state == Undefined) {
    state_.current_indentation_level += tab_in_spaces_;
   }
 
@@ -18,7 +18,7 @@ TryAddConstructionResult TabIndentationHandler::TryAddConstructionTo(char charac
     constructions.emplace_back(Undefined, TabIndentation);
   }
 
-  return {false};
+  return {false, false};
 }
 
 TabIndentationHandler::TabIndentationHandler(IndentationAnalyzerState& state, int tab_in_spaces)

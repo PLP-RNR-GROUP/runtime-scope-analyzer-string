@@ -14,7 +14,7 @@ TryAddConstructionResult DollarSlashyStringHandler::TryAddConstructionTo(char ch
                                                                   ConstructionStreamExtractorState& state,
                                                                   std::list<Construction>& constructions) {
   bool add_current_char = true;
-  if (state.buffer_.empty()) return {add_current_char};
+  if (state.buffer_.empty()) return {add_current_char, false};
 
   if (character == '/' && state.buffer_[0] == '$') {
     constructions.emplace_back(Opened, DollarSlashyString);
@@ -27,5 +27,5 @@ TryAddConstructionResult DollarSlashyStringHandler::TryAddConstructionTo(char ch
     add_current_char = false;
   }
 
-  return {add_current_char};
+  return {add_current_char, false};
 }

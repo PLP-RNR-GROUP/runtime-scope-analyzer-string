@@ -14,9 +14,9 @@ std::unique_ptr<Construction> StringQuoteHandler::Handle(const Construction& con
 TryAddConstructionResult StringQuoteHandler::TryAddConstructionTo(char character,
                                                                   ConstructionStreamExtractorState& state,
                                                                   std::list<Construction>& constructions) {
-  if (character != '"') return {true};
-  if (!state.buffer_.empty() && state.buffer_[0] == '\\') return {false};
+  if (character != '"') return {true, false};
+  if (!state.buffer_.empty() && state.buffer_[0] == '\\') return {false, false};
 
   constructions.emplace_back(Undefined, DoubleQuote);
-  return {true};
+  return {true, false};
 }

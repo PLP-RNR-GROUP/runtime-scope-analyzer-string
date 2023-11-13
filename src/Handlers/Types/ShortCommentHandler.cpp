@@ -17,11 +17,11 @@ TryAddConstructionResult ShortCommentHandler::TryAddConstructionTo(char characte
       character == '\n' ||
       (character == 'n' && !state.buffer_.empty() && state.buffer_[0] == '\\')) {
     constructions.emplace_back(Closed, ShortComment);
-    return {false};
+    return {false, false};
   }
 
   bool add_current_char = true;
-  if (character != '/') return {add_current_char};
+  if (character != '/') return {add_current_char, false};
 
   if (!state.buffer_.empty() && state.buffer_[0] == '/') {
     add_current_char = false;
@@ -29,5 +29,5 @@ TryAddConstructionResult ShortCommentHandler::TryAddConstructionTo(char characte
     state.buffer_.pop_front();
   }
 
-  return {add_current_char};
+  return {add_current_char, false};
 }

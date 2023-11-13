@@ -6,10 +6,15 @@
 #include "Handlers/Types/BraceHandler.h"
 
 AddTokenResult BraceAnalyzer::AddToken(int32_t token) {
+  GetResult get_result = constructions_stream_extractor_.Get(token);
+  if (get_result.stop_generation) {
+    return Stop;
+  }
+
   int prev_brace_balance = state_.brace_balance;
   bool updated_brace_balance = false;
 
-  for (const auto& construction : constructions_stream_extractor_.Get(token)) {
+  for (const auto& construction : get_result.constructions) {
     if (state_.waiting_for_construction_ != nullptr) {
       if (construction.type == state_.waiting_for_construction_->type
           && construction.state == state_.waiting_for_construction_->state) {

@@ -10,14 +10,16 @@
 
 struct Construction {
   Construction() = default;
-  Construction(ConstructionState state, ConstructionType type) : state(state), type(type) {}
+  Construction(ConstructionState state, ConstructionType type, int amount = 1) : state(state), type(type), amount(amount) {}
 
   ConstructionState state;
   ConstructionType type;
+  int amount;
 
   bool operator==(const Construction& rhs) const {
     return state == rhs.state &&
-        type == rhs.type;
+        type == rhs.type &&
+        amount == rhs.amount;
   }
   bool operator!=(const Construction& rhs) const {
     return !(rhs == *this);

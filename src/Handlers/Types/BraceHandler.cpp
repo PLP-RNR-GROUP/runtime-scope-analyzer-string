@@ -26,14 +26,14 @@ TryAddConstructionResult BraceHandler::TryAddConstructionTo(char character,
                                                             std::list<Construction>& constructions) {
   if (character == '{') {
     constructions.emplace_back(Opened, Brace);
-    return {false};
+    return {false, false};
   }
   else if (character == '}') {
     constructions.emplace_back(Closed, Brace);
-    return {false};
+    return {false, false};
   }
 
-  return {true};
+  return {true, false};
 }
 
 BraceHandler::BraceHandler(BraceAnalyzerState& state) : state_(state) {}

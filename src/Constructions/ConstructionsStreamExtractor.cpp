@@ -5,16 +5,21 @@
 
 #include <list>
 #include "nlohmann/json.hpp"
+#include "Constructions/GetResult.h"
 
 using json = nlohmann::json;
 
-std::list<Construction> ConstructionsStreamExtractor::Get(int32_t token) {
+GetResult ConstructionsStreamExtractor::Get(int32_t token) {
   std::string token_metadata = tokenizer_.Decode(token);
   std::list<Construction> constructions;
   for (char character: token_metadata) {
     bool save_current_character = true;
     for (const auto& kHandler : *handlers_) {
       TryAddConstructionResult result = kHandler->TryAddConstructionTo(character, state_, constructions);
+      if (result.should_stop_generation) {
+        return {constructions, true};
+      }
+
       if (!result.save_current_character) {
         save_current_character = false;
       }
@@ -25,7 +30,7 @@ std::list<Construction> ConstructionsStreamExtractor::Get(int32_t token) {
     }
   }
 
-  return constructions;
+  return {constructions, false};
 }
 
 void ConstructionsStreamExtractor::UpdateHandlers(const handlers_list* handlers) {

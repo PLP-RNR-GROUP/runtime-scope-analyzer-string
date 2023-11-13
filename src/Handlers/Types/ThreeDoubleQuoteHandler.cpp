@@ -13,7 +13,7 @@ std::unique_ptr<Construction> ThreeDoubleQuoteHandler::Handle(const Construction
 TryAddConstructionResult ThreeDoubleQuoteHandler::TryAddConstructionTo(char character,
                                                                        ConstructionStreamExtractorState& state,
                                                                        std::list<Construction>& constructions) {
-  if (character != '"') return {true};
+  if (character != '"') return {true, false};
 
   if (state.buffer_.size() >= 2 && state.buffer_[0] == '"' && state.buffer_[1] == '"') {
     if (!constructions.empty() && constructions.back().type == DoubleQuote) {
@@ -21,8 +21,8 @@ TryAddConstructionResult ThreeDoubleQuoteHandler::TryAddConstructionTo(char char
     }
 
     constructions.emplace_back(Undefined, ThreeDoubleQuote);
-    return {false};
+    return {false, false};
   }
 
-  return {true};
+  return {true, false};
 }

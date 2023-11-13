@@ -5,7 +5,7 @@
 #include "Handlers/Types/SpaceIndentationHandler.h"
 
 std::unique_ptr<Construction> SpaceIndentationHandler::Handle(const Construction& construction) {
-  if (construction.type == SpaceIndentation && construction.state == Undefined) {
+  if (state_.line_no_chars_at_moment && construction.type == SpaceIndentation && construction.state == Undefined) {
     ++state_.current_indentation_level;
   }
 
@@ -19,7 +19,7 @@ TryAddConstructionResult SpaceIndentationHandler::TryAddConstructionTo(char char
     constructions.emplace_back(Undefined, SpaceIndentation);
   }
 
-  return {false};
+  return {false, false};
 }
 
 SpaceIndentationHandler::SpaceIndentationHandler(IndentationAnalyzerState& state, int tab_in_spaces)

@@ -13,5 +13,5 @@ std::unique_ptr<Construction> IndentationEndHandler::Handle(const Construction& 
 TryAddConstructionResult IndentationEndHandler::TryAddConstructionTo(char character,
                                                                   ConstructionStreamExtractorState& state,
                                                                   std::list<Construction>& constructions) {
-  return {true};
+  return {true, false};
 }

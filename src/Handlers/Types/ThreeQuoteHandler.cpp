@@ -13,7 +13,7 @@ std::unique_ptr<Construction> ThreeQuoteHandler::Handle(const Construction& cons
 TryAddConstructionResult ThreeQuoteHandler::TryAddConstructionTo(char character,
                                                                  ConstructionStreamExtractorState& state,
                                                                  std::list<Construction>& constructions) {
-  if (character != '\'') return {true};
+  if (character != '\'') return {true, false};
 
   if (state.buffer_.size() >= 2 && state.buffer_[0] == '\'' && state.buffer_[1] == '\'') {
     if (!constructions.empty() && constructions.back().type == Quote) {
@@ -21,8 +21,8 @@ TryAddConstructionResult ThreeQuoteHandler::TryAddConstructionTo(char character,
     }
 
     constructions.emplace_back(Undefined, ThreeQuote);
-    return {false};
+    return {false, false};
   }
 
-  return {true};
+  return {true, false};
 }

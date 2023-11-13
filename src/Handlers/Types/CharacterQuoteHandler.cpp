@@ -13,9 +13,9 @@ std::unique_ptr<Construction> CharacterQuoteHandler::Handle(const Construction& 
 TryAddConstructionResult CharacterQuoteHandler::TryAddConstructionTo(char character,
                                                                      ConstructionStreamExtractorState& state,
                                                                      std::list<Construction>& constructions) {
-  if (character != '\'') return {true};
-  if (!state.buffer_.empty() && state.buffer_[0] == '\\') return {false};
+  if (character != '\'') return {true, false};
+  if (!state.buffer_.empty() && state.buffer_[0] == '\\') return {false, false};
 
   constructions.emplace_back(Undefined, Quote);
-  return {true};
+  return {true, false};
 }

@@ -12,6 +12,7 @@
 struct IndentationAnalyzerState {
   std::unique_ptr<Construction> waiting_for_construction_;
   int current_indentation_level;
+  bool line_no_chars_at_moment;
 };
 
 #endif //RUNTIME_SRC_SCOPEANALYZERSTATE_INCLUDE_SCOPEANALYZERSTATE_INDENTATIONANALYZERSTATE_H_
