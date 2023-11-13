@@ -18,12 +18,10 @@ TryAddConstructionResult LongCommentHandler::TryAddConstructionTo(char character
 
   if (character == '/' && state.buffer_[0] == '*') {
     constructions.emplace_back(Closed, LongComment);
-    state.buffer_.pop_front();
     add_current_char = false;
   }
   else if (character == '*' && state.buffer_[0] == '/') {
     constructions.emplace_back(Opened, LongComment);
-    state.buffer_.pop_front();
     add_current_char = false;
   }
 

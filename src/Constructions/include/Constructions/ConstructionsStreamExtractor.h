@@ -17,7 +17,6 @@ class ConstructionsStreamExtractor {
  public:
   explicit ConstructionsStreamExtractor(const Tokenizer& tokenizer, const handlers_list* handlers);
   GetResult Get(int32_t token);
-  void UpdateHandlers(const handlers_list* handlers);
  private:
   const Tokenizer& tokenizer_;
   ConstructionStreamExtractorState state_;

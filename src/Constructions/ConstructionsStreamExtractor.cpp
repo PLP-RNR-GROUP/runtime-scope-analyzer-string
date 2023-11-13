@@ -22,6 +22,8 @@ GetResult ConstructionsStreamExtractor::Get(int32_t token) {
 
       if (!result.save_current_character) {
         save_current_character = false;
+        state_.buffer_.clear();
+        break;
       }
     }
 
@@ -31,11 +33,6 @@ GetResult ConstructionsStreamExtractor::Get(int32_t token) {
   }
 
   return {constructions, false};
-}
-
-void ConstructionsStreamExtractor::UpdateHandlers(const handlers_list* handlers) {
-  handlers_ = handlers;
-  state_.buffer_.clear();
 }
 
 ConstructionsStreamExtractor::ConstructionsStreamExtractor(const Tokenizer& tokenizer, const handlers_list* handlers) :

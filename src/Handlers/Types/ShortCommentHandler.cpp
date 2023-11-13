@@ -17,17 +17,14 @@ TryAddConstructionResult ShortCommentHandler::TryAddConstructionTo(char characte
       character == '\n' ||
       (character == 'n' && !state.buffer_.empty() && state.buffer_[0] == '\\')) {
     constructions.emplace_back(Closed, ShortComment);
-    return {false, false};
+    return {true, false};
   }
 
-  bool add_current_char = true;
-  if (character != '/') return {add_current_char, false};
+  if (character != '/') return {true, false};
 
   if (!state.buffer_.empty() && state.buffer_[0] == '/') {
-    add_current_char = false;
     constructions.emplace_back(Opened, ShortComment);
-    state.buffer_.pop_front();
   }
 
-  return {add_current_char, false};
+  return {false, false};
 }
