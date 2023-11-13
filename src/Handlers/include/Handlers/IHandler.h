@@ -8,7 +8,7 @@
 #include "Constructions/Construction.h"
 #include "Constructions/ConstructionStreamExtractorState.h"
 #include "TryAddConstructionResult.h"
-#include "ScopeAnalyzerState/BraceAnalyzerState.h"
+#include "AnalyzerTypes/BraceAnalyzerState.h"
 
 #include <memory>
 #include <list>

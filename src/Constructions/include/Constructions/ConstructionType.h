@@ -15,8 +15,6 @@ enum ConstructionType {
   DollarSlashyString,
   Brace,
   Backtick,
-  SpaceIndentation,
-  TabIndentation,
 };
 
 #endif //RUNTIME_SRC_INCLUDE_SCOPEANALYZER_SPECIALSYMBOLS_SPECIALSYMBOLTYPE_H_

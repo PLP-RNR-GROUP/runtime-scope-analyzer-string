@@ -8,7 +8,7 @@
 #include "nlohmann/json.hpp"
 #include "AnalyzerTypes/Results//AddTokenResult.h"
 #include "Constructions/ConstructionsStreamExtractor.h"
-#include "ScopeAnalyzerState/BraceAnalyzerState.h"
+#include "AnalyzerTypes/BraceAnalyzerState.h"
 #include "AnalyzerTypes/IAnalyzer.h"
 
 #include "AnalyzerTypes/ScopeContext.h"

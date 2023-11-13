@@ -7,7 +7,7 @@
 
 #include "IAnalyzer.h"
 #include "Constructions/ConstructionsStreamExtractor.h"
-#include "ScopeAnalyzerState/IndentationAnalyzerState.h"
+#include "IndentationAnalyzerState.h"
 
 class IndentationAnalyzer : public IAnalyzer {
  public:

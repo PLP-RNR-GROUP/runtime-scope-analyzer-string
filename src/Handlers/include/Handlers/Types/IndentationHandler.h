@@ -6,18 +6,20 @@
 #define RUNTIME_SRC_HANDLERS_TYPES_INDENTATIONHANDLER_H_
 
 #include "Handlers/IHandler.h"
-#include "ScopeAnalyzerState/IndentationAnalyzerState.h"
+#include "AnalyzerTypes/IndentationAnalyzerState.h"
+#include "AnalyzerTypes/ScopeContext.h"
 
-class TabIndentationHandler : public IHandler {
+class IndentationHandler : public IHandler {
  public:
-  TabIndentationHandler(IndentationAnalyzerState& state, int tab_in_spaces);
+  explicit IndentationHandler(ScopeContext context);
   std::unique_ptr<Construction> Handle(const Construction& construction) override;
   TryAddConstructionResult TryAddConstructionTo(char character,
                                                 ConstructionStreamExtractorState& state,
                                                 std::list<Construction>& constructions) override;
  private:
-  IndentationAnalyzerState& state_;
-  int tab_in_spaces_;
+  ScopeContext context_;
+  bool line_no_chars_at_moment;
+  int current_indentation_level;
 };
 
 #endif //RUNTIME_SRC_HANDLERS_TYPES_INDENTATIONHANDLER_H_
