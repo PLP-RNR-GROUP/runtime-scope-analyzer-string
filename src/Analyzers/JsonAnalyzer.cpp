@@ -23,7 +23,7 @@ static handlers_list_ptr getHandlersListPtr() {
   return handlers_ptr;
 }
 
-JsonAnalyzer::JsonAnalyzer(const Tokenizer& tokenizer)
-    : BraceAnalyzer(tokenizer, getHandlersListPtr()) {
+JsonAnalyzer::JsonAnalyzer(const Tokenizer& tokenizer, ScopeContext context)
+    : BraceAnalyzer(tokenizer, getHandlersListPtr(), context) {
 
 }

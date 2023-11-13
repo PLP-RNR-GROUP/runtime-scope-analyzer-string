@@ -9,7 +9,7 @@
 
 class JavaAnalyzer : public BraceAnalyzer {
  public:
-  explicit JavaAnalyzer(const Tokenizer& tokenizer);
+  explicit JavaAnalyzer(const Tokenizer& tokenizer, ScopeContext context);
 };
 
 #endif //RUNTIME_LIB_INCLUDE_SCOPEANALYZER_ANALYZERS_JAVAANALYZER_H_

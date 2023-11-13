@@ -11,12 +11,11 @@
 
 class BraceAnalyzer : public IAnalyzer {
  public:
-  BraceAnalyzer(const Tokenizer& tokenizer,
-                handlers_list_ptr handlers);
+  BraceAnalyzer(const Tokenizer& tokenizer, handlers_list_ptr handlers, ScopeContext context);
   AddTokenResult AddToken(int32_t token) override;
-  void ResetState(ScopeContext context, Language language) override;
-  void ApplyContext(ScopeContext context) override;
  private:
+  void ApplyContext(ScopeContext context);
+
   BraceAnalyzerState state_;
 };
 

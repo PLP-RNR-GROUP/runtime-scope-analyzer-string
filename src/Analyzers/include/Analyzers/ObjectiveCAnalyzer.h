@@ -9,7 +9,7 @@
 
 class ObjectiveCAnalyzer : public BraceAnalyzer {
  public:
-  explicit ObjectiveCAnalyzer(const Tokenizer& tokenizer);
+  explicit ObjectiveCAnalyzer(const Tokenizer& tokenizer, ScopeContext context);
 };
 
 #endif //RUNTIME_SRC_ANALYZERS_OBJECTIVECANALYZER_H_

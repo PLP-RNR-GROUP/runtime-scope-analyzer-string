@@ -29,5 +29,5 @@ static handlers_list_ptr getHandlersListPtr() {
 }
 
 PythonAnalyzer::PythonAnalyzer(const Tokenizer& tokenizer,
-                               const ScopeContext& context)
+                               ScopeContext context)
                                : IndentationAnalyzer(tokenizer, getHandlersListPtr(), context) {}

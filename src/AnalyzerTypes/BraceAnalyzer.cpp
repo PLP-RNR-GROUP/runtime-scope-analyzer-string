@@ -39,16 +39,12 @@ AddTokenResult BraceAnalyzer::AddToken(int32_t token) {
   return Continue;
 }
 
-void BraceAnalyzer::ResetState(ScopeContext context, Language language) {
-  ApplyContext(context);
-}
-
 void BraceAnalyzer::ApplyContext(ScopeContext context) {
-  if (context.in_character + context.in_long_comment + context.in_short_comment + context.in_string > 1) {
+  if (!context.IsValid()) {
     throw std::invalid_argument("start context is invalid");
   }
 
-  // TODO: Make interface
+  // TODO: Make interface?
   if (context.in_character) {
     state_.waiting_for_construction_ = std::make_unique<Construction>(
         Undefined,
@@ -78,7 +74,10 @@ void BraceAnalyzer::ApplyContext(ScopeContext context) {
   }
 }
 
-BraceAnalyzer::BraceAnalyzer(const Tokenizer& tokenizer, handlers_list_ptr handlers)
-  : IAnalyzer(tokenizer, std::move(handlers), ScopeContext(false, false, false, false, false, 0)) {
+BraceAnalyzer::BraceAnalyzer(const Tokenizer& tokenizer,
+                             handlers_list_ptr handlers,
+                             ScopeContext context)
+  : IAnalyzer(tokenizer, std::move(handlers)) {
   handlers_->push_back(handler(new BraceHandler(state_)));
-};
+  ApplyContext(context);
+}

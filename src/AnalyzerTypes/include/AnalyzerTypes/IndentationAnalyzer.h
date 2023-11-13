@@ -16,9 +16,9 @@ class IndentationAnalyzer : public IAnalyzer {
                 handlers_list_ptr handlers,
                 ScopeContext context);
   AddTokenResult AddToken(int32_t token) override;
-  void ResetState(ScopeContext context, Language language) override;
-  void ApplyContext(ScopeContext context) override;
  private:
+  void ApplyContext(ScopeContext context);
+
   IndentationAnalyzerState state_;
 };
 

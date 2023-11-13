@@ -35,7 +35,7 @@ static handlers_list_ptr getHandlersListPtr() {
   return handlers_ptr;
 }
 
-GroovyAnalyzer::GroovyAnalyzer(const Tokenizer& tokenizer)
-    : BraceAnalyzer(tokenizer, getHandlersListPtr()) {
+GroovyAnalyzer::GroovyAnalyzer(const Tokenizer& tokenizer, ScopeContext context)
+    : BraceAnalyzer(tokenizer, getHandlersListPtr(), context) {
 
 }

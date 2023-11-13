@@ -9,7 +9,7 @@
 
 class CSharpAnalyzer : public BraceAnalyzer {
  public:
-  explicit CSharpAnalyzer(const Tokenizer& tokenizer);
+  explicit CSharpAnalyzer(const Tokenizer& tokenizer, ScopeContext context);
 };
 
 #endif //RUNTIME_SRC_ANALYZERS_CSHARPANALYZER_H_

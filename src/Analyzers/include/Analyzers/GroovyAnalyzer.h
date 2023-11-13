@@ -9,7 +9,7 @@
 
 class GroovyAnalyzer : public BraceAnalyzer {
  public:
-  explicit GroovyAnalyzer(const Tokenizer& tokenizer);
+  explicit GroovyAnalyzer(const Tokenizer& tokenizer, ScopeContext context);
 };
 
 #endif //RUNTIME_SRC_ANALYZERS_GROOVYANALYZER_H_

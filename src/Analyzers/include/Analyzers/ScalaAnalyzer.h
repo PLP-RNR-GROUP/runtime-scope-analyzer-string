@@ -9,7 +9,7 @@
 
 class ScalaAnalyzer : public BraceAnalyzer {
  public:
-  explicit ScalaAnalyzer(const Tokenizer& tokenizer);
+  explicit ScalaAnalyzer(const Tokenizer& tokenizer, ScopeContext context);
 };
 
 #endif //RUNTIME_SRC_ANALYZERS_SCALAANALYZER_H_

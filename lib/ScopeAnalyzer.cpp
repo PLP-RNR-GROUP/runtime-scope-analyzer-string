@@ -24,8 +24,7 @@ ScopeAnalyzer::ScopeAnalyzer(
 }
 
 void ScopeAnalyzer::ResetState(ScopeContext context, Language language) {
-  analyzer_ = PickAnalyzerForLanguage(language, ScopeContext(false, false, false, false, false, 0));
-  analyzer_->ApplyContext(context);
+  analyzer_ = PickAnalyzerForLanguage(language, context);
 }
 
 AddTokenResult ScopeAnalyzer::AddToken(int32_t token) {
@@ -37,34 +36,34 @@ std::unique_ptr<IAnalyzer, IAnalyzer::Deleter> ScopeAnalyzer::PickAnalyzerForLan
   switch (language) {
     case Java:
       return std::unique_ptr<IAnalyzer,
-                             IAnalyzer::Deleter>(new JavaAnalyzer(tokenizer_));
+                             IAnalyzer::Deleter>(new JavaAnalyzer(tokenizer_, context));
     case Javascript:
       return std::unique_ptr<IAnalyzer,
-                             IAnalyzer::Deleter>(new JavascriptAnalyzer(tokenizer_));
+                             IAnalyzer::Deleter>(new JavascriptAnalyzer(tokenizer_, context));
     case ObjectiveC:
       return std::unique_ptr<IAnalyzer,
-                             IAnalyzer::Deleter>(new ObjectiveCAnalyzer(tokenizer_));
+                             IAnalyzer::Deleter>(new ObjectiveCAnalyzer(tokenizer_, context));
     case CSharp:
       return std::unique_ptr<IAnalyzer,
-                             IAnalyzer::Deleter>(new CSharpAnalyzer(tokenizer_));
+                             IAnalyzer::Deleter>(new CSharpAnalyzer(tokenizer_, context));
     case Go:
       return std::unique_ptr<IAnalyzer,
-                             IAnalyzer::Deleter>(new GoAnalyzer(tokenizer_));
+                             IAnalyzer::Deleter>(new GoAnalyzer(tokenizer_, context));
     case Groovy:
       return std::unique_ptr<IAnalyzer,
-                             IAnalyzer::Deleter>(new GroovyAnalyzer(tokenizer_));
+                             IAnalyzer::Deleter>(new GroovyAnalyzer(tokenizer_, context));
     case Kotlin:
       return std::unique_ptr<IAnalyzer,
-                             IAnalyzer::Deleter>(new KotlinAnalyzer(tokenizer_));
+                             IAnalyzer::Deleter>(new KotlinAnalyzer(tokenizer_, context));
     case Scala:
       return std::unique_ptr<IAnalyzer,
-                             IAnalyzer::Deleter>(new ScalaAnalyzer(tokenizer_));
+                             IAnalyzer::Deleter>(new ScalaAnalyzer(tokenizer_, context));
     case Swift:
       return std::unique_ptr<IAnalyzer,
-                             IAnalyzer::Deleter>(new SwiftAnalyzer(tokenizer_));
+                             IAnalyzer::Deleter>(new SwiftAnalyzer(tokenizer_, context));
     case Json:
       return std::unique_ptr<IAnalyzer,
-                             IAnalyzer::Deleter>(new JsonAnalyzer(tokenizer_));
+                             IAnalyzer::Deleter>(new JsonAnalyzer(tokenizer_, context));
     case Python:
       return std::unique_ptr<IAnalyzer,
                              IAnalyzer::Deleter>(new PythonAnalyzer(tokenizer_, context));

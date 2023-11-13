@@ -27,7 +27,7 @@ static handlers_list_ptr getHandlersListPtr() {
   return handlers_ptr;
 }
 
-ObjectiveCAnalyzer::ObjectiveCAnalyzer(const Tokenizer& tokenizer)
-    : BraceAnalyzer(tokenizer, getHandlersListPtr()) {
+ObjectiveCAnalyzer::ObjectiveCAnalyzer(const Tokenizer& tokenizer, ScopeContext context)
+    : BraceAnalyzer(tokenizer, getHandlersListPtr(), context) {
 
 }

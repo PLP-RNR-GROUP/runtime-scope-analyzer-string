@@ -33,13 +33,38 @@ AddTokenResult IndentationAnalyzer::AddToken(int32_t token) {
 }
 
 IndentationAnalyzer::IndentationAnalyzer(const Tokenizer& tokenizer, handlers_list_ptr handlers, ScopeContext context)
-    : IAnalyzer(tokenizer, std::move(handlers), context) {
+    : IAnalyzer(tokenizer, std::move(handlers)) {
   handlers_->push_back(handler(new IndentationHandler(context)));
+  ApplyContext(context);
 }
 
-void IndentationAnalyzer::ResetState(ScopeContext context, Language language) {
-
-}
 void IndentationAnalyzer::ApplyContext(ScopeContext context) {
+  if (!context.IsValid()) {
+    throw std::invalid_argument("start context is invalid");
+  }
 
+  // TODO: Make interface?
+  if (context.in_character) {
+    state_.waiting_for_construction_ = std::make_unique<Construction>(
+        Undefined,
+        Quote);
+  }
+  else if (context.in_string) {
+    state_.waiting_for_construction_ = std::make_unique<Construction>(
+        Undefined,
+        DoubleQuote
+    );
+  }
+  else if (context.in_short_comment) {
+    state_.waiting_for_construction_ = std::make_unique<Construction>(
+        Closed,
+        ShortComment
+    );
+  }
+  else if (context.in_long_comment) {
+    state_.waiting_for_construction_ = std::make_unique<Construction>(
+        Closed,
+        LongComment
+    );
+  }
 }

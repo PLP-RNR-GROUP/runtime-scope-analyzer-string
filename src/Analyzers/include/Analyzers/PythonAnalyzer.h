@@ -9,7 +9,7 @@
 
 class PythonAnalyzer : public IndentationAnalyzer {
  public:
-  PythonAnalyzer(const Tokenizer& tokenizer, const ScopeContext& context);
+  PythonAnalyzer(const Tokenizer& tokenizer, ScopeContext context);
 };
 
 #endif //RUNTIME_SRC_ANALYZERS_PYTHONANALYZER_H_
