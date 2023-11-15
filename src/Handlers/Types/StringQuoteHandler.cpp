@@ -14,6 +14,7 @@ std::unique_ptr<Construction> StringQuoteHandler::Handle(const Construction& con
 
   return nullptr;
 }
+
 TryAddConstructionResult StringQuoteHandler::TryAddConstructionTo(char character,
                                                                   ConstructionStreamExtractorState& state,
                                                                   std::list<Construction>& constructions) {
@@ -23,3 +24,7 @@ TryAddConstructionResult StringQuoteHandler::TryAddConstructionTo(char character
   constructions.emplace_back(Undefined, DoubleQuote);
   return {true, false};
 }
+
+StringQuoteHandler::StringQuoteHandler() : IHandler({
+  '"',
+}) {}

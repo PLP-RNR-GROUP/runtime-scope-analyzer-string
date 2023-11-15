@@ -8,6 +8,7 @@
 #include "Handlers/IHandler.h"
 class CharacterQuoteHandler : public IHandler {
  public:
+  explicit CharacterQuoteHandler();
   std::unique_ptr<Construction> Handle(const Construction& construction,
                                        const std::unique_ptr<Construction>& waiting_for_construction) override;
   TryAddConstructionResult TryAddConstructionTo(char character,

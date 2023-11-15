@@ -30,3 +30,9 @@ TryAddConstructionResult DollarSlashyStringHandler::TryAddConstructionTo(char ch
 
   return {add_current_char, false};
 }
+DollarSlashyStringHandler::DollarSlashyStringHandler() : IHandler({
+  '$',
+  '/'
+}) {
+
+}

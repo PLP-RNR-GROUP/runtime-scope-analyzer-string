@@ -21,3 +21,8 @@ TryAddConstructionResult BacktickHandler::TryAddConstructionTo(char character,
   constructions.emplace_back(Undefined, Backtick);
   return {false, false};
 }
+BacktickHandler::BacktickHandler() : IHandler({
+  '`',
+}) {
+
+}

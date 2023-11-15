@@ -15,9 +15,11 @@
 
 class IHandler {
  protected:
-  IHandler() = default;
   virtual ~IHandler() = 0;
   virtual void Delete();
+
+  std::vector<char> handling_text;
+  explicit IHandler(const std::vector<char>& handling_text);
 
  public:
   IHandler& operator=(const IHandler&) = delete;
@@ -28,6 +30,7 @@ class IHandler {
   virtual TryAddConstructionResult TryAddConstructionTo(char character,
                                                         ConstructionStreamExtractorState& state,
                                                         std::list<Construction>& constructions) = 0;
+  const std::vector<char>& GetHandlingText() const;
 
   struct Deleter
   {

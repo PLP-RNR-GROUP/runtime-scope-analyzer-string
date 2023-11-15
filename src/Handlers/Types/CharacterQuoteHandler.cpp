@@ -22,3 +22,8 @@ TryAddConstructionResult CharacterQuoteHandler::TryAddConstructionTo(char charac
   constructions.emplace_back(Undefined, Quote);
   return {true, false};
 }
+CharacterQuoteHandler::CharacterQuoteHandler() : IHandler({
+  '\'',
+}){
+
+}

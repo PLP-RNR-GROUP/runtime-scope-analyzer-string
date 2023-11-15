@@ -8,6 +8,7 @@
 #include "Handlers/IHandler.h"
 class LongCommentHandler : public IHandler {
  public:
+  explicit LongCommentHandler();
   std::unique_ptr<Construction> Handle(const Construction& construction,
                                        const std::unique_ptr<Construction>& waiting_for_construction) override;
   TryAddConstructionResult TryAddConstructionTo(char character,

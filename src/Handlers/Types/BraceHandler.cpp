@@ -41,4 +41,7 @@ TryAddConstructionResult BraceHandler::TryAddConstructionTo(char character,
   return {true, false};
 }
 
-BraceHandler::BraceHandler(BraceAnalyzerState& state) : state_(state) {}
+BraceHandler::BraceHandler(BraceAnalyzerState& state) : state_(state), IHandler({
+  '{',
+  '}'
+}) {}
