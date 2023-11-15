@@ -4,7 +4,7 @@
 #include "Handlers/Types/CharacterQuoteHandler.h"
 
 std::unique_ptr<Construction> CharacterQuoteHandler::Handle(const Construction& construction,
-                                                            std::unique_ptr<Construction>& waiting_for_construction) {
+                                                            const std::unique_ptr<Construction>& waiting_for_construction) {
   if (waiting_for_construction != nullptr) return nullptr;
 
   if (construction.type == Quote && construction.state == Undefined) {

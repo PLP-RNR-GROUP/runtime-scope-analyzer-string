@@ -4,7 +4,7 @@
 
 #include "Handlers/Types/IndentationHandler.h"
 std::unique_ptr<Construction> IndentationHandler::Handle(const Construction& construction,
-                                                         std::unique_ptr<Construction>& waiting_for_construction) {
+                                                         const std::unique_ptr<Construction>& waiting_for_construction) {
   return nullptr;
 }
 

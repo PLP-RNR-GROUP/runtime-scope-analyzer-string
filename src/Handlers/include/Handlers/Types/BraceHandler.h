@@ -12,7 +12,7 @@ class BraceHandler : public IHandler {
  public:
   explicit BraceHandler(BraceAnalyzerState& state);
   std::unique_ptr<Construction> Handle(const Construction& construction,
-                                       std::unique_ptr<Construction>& waiting_for_construction) override;
+                                       const std::unique_ptr<Construction>& waiting_for_construction) override;
   TryAddConstructionResult TryAddConstructionTo(char character,
                                                 ConstructionStreamExtractorState& state,
                                                 std::list<Construction>& constructions) override;

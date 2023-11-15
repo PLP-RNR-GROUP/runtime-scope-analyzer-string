@@ -24,7 +24,7 @@ class IHandler {
 
   // Handle returns next waiting construction.
   virtual std::unique_ptr<Construction> Handle(const Construction& construction,
-                                               std::unique_ptr<Construction>& waiting_for_construction) = 0;
+                                               const std::unique_ptr<Construction>& waiting_for_construction) = 0;
   virtual TryAddConstructionResult TryAddConstructionTo(char character,
                                                         ConstructionStreamExtractorState& state,
                                                         std::list<Construction>& constructions) = 0;

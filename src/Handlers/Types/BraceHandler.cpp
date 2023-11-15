@@ -5,7 +5,7 @@
 #include "Handlers/Types/BraceHandler.h"
 
 std::unique_ptr<Construction> BraceHandler::Handle(const Construction& construction,
-                                                   std::unique_ptr<Construction>& waiting_for_construction) {
+                                                   const std::unique_ptr<Construction>& waiting_for_construction) {
   if (waiting_for_construction != nullptr) return nullptr;
 
   if (construction.type == Brace) {

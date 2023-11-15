@@ -4,7 +4,7 @@
 
 #include "Handlers/Types/BacktickHandler.h"
 std::unique_ptr<Construction> BacktickHandler::Handle(const Construction& construction,
-                                                      std::unique_ptr<Construction>& waiting_for_construction) {
+                                                      const std::unique_ptr<Construction>& waiting_for_construction) {
   if (waiting_for_construction != nullptr) return nullptr;
   if (construction.type == Backtick && construction.state == Undefined) {
     return std::make_unique<Construction>(construction);
