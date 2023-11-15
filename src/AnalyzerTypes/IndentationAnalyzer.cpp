@@ -7,25 +7,23 @@
 
 AddTokenResult IndentationAnalyzer::AddToken(int32_t token) {
   GetResult get_result = constructions_stream_extractor_.Get(token);
-  if (get_result.stop_generation) {
+  if (get_result.stop_generation && state_.waiting_for_construction_ == nullptr) {
     return Stop;
   }
 
   for (const auto& construction : get_result.constructions) {
-    if (state_.waiting_for_construction_ != nullptr) {
-      if (construction.type == state_.waiting_for_construction_->type
-          && construction.state == state_.waiting_for_construction_->state) {
-        state_.waiting_for_construction_ = nullptr;
-      }
+    if (state_.waiting_for_construction_ != nullptr &&
+        state_.waiting_for_construction_->type == construction.type &&
+        state_.waiting_for_construction_->state == construction.state) {
+      state_.waiting_for_construction_ = nullptr;
       continue;
     }
 
     for (const auto& kHandler : *handlers_) {
-      auto handleResult = kHandler->Handle(construction);
-      if (handleResult != nullptr) {
-        state_.waiting_for_construction_ = std::move(handleResult);
-        break;
-      }
+      auto handleResult = kHandler->Handle(construction, state_.waiting_for_construction_);
+      if (handleResult == nullptr) continue;
+
+      state_.waiting_for_construction_ = std::move(handleResult);
     }
   }
 

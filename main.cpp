@@ -12,10 +12,9 @@ int main() {
   std::stringstream buffer;
   buffer << vocabFile.rdbuf();
 
-////  "{{{}}}"void scope {}
-  std::vector<int32_t> tokens {12, 308, 8050, 1000, 2637};
+  std::vector<int32_t> tokens {4690, 11192, 8228, 204, 264, 5967, 7, 936, 1272, 204, 37488, 7, 204, 264, 3901, 204};
 
-  ScopeAnalyzer analyzer(buffer.str(), ScopeContext(false, false, false, false, false), Java);
+  ScopeAnalyzer analyzer(buffer.str(), ScopeContext(false, false, false, false, false, 0), Python);
   for (const auto token: tokens) {
     std::cout << analyzer.AddToken(token) << '\n';
   }

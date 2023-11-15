@@ -3,7 +3,10 @@
 //
 
 #include "Handlers/Types/ShortCommentHandler.h"
-std::unique_ptr<Construction> ShortCommentHandler::Handle(const Construction& construction) {
+std::unique_ptr<Construction> ShortCommentHandler::Handle(const Construction& construction,
+                                                          std::unique_ptr<Construction>& waiting_for_construction) {
+  if (waiting_for_construction != nullptr) return nullptr;
+
   if (construction.type == ShortComment && construction.state == Opened) {
     return std::make_unique<Construction>(Closed, ShortComment);
   }
@@ -24,7 +27,8 @@ TryAddConstructionResult ShortCommentHandler::TryAddConstructionTo(char characte
 
   if (!state.buffer_.empty() && state.buffer_[0] == '/') {
     constructions.emplace_back(Opened, ShortComment);
+    return {false, false};
   }
 
-  return {false, false};
+  return {true, false};
 }

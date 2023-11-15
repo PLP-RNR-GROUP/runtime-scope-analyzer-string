@@ -9,7 +9,8 @@
 
 class BacktickHandler : public IHandler {
  public:
-  std::unique_ptr<Construction> Handle(const Construction& construction) override;
+  std::unique_ptr<Construction> Handle(const Construction& construction,
+                                       std::unique_ptr<Construction>& waiting_for_construction) override;
   TryAddConstructionResult TryAddConstructionTo(char character,
                                                 ConstructionStreamExtractorState& state,
                                                 std::list<Construction>& constructions) override;
