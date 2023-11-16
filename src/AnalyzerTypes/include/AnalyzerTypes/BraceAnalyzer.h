@@ -8,6 +8,7 @@
 #include "IAnalyzer.h"
 #include "Constructions/ConstructionsStreamExtractor.h"
 #include "AnalyzerTypes/Results/AddTokenResult.h"
+#include "Handlers/HandlersMap.h"
 
 class BraceAnalyzer : public IAnalyzer {
  public:
@@ -16,7 +17,9 @@ class BraceAnalyzer : public IAnalyzer {
  private:
   void ApplyContext(ScopeContext context);
 
+  HandlersMap handlers_map_;
   BraceAnalyzerState state_;
+  ConstructionsStreamExtractor constructions_stream_extractor_;
 };
 
 #endif //RUNTIME_LIB_INCLUDE_SCOPEANALYZER_ANALYZERS_BRACEANALYZER_H_

@@ -19,7 +19,7 @@ AddTokenResult IndentationAnalyzer::AddToken(int32_t token) {
       continue;
     }
 
-    for (const auto& kHandler : *handlers_) {
+    for (const auto& kHandler : handlers_map_.GetHandlersFor()) {
       auto handleResult = kHandler->Handle(construction, state_.waiting_for_construction_);
       if (handleResult == nullptr) continue;
 
@@ -31,8 +31,9 @@ AddTokenResult IndentationAnalyzer::AddToken(int32_t token) {
 }
 
 IndentationAnalyzer::IndentationAnalyzer(const Tokenizer& tokenizer, handlers_list_ptr handlers, ScopeContext context)
-    : IAnalyzer(tokenizer, std::move(handlers)) {
-  handlers_->push_back(handler(new IndentationHandler(context)));
+    : handlers_map_(std::move(handlers)),
+      constructions_stream_extractor_(tokenizer, handlers_map_){
+  handlers_map_.Add(handler(new IndentationHandler(context)));
   ApplyContext(context);
 }
 

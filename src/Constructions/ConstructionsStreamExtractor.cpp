@@ -6,6 +6,7 @@
 #include <list>
 #include "nlohmann/json.hpp"
 #include "Constructions/GetResult.h"
+#include "Handlers/HandlersMap.h"
 
 using json = nlohmann::json;
 
@@ -16,7 +17,7 @@ GetResult ConstructionsStreamExtractor::Get(int32_t token) {
   bool should_stop_generation = false;
   for (char character: token_metadata) {
     bool save_current_character = true;
-    for (const auto& kHandler : *handlers_) {
+    for (const auto& kHandler : handlers_map_.GetHandlersFor(character)) {
       TryAddConstructionResult result = kHandler->TryAddConstructionTo(character, state_, constructions);
       if (result.should_stop_generation) {
         should_stop_generation = result.should_stop_generation;
@@ -37,8 +38,8 @@ GetResult ConstructionsStreamExtractor::Get(int32_t token) {
   return {constructions, should_stop_generation};
 }
 
-ConstructionsStreamExtractor::ConstructionsStreamExtractor(const Tokenizer& tokenizer, const handlers_list* handlers) :
-tokenizer_(tokenizer ){
+ConstructionsStreamExtractor::ConstructionsStreamExtractor(const Tokenizer& tokenizer, const HandlersMap& handlers_map) :
+    tokenizer_(tokenizer),
+    handlers_map_(handlers_map) {
   state_.buffer_ = boost::circular_buffer<char>(2);
-  handlers_ = handlers;
 }

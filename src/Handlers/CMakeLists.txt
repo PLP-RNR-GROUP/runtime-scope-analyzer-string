@@ -10,6 +10,7 @@ add_library(handlers
         Types/DollarSlashyStringHandler.cpp
         Types/IndentationHandler.cpp
 
+        HandlersMap.cpp
         IHandler.cpp
 )
 

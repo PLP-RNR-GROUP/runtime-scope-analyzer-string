@@ -20,6 +20,8 @@ class IndentationAnalyzer : public IAnalyzer {
   void ApplyContext(ScopeContext context);
 
   IndentationAnalyzerState state_;
+  HandlersMap handlers_map_;
+  ConstructionsStreamExtractor constructions_stream_extractor_;
 };
 
 #endif //RUNTIME_LIB_INCLUDE_SCOPEANALYZER_ANALYZERS_INDENTATIONANALYZER_H_

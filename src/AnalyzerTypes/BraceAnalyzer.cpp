@@ -75,7 +75,9 @@ void BraceAnalyzer::ApplyContext(ScopeContext context) {
 BraceAnalyzer::BraceAnalyzer(const Tokenizer& tokenizer,
                              handlers_list_ptr handlers,
                              ScopeContext context)
-  : IAnalyzer(tokenizer, std::move(handlers)) {
-  handlers_->push_back(handler(new BraceHandler(state_)));
+  : handlers_map_(std::move(handlers)),
+    constructions_stream_extractor_(tokenizer, handlers_map_){
+
+  handlers_map_.Add(handler(new BraceHandler(state_)));
   ApplyContext(context);
 }
