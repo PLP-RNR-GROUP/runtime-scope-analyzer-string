@@ -31,8 +31,11 @@ TryAddConstructionResult LongCommentHandler::TryAddConstructionTo(char character
   return {add_current_char, false};
 }
 LongCommentHandler::LongCommentHandler() : IHandler({
-  '*',
-  '/'
-}){
+                                                        '*',
+                                                        '/'
+                                                    },
+                                                    {
+                                                          {Opened, LongComment},
+                                                    }) {
 
 }

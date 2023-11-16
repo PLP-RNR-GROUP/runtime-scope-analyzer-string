@@ -26,5 +26,7 @@ TryAddConstructionResult StringQuoteHandler::TryAddConstructionTo(char character
 }
 
 StringQuoteHandler::StringQuoteHandler() : IHandler({
-  '"',
-}) {}
+                                                        '"',
+                                                    }, {
+                                                        {Undefined, DoubleQuote}
+                                                    }) {}

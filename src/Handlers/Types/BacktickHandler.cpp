@@ -22,7 +22,10 @@ TryAddConstructionResult BacktickHandler::TryAddConstructionTo(char character,
   return {false, false};
 }
 BacktickHandler::BacktickHandler() : IHandler({
-  '`',
-}) {
+                                                  '`',
+                                              },
+                                              {
+                                                  {Undefined, Backtick}
+                                              }) {
 
 }

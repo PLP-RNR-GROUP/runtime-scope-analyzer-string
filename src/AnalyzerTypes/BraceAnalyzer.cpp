@@ -22,12 +22,15 @@ AddTokenResult BraceAnalyzer::AddToken(int32_t token) {
       continue;
     }
 
-    for (const auto& kHandler: *handlers_) {
-      auto handleResult = kHandler->Handle(construction, state_.waiting_for_construction_);
-      if (prev_brace_balance != state_.brace_balance) updated_brace_balance = true;
-      if (handleResult == nullptr) continue;
+    auto handlers = handlers_map_.GetHandlersFor(construction);
+    if (handlers != nullptr) {
+      for (const auto& kHandler : *handlers) {
+        auto handleResult = kHandler->Handle(construction, state_.waiting_for_construction_);
+        if (prev_brace_balance != state_.brace_balance) updated_brace_balance = true;
+        if (handleResult == nullptr) continue;
 
-      state_.waiting_for_construction_ = std::move(handleResult);
+        state_.waiting_for_construction_ = std::move(handleResult);
+      }
     }
   }
 

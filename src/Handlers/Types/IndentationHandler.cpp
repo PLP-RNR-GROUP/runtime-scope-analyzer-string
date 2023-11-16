@@ -40,9 +40,10 @@ TryAddConstructionResult IndentationHandler::TryAddConstructionTo(char character
 }
 IndentationHandler::IndentationHandler(ScopeContext context)
   :context_(context), line_no_chars_at_moment(false), current_indentation_level(0), IHandler({
-    '\n',
-    'n',
-    't',
-    '\t',
-  })   {
+                                                                                                 '\n',
+                                                                                                 'n',
+                                                                                                 't',
+                                                                                                 '\t',
+                                                                                             },
+                                                                                             {}) {
 }

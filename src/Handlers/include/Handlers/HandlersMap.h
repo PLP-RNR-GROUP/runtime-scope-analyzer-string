@@ -14,11 +14,13 @@ class HandlersMap {
  public:
   explicit HandlersMap(handlers_list_ptr handlers);
 
-  std::list<IHandler*> GetHandlersFor(char character) const;
+  const std::list<IHandler*>* GetHandlersFor(char character) const;
+  const std::list<IHandler*>* GetHandlersFor(Construction construction) const;
   void Add(handler handler);
  private:
-    std::map<char, std::list<IHandler*>> handlers_map_;
-    handlers_list_ptr handlers_;
+  std::map<char, std::list<IHandler*>> char_handlers_map_;
+  std::map<Construction, std::list<IHandler*>> construction_handlers_map_;
+  handlers_list_ptr handlers_;
 };
 
 #endif //RUNTIME_SRC_HANDLERS_HANDLERSMAP_H_

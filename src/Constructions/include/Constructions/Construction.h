@@ -8,21 +8,47 @@
 #include "ConstructionState.h"
 #include "ConstructionType.h"
 
+#include <utility>
+#include <memory>
+
 struct Construction {
   Construction() = default;
-  Construction(ConstructionState state, ConstructionType type, int amount = 1) : state(state), type(type), amount(amount) {}
+  Construction(ConstructionState state, ConstructionType type) : state(state), type(type) {}
 
   ConstructionState state;
   ConstructionType type;
-  int amount;
 
   bool operator==(const Construction& rhs) const {
     return state == rhs.state &&
-        type == rhs.type &&
-        amount == rhs.amount;
+        type == rhs.type;
   }
   bool operator!=(const Construction& rhs) const {
     return !(rhs == *this);
+  }
+
+  bool operator<(const Construction& rhs) const {
+    if (state < rhs.state)
+      return true;
+    if (rhs.state < state)
+      return false;
+    return type < rhs.type;
+  }
+
+  bool operator>(const Construction& rhs) const {
+    return rhs < *this;
+  }
+  bool operator<=(const Construction& rhs) const {
+    return !(rhs < *this);
+  }
+  bool operator>=(const Construction& rhs) const {
+    return !(*this < rhs);
+  }
+};
+
+template <>
+struct std::hash<Construction> {
+  auto operator()(const Construction &construction) const -> size_t {
+    return std::hash<int>()(construction.state) ^ std::hash<int>()(construction.type);
   }
 };
 

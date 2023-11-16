@@ -17,7 +17,10 @@ GetResult ConstructionsStreamExtractor::Get(int32_t token) {
   bool should_stop_generation = false;
   for (char character: token_metadata) {
     bool save_current_character = true;
-    for (const auto& kHandler : handlers_map_.GetHandlersFor(character)) {
+
+    auto handlers = handlers_map_.GetHandlersFor(character);
+    if (handlers != nullptr) {
+      for (const auto& kHandler : *handlers) {
       TryAddConstructionResult result = kHandler->TryAddConstructionTo(character, state_, constructions);
       if (result.should_stop_generation) {
         should_stop_generation = result.should_stop_generation;
@@ -28,6 +31,7 @@ GetResult ConstructionsStreamExtractor::Get(int32_t token) {
         state_.buffer_.clear();
         break;
       }
+    }
     }
 
     if (save_current_character) {

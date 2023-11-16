@@ -31,7 +31,10 @@ TryAddConstructionResult ThreeQuoteHandler::TryAddConstructionTo(char character,
   return {true, false};
 }
 ThreeQuoteHandler::ThreeQuoteHandler() : IHandler({
-  '\'',
-}) {
+                                                      '\'',
+                                                  },
+                                                  {
+                                                        {Undefined, ThreeQuote}
+                                                  }) {
 
 }

@@ -33,9 +33,12 @@ TryAddConstructionResult ShortCommentHandler::TryAddConstructionTo(char characte
   return {true, false};
 }
 ShortCommentHandler::ShortCommentHandler() : IHandler({
-  '/',
-  '\n',
-  'n'
-}){
+                                                          '/',
+                                                          '\n',
+                                                          'n'
+                                                      },
+                                                      {
+                                                          {Opened, ShortComment},
+                                                      }) {
 
 }

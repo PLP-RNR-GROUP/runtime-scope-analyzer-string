@@ -19,7 +19,9 @@ class IHandler {
   virtual void Delete();
 
   std::vector<char> handling_text;
-  explicit IHandler(const std::vector<char>& handling_text);
+  std::vector<Construction> handling_constructions;
+  explicit IHandler(const std::vector<char>& handling_text,
+                    const std::vector<Construction>& handling_constructions);
 
  public:
   IHandler& operator=(const IHandler&) = delete;
@@ -31,6 +33,7 @@ class IHandler {
                                                         ConstructionStreamExtractorState& state,
                                                         std::list<Construction>& constructions) = 0;
   const std::vector<char>& GetHandlingText() const;
+  const std::vector<Construction>& GetHandlingConstructions() const;
 
   struct Deleter
   {

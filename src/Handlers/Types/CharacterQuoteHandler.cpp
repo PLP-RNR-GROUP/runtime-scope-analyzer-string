@@ -23,7 +23,9 @@ TryAddConstructionResult CharacterQuoteHandler::TryAddConstructionTo(char charac
   return {true, false};
 }
 CharacterQuoteHandler::CharacterQuoteHandler() : IHandler({
-  '\'',
-}){
+                                                              '\'',
+                                                          }, {
+                                                              {Undefined, Quote}
+                                                          }) {
 
 }
