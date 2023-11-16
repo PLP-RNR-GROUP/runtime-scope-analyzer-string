@@ -19,24 +19,36 @@ AddTokenResult IndentationAnalyzer::AddToken(int32_t token) {
       continue;
     }
 
-    auto handlers = handlers_map_.GetHandlersFor(construction);
-    if (handlers != nullptr) {
-      for (const auto& kHandler : *handlers) {
-        auto handleResult = kHandler->Handle(construction, state_.waiting_for_construction_);
-        if (handleResult == nullptr) continue;
 
-        state_.waiting_for_construction_ = std::move(handleResult);
-      }
-    }
+  for (const auto& kHandler : handlers_map_.GetHandlersFor(construction)) {
+    auto handleResult = kHandler->Handle(construction, state_.waiting_for_construction_);
+    if (handleResult == nullptr) continue;
+
+    state_.waiting_for_construction_ = std::move(handleResult);
+  }
   }
 
   return Continue;
 }
 
+static handlers_list_ptr getRequiredHandlers(ScopeContext context) {
+  handler registered_handlers[] = {
+      handler(new IndentationHandler(context))
+  };
+
+  std::vector<handler> registered_handlers_vector(std::make_move_iterator(std::begin(registered_handlers)),
+                                                  std::make_move_iterator(std::end(registered_handlers)));
+
+  handlers_list_ptr handlers_ptr = handlers_list_ptr(
+      std::make_unique<handlers_list>(std::move(registered_handlers_vector))
+  );
+
+  return handlers_ptr;
+}
+
 IndentationAnalyzer::IndentationAnalyzer(const Tokenizer& tokenizer, handlers_list_ptr handlers, ScopeContext context)
-    : handlers_map_(std::move(handlers)),
+    : handlers_map_(std::move(handlers), getRequiredHandlers(context)),
       constructions_stream_extractor_(tokenizer, handlers_map_){
-  handlers_map_.Add(handler(new IndentationHandler(context)));
   ApplyContext(context);
 }
 

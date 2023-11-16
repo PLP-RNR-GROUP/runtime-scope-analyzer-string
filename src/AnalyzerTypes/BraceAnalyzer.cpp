@@ -22,15 +22,13 @@ AddTokenResult BraceAnalyzer::AddToken(int32_t token) {
       continue;
     }
 
-    auto handlers = handlers_map_.GetHandlersFor(construction);
-    if (handlers != nullptr) {
-      for (const auto& kHandler : *handlers) {
-        auto handleResult = kHandler->Handle(construction, state_.waiting_for_construction_);
-        if (prev_brace_balance != state_.brace_balance) updated_brace_balance = true;
-        if (handleResult == nullptr) continue;
 
-        state_.waiting_for_construction_ = std::move(handleResult);
-      }
+    for (const auto& kHandler : handlers_map_.GetHandlersFor(construction)) {
+      auto handleResult = kHandler->Handle(construction, state_.waiting_for_construction_);
+      if (prev_brace_balance != state_.brace_balance) updated_brace_balance = true;
+      if (handleResult == nullptr) continue;
+
+      state_.waiting_for_construction_ = std::move(handleResult);
     }
   }
 
@@ -78,7 +76,7 @@ void BraceAnalyzer::ApplyContext(ScopeContext context) {
 BraceAnalyzer::BraceAnalyzer(const Tokenizer& tokenizer,
                              handlers_list_ptr handlers,
                              ScopeContext context)
-  : handlers_map_(std::move(handlers)),
+  : handlers_map_(std::move(handlers), {}),
     constructions_stream_extractor_(tokenizer, handlers_map_){
 
   handlers_map_.Add(handler(new BraceHandler(state_)));
