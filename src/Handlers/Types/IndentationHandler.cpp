@@ -9,8 +9,8 @@ std::unique_ptr<Construction> IndentationHandler::Handle(const Construction& con
 }
 
 TryAddConstructionResult IndentationHandler::TryAddConstructionTo(char character,
-                                                                     ConstructionStreamExtractorState& state,
-                                                                     std::list<Construction>& constructions) {
+                                                                  const ConstructionStreamExtractorState& state,
+                                                                  std::list<Construction>& constructions) {
   if (
       character == '\n' ||
           (character == 'n' && !state.buffer_.empty() && state.buffer_[0] == '\\')) {

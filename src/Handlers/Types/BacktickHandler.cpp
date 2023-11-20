@@ -13,7 +13,7 @@ std::unique_ptr<Construction> BacktickHandler::Handle(const Construction& constr
   return nullptr;
 }
 TryAddConstructionResult BacktickHandler::TryAddConstructionTo(char character,
-                                                               ConstructionStreamExtractorState& state,
+                                                               const ConstructionStreamExtractorState& state,
                                                                std::list<Construction>& constructions) {
   if (character != '`') return {true, false};
   if (!state.buffer_.empty() && state.buffer_[0] == '\\') return {false, false};

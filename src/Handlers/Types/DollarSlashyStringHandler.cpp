@@ -14,8 +14,8 @@ std::unique_ptr<Construction> DollarSlashyStringHandler::Handle(const Constructi
   return nullptr;
 }
 TryAddConstructionResult DollarSlashyStringHandler::TryAddConstructionTo(char character,
-                                                                  ConstructionStreamExtractorState& state,
-                                                                  std::list<Construction>& constructions) {
+                                                                         const ConstructionStreamExtractorState& state,
+                                                                         std::list<Construction>& constructions) {
   bool add_current_char = true;
   if (state.buffer_.empty()) return {add_current_char, false};
 

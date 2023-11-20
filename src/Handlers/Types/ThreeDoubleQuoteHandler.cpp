@@ -15,7 +15,7 @@ std::unique_ptr<Construction> ThreeDoubleQuoteHandler::Handle(const Construction
   return nullptr;
 }
 TryAddConstructionResult ThreeDoubleQuoteHandler::TryAddConstructionTo(char character,
-                                                                       ConstructionStreamExtractorState& state,
+                                                                       const ConstructionStreamExtractorState& state,
                                                                        std::list<Construction>& constructions) {
   if (character != '"') return {true, false};
 

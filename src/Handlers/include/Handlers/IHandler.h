@@ -30,7 +30,7 @@ class IHandler {
   virtual std::unique_ptr<Construction> Handle(const Construction& construction,
                                                const std::unique_ptr<Construction>& waiting_for_construction) = 0;
   virtual TryAddConstructionResult TryAddConstructionTo(char character,
-                                                        ConstructionStreamExtractorState& state,
+                                                        const ConstructionStreamExtractorState& state,
                                                         std::list<Construction>& constructions) = 0;
   const std::vector<char>& GetHandlingText() const;
   const std::vector<Construction>& GetHandlingConstructions() const;

@@ -14,7 +14,7 @@ std::unique_ptr<Construction> CharacterQuoteHandler::Handle(const Construction& 
   return nullptr;
 }
 TryAddConstructionResult CharacterQuoteHandler::TryAddConstructionTo(char character,
-                                                                     ConstructionStreamExtractorState& state,
+                                                                     const ConstructionStreamExtractorState& state,
                                                                      std::list<Construction>& constructions) {
   if (character != '\'') return {true, false};
   if (!state.buffer_.empty() && state.buffer_[0] == '\\') return {false, false};

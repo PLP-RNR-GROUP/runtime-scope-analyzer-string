@@ -14,7 +14,7 @@ std::unique_ptr<Construction> ShortCommentHandler::Handle(const Construction& co
   return nullptr;
 }
 TryAddConstructionResult ShortCommentHandler::TryAddConstructionTo(char character,
-                                                                   ConstructionStreamExtractorState& state,
+                                                                   const ConstructionStreamExtractorState& state,
                                                                    std::list<Construction>& constructions) {
   if (
       character == '\n' ||

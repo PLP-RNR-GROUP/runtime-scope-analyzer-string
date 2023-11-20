@@ -14,7 +14,7 @@ std::unique_ptr<Construction> LongCommentHandler::Handle(const Construction& con
   return nullptr;
 }
 TryAddConstructionResult LongCommentHandler::TryAddConstructionTo(char character,
-                                                                  ConstructionStreamExtractorState& state,
+                                                                  const ConstructionStreamExtractorState& state,
                                                                   std::list<Construction>& constructions) {
   bool add_current_char = true;
   if (state.buffer_.empty()) return {add_current_char, false};

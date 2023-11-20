@@ -25,7 +25,7 @@ std::unique_ptr<Construction> BraceHandler::Handle(const Construction& construct
 }
 
 TryAddConstructionResult BraceHandler::TryAddConstructionTo(char character,
-                                                            ConstructionStreamExtractorState& state,
+                                                            const ConstructionStreamExtractorState& state,
                                                             std::list<Construction>& constructions) {
   if (!state.buffer_.empty() && state.buffer_[0] == '\\') return {false, false};
 
