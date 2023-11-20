@@ -25,24 +25,6 @@ struct Construction {
   bool operator!=(const Construction& rhs) const {
     return !(rhs == *this);
   }
-
-  bool operator<(const Construction& rhs) const {
-    if (state < rhs.state)
-      return true;
-    if (rhs.state < state)
-      return false;
-    return type < rhs.type;
-  }
-
-  bool operator>(const Construction& rhs) const {
-    return rhs < *this;
-  }
-  bool operator<=(const Construction& rhs) const {
-    return !(rhs < *this);
-  }
-  bool operator>=(const Construction& rhs) const {
-    return !(*this < rhs);
-  }
 };
 
 template <>
