@@ -10,14 +10,14 @@
 
 class BraceHandler : public IHandler {
  public:
-  explicit BraceHandler(BraceAnalyzerState& state);
+  explicit BraceHandler(int brace_balance);
   HandleResult Handle(const Construction& construction,
                       const std::unique_ptr<Construction>& waiting_for_construction) override;
   TryAddConstructionResult TryAddConstructionTo(char character,
                                                 const ConstructionStreamExtractorState& state,
                                                 std::list<Construction>& constructions) override;
  private:
-  BraceAnalyzerState& state_;
+  int brace_balance_;
 };
 
 #endif //RUNTIME_SRC_HANDLERS_TYPES_BRACEHANDLER_H_

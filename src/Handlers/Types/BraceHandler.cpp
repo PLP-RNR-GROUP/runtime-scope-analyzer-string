@@ -13,13 +13,13 @@ HandleResult BraceHandler::Handle(const Construction& construction,
       case Undefined:
         throw std::invalid_argument("invalid state");
       case Closed:
-        --state_.brace_balance;
-        if (state_.brace_balance <= 0) {
+        --brace_balance_;
+        if (brace_balance_ <= 0) {
           return {nullptr, Stop};
         }
         break;
       case Opened:
-        ++state_.brace_balance;
+        ++brace_balance_;
         break;
     }
   }
@@ -44,7 +44,7 @@ TryAddConstructionResult BraceHandler::TryAddConstructionTo(char character,
   return {true, false};
 }
 
-BraceHandler::BraceHandler(BraceAnalyzerState& state) : state_(state), IHandler({
+BraceHandler::BraceHandler(int brace_balance) : brace_balance_(brace_balance), IHandler({
                                                                                     '{',
                                                                                     '}'
                                                                                 },

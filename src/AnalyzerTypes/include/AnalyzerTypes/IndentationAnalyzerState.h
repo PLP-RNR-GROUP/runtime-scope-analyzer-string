@@ -10,7 +10,6 @@
 #include <memory>
 
 struct IndentationAnalyzerState {
-  std::unique_ptr<Construction> waiting_for_construction_;
 };
 
 #endif //RUNTIME_SRC_SCOPEANALYZERSTATE_INCLUDE_SCOPEANALYZERSTATE_INDENTATIONANALYZERSTATE_H_
