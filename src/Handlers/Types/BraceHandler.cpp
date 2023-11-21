@@ -4,9 +4,9 @@
 
 #include "Handlers/Types/BraceHandler.h"
 
-std::unique_ptr<Construction> BraceHandler::Handle(const Construction& construction,
-                                                   const std::unique_ptr<Construction>& waiting_for_construction) {
-  if (waiting_for_construction != nullptr) return nullptr;
+HandleResult BraceHandler::Handle(const Construction& construction,
+                                  const std::unique_ptr<Construction>& waiting_for_construction) {
+  if (waiting_for_construction != nullptr) return {nullptr, Continue};
 
   if (construction.type == Brace) {
     switch (construction.state) {
@@ -14,6 +14,9 @@ std::unique_ptr<Construction> BraceHandler::Handle(const Construction& construct
         throw std::invalid_argument("invalid state");
       case Closed:
         --state_.brace_balance;
+        if (state_.brace_balance <= 0) {
+          return {nullptr, Stop};
+        }
         break;
       case Opened:
         ++state_.brace_balance;
@@ -21,7 +24,7 @@ std::unique_ptr<Construction> BraceHandler::Handle(const Construction& construct
     }
   }
 
-  return nullptr;
+  return {nullptr, Continue};
 }
 
 TryAddConstructionResult BraceHandler::TryAddConstructionTo(char character,

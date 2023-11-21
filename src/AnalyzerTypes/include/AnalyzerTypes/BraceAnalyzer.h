@@ -7,7 +7,6 @@
 
 #include "IAnalyzer.h"
 #include "Constructions/ConstructionsStreamExtractor.h"
-#include "AnalyzerTypes/Results/AddTokenResult.h"
 #include "Handlers/HandlersMap.h"
 
 class BraceAnalyzer : public IAnalyzer {

@@ -3,15 +3,15 @@
 //
 #include "Handlers/Types/CharacterQuoteHandler.h"
 
-std::unique_ptr<Construction> CharacterQuoteHandler::Handle(const Construction& construction,
-                                                            const std::unique_ptr<Construction>& waiting_for_construction) {
-  if (waiting_for_construction != nullptr) return nullptr;
+HandleResult CharacterQuoteHandler::Handle(const Construction& construction,
+                                           const std::unique_ptr<Construction>& waiting_for_construction) {
+  if (waiting_for_construction != nullptr) return {nullptr, Continue};
 
   if (construction.type == Quote && construction.state == Undefined) {
-    return std::make_unique<Construction>(construction);
+    return {std::make_unique<Construction>(construction), Continue};
   }
 
-  return nullptr;
+  return {nullptr, Continue};
 }
 TryAddConstructionResult CharacterQuoteHandler::TryAddConstructionTo(char character,
                                                                      const ConstructionStreamExtractorState& state,

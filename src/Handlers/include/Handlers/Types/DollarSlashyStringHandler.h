@@ -6,11 +6,12 @@
 #define RUNTIME_SRC_HANDLERS_TYPES_DOLLARSLASHYSTRINGHANDLER_H_
 
 #include "Handlers/IHandler.h"
+#include "Handlers/HandleResult.h"
 class DollarSlashyStringHandler : public IHandler {
  public:
   explicit DollarSlashyStringHandler();
-  std::unique_ptr<Construction> Handle(const Construction& construction,
-                                       const std::unique_ptr<Construction>& waiting_for_construction) override;
+  HandleResult Handle(const Construction& construction,
+                      const std::unique_ptr<Construction>& waiting_for_construction) override;
   TryAddConstructionResult TryAddConstructionTo(char character,
                                                 const ConstructionStreamExtractorState& state,
                                                 std::list<Construction>& constructions) override;

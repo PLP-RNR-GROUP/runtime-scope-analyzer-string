@@ -6,7 +6,7 @@
 #define RUNTIME_LIB_INCLUDE_SCOPEANALYZER_ANALYZERS_IANALYZER_H_
 
 #include "Languages/Language.h"
-#include "AnalyzerTypes/Results/AddTokenResult.h"
+#include "Handlers/Results/AddTokenResult.h"
 #include "ScopeContext.h"
 #include "Handlers/IHandlerList.h"
 #include "Tokenizers/Tokenizer.h"

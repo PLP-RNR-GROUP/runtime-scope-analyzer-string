@@ -9,6 +9,7 @@
 #include "Constructions/ConstructionStreamExtractorState.h"
 #include "TryAddConstructionResult.h"
 #include "AnalyzerTypes/BraceAnalyzerState.h"
+#include "HandleResult.h"
 
 #include <memory>
 #include <list>
@@ -27,8 +28,8 @@ class IHandler {
   IHandler& operator=(const IHandler&) = delete;
 
   // Handle returns next waiting construction.
-  virtual std::unique_ptr<Construction> Handle(const Construction& construction,
-                                               const std::unique_ptr<Construction>& waiting_for_construction) = 0;
+  virtual HandleResult Handle(const Construction& construction,
+                              const std::unique_ptr<Construction>& waiting_for_construction) = 0;
   virtual TryAddConstructionResult TryAddConstructionTo(char character,
                                                         const ConstructionStreamExtractorState& state,
                                                         std::list<Construction>& constructions) = 0;

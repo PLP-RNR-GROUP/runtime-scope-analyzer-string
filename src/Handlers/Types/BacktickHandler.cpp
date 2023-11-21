@@ -3,14 +3,14 @@
 //
 
 #include "Handlers/Types/BacktickHandler.h"
-std::unique_ptr<Construction> BacktickHandler::Handle(const Construction& construction,
-                                                      const std::unique_ptr<Construction>& waiting_for_construction) {
-  if (waiting_for_construction != nullptr) return nullptr;
+HandleResult BacktickHandler::Handle(const Construction& construction,
+                                     const std::unique_ptr<Construction>& waiting_for_construction) {
+  if (waiting_for_construction != nullptr) return {nullptr, Continue};
   if (construction.type == Backtick && construction.state == Undefined) {
-    return std::make_unique<Construction>(construction);
+    return {std::make_unique<Construction>(construction), Continue};
   }
 
-  return nullptr;
+  return {nullptr, Continue};
 }
 TryAddConstructionResult BacktickHandler::TryAddConstructionTo(char character,
                                                                const ConstructionStreamExtractorState& state,

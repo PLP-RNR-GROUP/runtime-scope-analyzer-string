@@ -3,15 +3,16 @@
 //
 
 #include "Handlers/Types/DollarSlashyStringHandler.h"
-std::unique_ptr<Construction> DollarSlashyStringHandler::Handle(const Construction& construction,
+#include "Handlers/HandleResult.h"
+HandleResult DollarSlashyStringHandler::Handle(const Construction& construction,
                                                                 const std::unique_ptr<Construction>& waiting_for_construction) {
-  if (waiting_for_construction != nullptr) return nullptr;
+  if (waiting_for_construction != nullptr) return {nullptr, Continue};
 
   if (construction.type == DollarSlashyString && construction.state == Opened) {
-    return std::make_unique<Construction>(Closed, DollarSlashyString);
+    return {std::make_unique<Construction>(Closed, DollarSlashyString), Continue};
   }
 
-  return nullptr;
+  return {nullptr, Continue};
 }
 TryAddConstructionResult DollarSlashyStringHandler::TryAddConstructionTo(char character,
                                                                          const ConstructionStreamExtractorState& state,

@@ -3,15 +3,16 @@
 //
 
 #include "Handlers/Types/LongCommentHandler.h"
-std::unique_ptr<Construction> LongCommentHandler::Handle(const Construction& construction,
+#include "Handlers/HandleResult.h"
+HandleResult LongCommentHandler::Handle(const Construction& construction,
                                                          const std::unique_ptr<Construction>& waiting_for_construction) {
-  if (waiting_for_construction != nullptr) return nullptr;
+  if (waiting_for_construction != nullptr) return {nullptr, Continue};
 
   if (construction.type == LongComment && construction.state == Opened) {
-    return std::make_unique<Construction>(Closed, LongComment);
+    return {std::make_unique<Construction>(Closed, LongComment), Continue};
   }
 
-  return nullptr;
+  return {nullptr, Continue};
 }
 TryAddConstructionResult LongCommentHandler::TryAddConstructionTo(char character,
                                                                   const ConstructionStreamExtractorState& state,

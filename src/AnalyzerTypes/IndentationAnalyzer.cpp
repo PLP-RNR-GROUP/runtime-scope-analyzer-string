@@ -19,13 +19,16 @@ AddTokenResult IndentationAnalyzer::AddToken(int32_t token) {
       continue;
     }
 
+    for (const auto& kHandler : handlers_map_.GetHandlersFor(construction)) {
+      auto handleResult = kHandler->Handle(construction, state_.waiting_for_construction_);
+      if (handleResult.result == Stop) {
+        return Stop;
+      }
 
-  for (const auto& kHandler : handlers_map_.GetHandlersFor(construction)) {
-    auto handleResult = kHandler->Handle(construction, state_.waiting_for_construction_);
-    if (handleResult == nullptr) continue;
-
-    state_.waiting_for_construction_ = std::move(handleResult);
-  }
+      if (handleResult.construction != nullptr) {
+        state_.waiting_for_construction_ = std::move(handleResult.construction);
+      }
+    }
   }
 
   return Continue;
@@ -48,7 +51,7 @@ static handlers_list_ptr getRequiredHandlers(ScopeContext context) {
 
 IndentationAnalyzer::IndentationAnalyzer(const Tokenizer& tokenizer, handlers_list_ptr handlers, ScopeContext context)
     : handlers_map_(std::move(handlers), getRequiredHandlers(context)),
-      constructions_stream_extractor_(tokenizer, handlers_map_){
+      constructions_stream_extractor_(tokenizer, handlers_map_) {
   ApplyContext(context);
 }
 
@@ -62,20 +65,17 @@ void IndentationAnalyzer::ApplyContext(ScopeContext context) {
     state_.waiting_for_construction_ = std::make_unique<Construction>(
         Undefined,
         Quote);
-  }
-  else if (context.in_string) {
+  } else if (context.in_string) {
     state_.waiting_for_construction_ = std::make_unique<Construction>(
         Undefined,
         DoubleQuote
     );
-  }
-  else if (context.in_short_comment) {
+  } else if (context.in_short_comment) {
     state_.waiting_for_construction_ = std::make_unique<Construction>(
         Closed,
         ShortComment
     );
-  }
-  else if (context.in_long_comment) {
+  } else if (context.in_long_comment) {
     state_.waiting_for_construction_ = std::make_unique<Construction>(
         Closed,
         LongComment

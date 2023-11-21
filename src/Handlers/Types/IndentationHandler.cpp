@@ -3,9 +3,9 @@
 //
 
 #include "Handlers/Types/IndentationHandler.h"
-std::unique_ptr<Construction> IndentationHandler::Handle(const Construction& construction,
-                                                         const std::unique_ptr<Construction>& waiting_for_construction) {
-  return nullptr;
+HandleResult IndentationHandler::Handle(const Construction& construction,
+                                        const std::unique_ptr<Construction>& waiting_for_construction) {
+  return {nullptr, Continue};
 }
 
 TryAddConstructionResult IndentationHandler::TryAddConstructionTo(char character,

@@ -6,11 +6,12 @@
 #define RUNTIME_SRC_HANDLERS_INCLUDE_HANDLERS_TYPES_LONGCOMMENTHANDLER_H_
 
 #include "Handlers/IHandler.h"
+#include "Handlers/HandleResult.h"
 class LongCommentHandler : public IHandler {
  public:
   explicit LongCommentHandler();
-  std::unique_ptr<Construction> Handle(const Construction& construction,
-                                       const std::unique_ptr<Construction>& waiting_for_construction) override;
+  HandleResult Handle(const Construction& construction,
+                      const std::unique_ptr<Construction>& waiting_for_construction) override;
   TryAddConstructionResult TryAddConstructionTo(char character,
                                                 const ConstructionStreamExtractorState& state,
                                                 std::list<Construction>& constructions) override;

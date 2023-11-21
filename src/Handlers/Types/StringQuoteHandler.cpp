@@ -3,16 +3,17 @@
 //
 
 #include "Handlers/Types/StringQuoteHandler.h"
+#include "Handlers/HandleResult.h"
 
-std::unique_ptr<Construction> StringQuoteHandler::Handle(const Construction& construction,
+HandleResult StringQuoteHandler::Handle(const Construction& construction,
                                                          const std::unique_ptr<Construction>& waiting_for_construction) {
-  if (waiting_for_construction != nullptr) return nullptr;
+  if (waiting_for_construction != nullptr) return {nullptr, Continue};
 
   if (construction.type == DoubleQuote && construction.state == Undefined) {
-    return std::make_unique<Construction>(construction);
+    return {std::make_unique<Construction>(construction), Continue};
   }
 
-  return nullptr;
+  return {nullptr, Continue};
 }
 
 TryAddConstructionResult StringQuoteHandler::TryAddConstructionTo(char character,

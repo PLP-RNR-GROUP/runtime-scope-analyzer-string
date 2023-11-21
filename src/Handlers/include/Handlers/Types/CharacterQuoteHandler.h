@@ -9,8 +9,8 @@
 class CharacterQuoteHandler : public IHandler {
  public:
   explicit CharacterQuoteHandler();
-  std::unique_ptr<Construction> Handle(const Construction& construction,
-                                       const std::unique_ptr<Construction>& waiting_for_construction) override;
+  HandleResult Handle(const Construction& construction,
+                      const std::unique_ptr<Construction>& waiting_for_construction) override;
   TryAddConstructionResult TryAddConstructionTo(char character,
                                                 const ConstructionStreamExtractorState& state,
                                                 std::list<Construction>& constructions) override;

@@ -3,16 +3,16 @@
 //
 
 #include "Handlers/Types/ThreeDoubleQuoteHandler.h"
-std::unique_ptr<Construction> ThreeDoubleQuoteHandler::Handle(const Construction& construction,
-                                                              const std::unique_ptr<Construction>& waiting_for_construction) {
+HandleResult ThreeDoubleQuoteHandler::Handle(const Construction& construction,
+                                             const std::unique_ptr<Construction>& waiting_for_construction) {
   if (waiting_for_construction != nullptr &&
-  (waiting_for_construction->type != DoubleQuote && waiting_for_construction->state != Undefined )) return nullptr;
+  (waiting_for_construction->type != DoubleQuote && waiting_for_construction->state != Undefined )) return {nullptr, Continue};
 
   if (construction.type == ThreeDoubleQuote && construction.state == Undefined) {
-    return std::make_unique<Construction>(construction);
+    return {std::make_unique<Construction>(construction), Continue};
   }
 
-  return nullptr;
+  return {nullptr, Continue};
 }
 TryAddConstructionResult ThreeDoubleQuoteHandler::TryAddConstructionTo(char character,
                                                                        const ConstructionStreamExtractorState& state,

@@ -6,7 +6,7 @@
 #define RUNTIME_SRC_ANALYZER_H_
 
 #include "nlohmann/json.hpp"
-#include "AnalyzerTypes/Results//AddTokenResult.h"
+#include "Handlers/Results/AddTokenResult.h"
 #include "Constructions/ConstructionsStreamExtractor.h"
 #include "AnalyzerTypes/BraceAnalyzerState.h"
 #include "AnalyzerTypes/IAnalyzer.h"
