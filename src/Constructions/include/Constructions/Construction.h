@@ -5,33 +5,20 @@
 #ifndef RUNTIME_SRC_INCLUDE_SCOPEANALYZER_CONSTRUCTIONS_CONSTRUCTION_H_
 #define RUNTIME_SRC_INCLUDE_SCOPEANALYZER_CONSTRUCTIONS_CONSTRUCTION_H_
 
-#include "ConstructionState.h"
-#include "ConstructionType.h"
-
-#include <utility>
-#include <memory>
-
-struct Construction {
-  Construction() = default;
-  Construction(ConstructionState state, ConstructionType type) : state(state), type(type) {}
-
-  ConstructionState state;
-  ConstructionType type;
-
-  bool operator==(const Construction& rhs) const {
-    return state == rhs.state &&
-        type == rhs.type;
-  }
-  bool operator!=(const Construction& rhs) const {
-    return !(rhs == *this);
-  }
-};
-
-template <>
-struct std::hash<Construction> {
-  auto operator()(const Construction &construction) const -> size_t {
-    return std::hash<int>()(construction.state) ^ std::hash<int>()(construction.type);
-  }
+enum Construction {
+  DoubleQuote = 1,
+  Quote,
+  ThreeDoubleQuote,
+  ThreeQuote,
+  OpenedShortComment,
+  ClosedShortComment,
+  OpenedLongComment,
+  ClosedLongComment,
+  OpenedDollarSlashyString,
+  ClosedDollarSlashyString,
+  OpenedBrace,
+  ClosedBrace,
+  Backtick,
 };
 
 #endif //RUNTIME_SRC_INCLUDE_SCOPEANALYZER_CONSTRUCTIONS_CONSTRUCTION_H_

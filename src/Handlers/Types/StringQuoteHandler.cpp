@@ -9,7 +9,7 @@ HandleResult StringQuoteHandler::Handle(const Construction& construction,
                                                          const std::unique_ptr<Construction>& waiting_for_construction) {
   if (waiting_for_construction != nullptr) return {nullptr, Continue};
 
-  if (construction.type == DoubleQuote && construction.state == Undefined) {
+  if (construction == DoubleQuote) {
     return {std::make_unique<Construction>(construction), Continue};
   }
 
@@ -22,12 +22,12 @@ TryAddConstructionResult StringQuoteHandler::TryAddConstructionTo(char character
   if (character != '"') return {true, false};
   if (!state.buffer_.empty() && state.buffer_[0] == '\\') return {false, false};
 
-  constructions.emplace_back(Undefined, DoubleQuote);
+  constructions.emplace_back(DoubleQuote);
   return {true, false};
 }
 
 StringQuoteHandler::StringQuoteHandler() : IHandler({
                                                         '"',
                                                     }, {
-                                                        {Undefined, DoubleQuote}
+                                                        DoubleQuote
                                                     }) {}

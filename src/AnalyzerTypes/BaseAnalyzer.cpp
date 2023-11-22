@@ -11,8 +11,7 @@ AddTokenResult BaseAnalyzer::AddToken(int32_t token) {
 
   for (const auto& construction : get_result.constructions) {
     if (waiting_for_construction_ != nullptr &&
-        waiting_for_construction_->type == construction.type &&
-        waiting_for_construction_->state == construction.state) {
+        *waiting_for_construction_ == construction) {
       waiting_for_construction_ = nullptr;
       continue;
     }
@@ -44,23 +43,12 @@ void BaseAnalyzer::ApplyContext(ScopeContext context) {
   if (!context.IsValid()) throw std::invalid_argument("context is invalid");
 
   if (context.in_character) {
-    waiting_for_construction_ = std::make_unique<Construction>(
-        Undefined,
-        Quote);
+    waiting_for_construction_ = std::make_unique<Construction>(Quote);
   } else if (context.in_string) {
-    waiting_for_construction_ = std::make_unique<Construction>(
-        Undefined,
-        DoubleQuote
-    );
+    waiting_for_construction_ = std::make_unique<Construction>(DoubleQuote);
   } else if (context.in_short_comment) {
-    waiting_for_construction_ = std::make_unique<Construction>(
-        Closed,
-        ShortComment
-    );
+    waiting_for_construction_ = std::make_unique<Construction>(ClosedShortComment);
   } else if (context.in_long_comment) {
-    waiting_for_construction_ = std::make_unique<Construction>(
-        Closed,
-        LongComment
-    );
+    waiting_for_construction_ = std::make_unique<Construction>(ClosedLongComment);
   }
 }

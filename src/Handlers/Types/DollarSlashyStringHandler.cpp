@@ -8,8 +8,8 @@ HandleResult DollarSlashyStringHandler::Handle(const Construction& construction,
                                                                 const std::unique_ptr<Construction>& waiting_for_construction) {
   if (waiting_for_construction != nullptr) return {nullptr, Continue};
 
-  if (construction.type == DollarSlashyString && construction.state == Opened) {
-    return {std::make_unique<Construction>(Closed, DollarSlashyString), Continue};
+  if (construction == OpenedDollarSlashyString) {
+    return {std::make_unique<Construction>(ClosedDollarSlashyString), Continue};
   }
 
   return {nullptr, Continue};
@@ -21,11 +21,11 @@ TryAddConstructionResult DollarSlashyStringHandler::TryAddConstructionTo(char ch
   if (state.buffer_.empty()) return {add_current_char, false};
 
   if (character == '/' && state.buffer_[0] == '$') {
-    constructions.emplace_back(Opened, DollarSlashyString);
+    constructions.emplace_back(OpenedDollarSlashyString);
     add_current_char = false;
   }
   else if (character == '$' && state.buffer_[0] == '/') {
-    constructions.emplace_back(Closed, DollarSlashyString);
+    constructions.emplace_back(ClosedDollarSlashyString);
     add_current_char = false;
   }
 
@@ -36,7 +36,7 @@ DollarSlashyStringHandler::DollarSlashyStringHandler() : IHandler({
                                                                       '/'
                                                                   },
                                                                   {
-                                                                      {Opened, DollarSlashyString},
+                                                                      OpenedDollarSlashyString,
                                                                   }) {
 
 }

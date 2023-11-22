@@ -6,7 +6,7 @@
 HandleResult BacktickHandler::Handle(const Construction& construction,
                                      const std::unique_ptr<Construction>& waiting_for_construction) {
   if (waiting_for_construction != nullptr) return {nullptr, Continue};
-  if (construction.type == Backtick && construction.state == Undefined) {
+  if (construction == Backtick) {
     return {std::make_unique<Construction>(construction), Continue};
   }
 
@@ -18,14 +18,14 @@ TryAddConstructionResult BacktickHandler::TryAddConstructionTo(char character,
   if (character != '`') return {true, false};
   if (!state.buffer_.empty() && state.buffer_[0] == '\\') return {false, false};
 
-  constructions.emplace_back(Undefined, Backtick);
+  constructions.emplace_back(Backtick);
   return {false, false};
 }
 BacktickHandler::BacktickHandler() : IHandler({
                                                   '`',
                                               },
                                               {
-                                                  {Undefined, Backtick}
+                                                  Backtick
                                               }) {
 
 }
