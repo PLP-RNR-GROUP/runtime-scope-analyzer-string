@@ -5,11 +5,9 @@
 #ifndef RUNTIME_SRC_HANDLERS_INCLUDE_IHANDLER_H_
 #define RUNTIME_SRC_HANDLERS_INCLUDE_IHANDLER_H_
 
-#include "Constructions/Construction.h"
-#include "Constructions/ConstructionStreamExtractorState.h"
 #include "TryAddConstructionResult.h"
-#include "AnalyzerTypes/BraceAnalyzerState.h"
-#include "HandleResult.h"
+#include "Handlers/Results/HandleResult.h"
+#include "boost/circular_buffer.hpp"
 
 #include <memory>
 #include <list>
@@ -31,7 +29,7 @@ class IHandler {
   virtual HandleResult Handle(const Construction& construction,
                               const std::unique_ptr<Construction>& waiting_for_construction) = 0;
   virtual TryAddConstructionResult TryAddConstructionTo(char character,
-                                                        const ConstructionStreamExtractorState& state,
+                                                        const boost::circular_buffer<char>& buffer,
                                                         std::list<Construction>& constructions) = 0;
   const std::vector<char>& GetHandlingText() const;
   const std::vector<Construction>& GetHandlingConstructions() const;

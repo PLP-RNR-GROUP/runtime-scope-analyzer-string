@@ -1,4 +1,4 @@
-add_library(tokenizers Tokenizer.cpp)
+add_library(tokenizers SHARED Tokenizer.cpp)
 
 target_include_directories(tokenizers PUBLIC include ${CMAKE_CURRENT_SOURCE_DIR})
 

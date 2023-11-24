@@ -5,8 +5,8 @@
 #ifndef RUNTIME_SRC_HANDLERS_HANDLERSMAP_H_
 #define RUNTIME_SRC_HANDLERS_HANDLERSMAP_H_
 
-#include "IHandler.h"
-#include "IHandlerList.h"
+#include "Handlers/IHandler.h"
+#include "Handlers/IHandlerList.h"
 
 #include <map>
 #include <list>
@@ -22,7 +22,19 @@ class HandlersMap {
   std::unordered_map<Construction, std::list<IHandler*>> construction_handlers_map_;
   handlers_list_ptr handlers_;
   std::list<IHandler*> required_handlers_for_char_;
-  std::list<IHandler*> empty_handlers_list_;
+  const std::list<IHandler*> empty_handlers_list_ {};
 };
+
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+HandlersMap* handlers_map_new(int tab_in_spaces);
+void handlers_map_del(HandlersMap* handlers_map);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif //RUNTIME_SRC_HANDLERS_HANDLERSMAP_H_

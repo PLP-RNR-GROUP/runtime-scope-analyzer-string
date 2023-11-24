@@ -5,8 +5,7 @@
 #ifndef RUNTIME_LIB_INCLUDE_SCOPEANALYZER_ANALYZERS_INDENTATIONANALYZER_H_
 #define RUNTIME_LIB_INCLUDE_SCOPEANALYZER_ANALYZERS_INDENTATIONANALYZER_H_
 
-#include "Constructions/ConstructionsStreamExtractor.h"
-#include "IndentationAnalyzerState.h"
+
 #include "AnalyzerTypes/BaseAnalyzer.h"
 
 class IndentationAnalyzer : public BaseAnalyzer {

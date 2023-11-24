@@ -14,11 +14,11 @@ HandleResult ThreeQuoteHandler::Handle(const Construction& construction,
   return {nullptr, Continue};
 }
 TryAddConstructionResult ThreeQuoteHandler::TryAddConstructionTo(char character,
-                                                                 const ConstructionStreamExtractorState& state,
+                                                                 const boost::circular_buffer<char>& buffer,
                                                                  std::list<Construction>& constructions) {
   if (character != '\'') return {true, false};
 
-  if (state.buffer_.size() >= 2 && state.buffer_[0] == '\'' && state.buffer_[1] == '\'') {
+  if (buffer.size() >= 2 && buffer[0] == '\'' && buffer[1] == '\'') {
     if (!constructions.empty() && constructions.back() == Quote) {
       constructions.pop_back();
     }

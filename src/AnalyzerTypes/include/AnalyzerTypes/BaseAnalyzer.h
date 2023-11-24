@@ -5,7 +5,12 @@
 #ifndef RUNTIME_SRC_ANALYZERTYPES_INCLUDE_ANALYZERTYPES_BASEANALYZER_H_
 #define RUNTIME_SRC_ANALYZERTYPES_INCLUDE_ANALYZERTYPES_BASEANALYZER_H_
 
+
 #include "IAnalyzer.h"
+#include "HandlersMap/HandlersMap.h"
+#include "ConstructionsStreamExtractor/ConstructionsStreamExtractor.h"
+#include "Contexts/ScopeContext.h"
+
 class BaseAnalyzer : public IAnalyzer {
  public:
   AddTokenResult AddToken(int32_t token) override;

@@ -5,11 +5,10 @@
 #ifndef RUNTIME_SRC_CONSTRUCTIONS_INCLUDE_CONSTRUCTIONS_TOKENTOCONSTRUCTIONSCONVERTER_H_
 #define RUNTIME_SRC_CONSTRUCTIONS_INCLUDE_CONSTRUCTIONS_TOKENTOCONSTRUCTIONSCONVERTER_H_
 
-#include "ConstructionStreamExtractorState.h"
 #include "Handlers/IHandlerList.h"
 #include "Tokenizers/Tokenizer.h"
 #include "GetResult.h"
-#include "Handlers/HandlersMap.h"
+#include "HandlersMap/HandlersMap.h"
 
 #include <unordered_map>
 #include <fstream>
@@ -21,7 +20,27 @@ class ConstructionsStreamExtractor {
  private:
   const Tokenizer& tokenizer_;
   const HandlersMap& handlers_map_;
-  ConstructionStreamExtractorState state_;
+  boost::circular_buffer<char> buffer_;
 };
+
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+struct CGetResult {
+  bool stop_generation;
+  size_t constructions_amount;
+  Construction* constructions;
+};
+
+ConstructionsStreamExtractor* constructions_stream_extractor_new(const Tokenizer* tokenizer, const HandlersMap* handlers_map);
+void constructions_stream_extractor_del(ConstructionsStreamExtractor* stream_extractor);
+CGetResult* constructions_stream_extractor_add_token(ConstructionsStreamExtractor* stream_extractor, int32_t token);
+
+void cget_result_del(CGetResult result);
+#ifdef __cplusplus
+}
+#endif
 
 #endif //RUNTIME_SRC_CONSTRUCTIONS_INCLUDE_CONSTRUCTIONS_TOKENTOCONSTRUCTIONSCONVERTER_H_

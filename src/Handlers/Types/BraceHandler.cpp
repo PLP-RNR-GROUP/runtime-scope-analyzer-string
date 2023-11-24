@@ -22,9 +22,9 @@ HandleResult BraceHandler::Handle(const Construction& construction,
 }
 
 TryAddConstructionResult BraceHandler::TryAddConstructionTo(char character,
-                                                            const ConstructionStreamExtractorState& state,
+                                                            const boost::circular_buffer<char>& buffer,
                                                             std::list<Construction>& constructions) {
-  if (!state.buffer_.empty() && state.buffer_[0] == '\\') return {false, false};
+  if (!buffer.empty() && buffer[0] == '\\') return {false, false};
 
   if (character == '{') {
     constructions.emplace_back(OpenedBrace);
