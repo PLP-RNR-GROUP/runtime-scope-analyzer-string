@@ -29,7 +29,7 @@ static handlers_list_ptr getHandlersListPtr() {
 }
 
 
-JavaAnalyzer::JavaAnalyzer(const Tokenizer& tokenizer)
-: BraceAnalyzer(tokenizer, getHandlersListPtr()) {
+JavaAnalyzer::JavaAnalyzer(const Tokenizer& tokenizer, ScopeContext context)
+: BraceAnalyzer(tokenizer, getHandlersListPtr(), context) {
 
 }

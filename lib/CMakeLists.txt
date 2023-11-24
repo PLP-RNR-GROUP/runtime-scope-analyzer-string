@@ -8,6 +8,5 @@ target_link_libraries(scope_lib PUBLIC
         constructions
         handlers
         languages
-        scope_analyzer_state
         analyzers
         analyzer_types)

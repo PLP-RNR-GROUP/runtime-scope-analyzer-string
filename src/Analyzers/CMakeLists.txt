@@ -9,6 +9,7 @@ add_library(analyzers
         ObjectiveCAnalyzer.cpp
         ScalaAnalyzer.cpp
         SwiftAnalyzer.cpp
+        PythonAnalyzer.cpp
 )
 
 target_include_directories(analyzers PUBLIC include ${CMAKE_CURRENT_SOURCE_DIR})

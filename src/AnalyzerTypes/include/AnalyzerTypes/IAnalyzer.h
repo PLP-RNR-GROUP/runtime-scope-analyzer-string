@@ -6,7 +6,7 @@
 #define RUNTIME_LIB_INCLUDE_SCOPEANALYZER_ANALYZERS_IANALYZER_H_
 
 #include "Languages/Language.h"
-#include "AnalyzerTypes/Results/AddTokenResult.h"
+#include "Handlers/Results/AddTokenResult.h"
 #include "ScopeContext.h"
 #include "Handlers/IHandlerList.h"
 #include "Tokenizers/Tokenizer.h"
@@ -21,20 +21,11 @@ class IAnalyzer {
   };
   virtual ~IAnalyzer() = default;
 
-  handlers_list_ptr handlers_;
-  ConstructionsStreamExtractor constructions_stream_extractor_;
-
-  explicit IAnalyzer(const Tokenizer& tokenizer, handlers_list_ptr handlers) :
-  handlers_(std::move(handlers)),
-  constructions_stream_extractor_(tokenizer, handlers_.get()) {
-  }
-
+  explicit IAnalyzer() = default;
  public:
   IAnalyzer& operator=(const IAnalyzer&) = delete;
 
   virtual AddTokenResult AddToken(int32_t token) = 0;
-  virtual void ResetState(ScopeContext context, Language language) = 0;
-  virtual void ApplyContext(ScopeContext context) = 0;
 
   struct Deleter
   {

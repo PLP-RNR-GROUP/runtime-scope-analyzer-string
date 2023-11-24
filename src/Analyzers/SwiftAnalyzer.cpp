@@ -32,8 +32,7 @@ static handlers_list_ptr getHandlersListPtr() {
   return handlers_ptr;
 }
 
-SwiftAnalyzer::SwiftAnalyzer(const Tokenizer& tokenizer)
+SwiftAnalyzer::SwiftAnalyzer(const Tokenizer& tokenizer, ScopeContext context)
     : BraceAnalyzer(tokenizer,
-                    getHandlersListPtr()
-                    ) {
+                    getHandlersListPtr(), context) {
 }

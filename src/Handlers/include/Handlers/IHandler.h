@@ -8,25 +8,33 @@
 #include "Constructions/Construction.h"
 #include "Constructions/ConstructionStreamExtractorState.h"
 #include "TryAddConstructionResult.h"
-#include "ScopeAnalyzerState/ScopeAnalyzerState.h"
+#include "AnalyzerTypes/BraceAnalyzerState.h"
+#include "HandleResult.h"
 
 #include <memory>
 #include <list>
 
 class IHandler {
  protected:
-  IHandler() = default;
   virtual ~IHandler() = 0;
   virtual void Delete();
+
+  std::vector<char> handling_text;
+  std::vector<Construction> handling_constructions;
+  explicit IHandler(const std::vector<char>& handling_text,
+                    const std::vector<Construction>& handling_constructions);
 
  public:
   IHandler& operator=(const IHandler&) = delete;
 
   // Handle returns next waiting construction.
-  virtual std::unique_ptr<Construction> Handle(const Construction& construction, ScopeAnalyzerState& state) = 0;
+  virtual HandleResult Handle(const Construction& construction,
+                              const std::unique_ptr<Construction>& waiting_for_construction) = 0;
   virtual TryAddConstructionResult TryAddConstructionTo(char character,
-                                                        ConstructionStreamExtractorState& state,
+                                                        const ConstructionStreamExtractorState& state,
                                                         std::list<Construction>& constructions) = 0;
+  const std::vector<char>& GetHandlingText() const;
+  const std::vector<Construction>& GetHandlingConstructions() const;
 
   struct Deleter
   {

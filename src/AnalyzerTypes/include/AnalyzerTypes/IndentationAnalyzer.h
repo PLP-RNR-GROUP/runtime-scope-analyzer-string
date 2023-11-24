@@ -5,18 +5,16 @@
 #ifndef RUNTIME_LIB_INCLUDE_SCOPEANALYZER_ANALYZERS_INDENTATIONANALYZER_H_
 #define RUNTIME_LIB_INCLUDE_SCOPEANALYZER_ANALYZERS_INDENTATIONANALYZER_H_
 
-#include "IAnalyzer.h"
 #include "Constructions/ConstructionsStreamExtractor.h"
+#include "IndentationAnalyzerState.h"
+#include "AnalyzerTypes/BaseAnalyzer.h"
 
-class IndentationAnalyzer : public IAnalyzer {
+class IndentationAnalyzer : public BaseAnalyzer {
  public:
   IndentationAnalyzer(
-                const Tokenizer& tokenizer,
-                handlers_list_ptr handlers);
-  AddTokenResult AddToken(int32_t token) override;
-
- private:
-  ScopeAnalyzerState state_;
+                      const Tokenizer& tokenizer,
+                      handlers_list_ptr handlers,
+                      ScopeContext context);
 };
 
 #endif //RUNTIME_LIB_INCLUDE_SCOPEANALYZER_ANALYZERS_INDENTATIONANALYZER_H_

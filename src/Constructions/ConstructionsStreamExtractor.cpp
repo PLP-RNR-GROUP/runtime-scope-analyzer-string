@@ -5,18 +5,29 @@
 
 #include <list>
 #include "nlohmann/json.hpp"
+#include "Constructions/GetResult.h"
+#include "Handlers/HandlersMap.h"
 
 using json = nlohmann::json;
 
-std::list<Construction> ConstructionsStreamExtractor::Get(int32_t token) {
+GetResult ConstructionsStreamExtractor::Get(int32_t token) {
   std::string token_metadata = tokenizer_.Decode(token);
   std::list<Construction> constructions;
+
+  bool should_stop_generation = false;
   for (char character: token_metadata) {
     bool save_current_character = true;
-    for (const auto& kHandler : *handlers_) {
+
+      for (const auto& kHandler : handlers_map_.GetHandlersFor(character)) {
       TryAddConstructionResult result = kHandler->TryAddConstructionTo(character, state_, constructions);
+      if (result.should_stop_generation) {
+        should_stop_generation = result.should_stop_generation;
+      }
+
       if (!result.save_current_character) {
         save_current_character = false;
+        state_.buffer_.clear();
+        break;
       }
     }
 
@@ -25,16 +36,11 @@ std::list<Construction> ConstructionsStreamExtractor::Get(int32_t token) {
     }
   }
 
-  return constructions;
+  return {constructions, should_stop_generation};
 }
 
-void ConstructionsStreamExtractor::UpdateHandlers(const handlers_list* handlers) {
-  handlers_ = handlers;
-  state_.buffer_.clear();
-}
-
-ConstructionsStreamExtractor::ConstructionsStreamExtractor(const Tokenizer& tokenizer, const handlers_list* handlers) :
-tokenizer_(tokenizer ){
+ConstructionsStreamExtractor::ConstructionsStreamExtractor(const Tokenizer& tokenizer, const HandlersMap& handlers_map) :
+    tokenizer_(tokenizer),
+    handlers_map_(handlers_map) {
   state_.buffer_ = boost::circular_buffer<char>(2);
-  handlers_ = handlers;
 }

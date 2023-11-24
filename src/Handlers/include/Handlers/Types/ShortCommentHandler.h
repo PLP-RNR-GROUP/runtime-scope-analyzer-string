@@ -8,9 +8,11 @@
 #include "Handlers/IHandler.h"
 class ShortCommentHandler : public IHandler {
  public:
-  std::unique_ptr<Construction> Handle(const Construction& construction, ScopeAnalyzerState& state) override;
+  explicit ShortCommentHandler();
+  HandleResult Handle(const Construction& construction,
+                      const std::unique_ptr<Construction>& waiting_for_construction) override;
   TryAddConstructionResult TryAddConstructionTo(char character,
-                                                ConstructionStreamExtractorState& state,
+                                                const ConstructionStreamExtractorState& state,
                                                 std::list<Construction>& constructions) override;
 };
 

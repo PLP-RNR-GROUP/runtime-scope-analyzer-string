@@ -9,7 +9,7 @@
 
 class GoAnalyzer : public BraceAnalyzer {
  public:
-  explicit GoAnalyzer(const Tokenizer& tokenizer);
+  explicit GoAnalyzer(const Tokenizer& tokenizer, ScopeContext context);
 };
 
 #endif //RUNTIME_SRC_ANALYZERS_GOANALYZER_H_

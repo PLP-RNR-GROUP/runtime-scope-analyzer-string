@@ -3,29 +3,40 @@
 //
 
 #include "Handlers/Types/LongCommentHandler.h"
-std::unique_ptr<Construction> LongCommentHandler::Handle(const Construction& construction, ScopeAnalyzerState& state) {
+#include "Handlers/HandleResult.h"
+HandleResult LongCommentHandler::Handle(const Construction& construction,
+                                                         const std::unique_ptr<Construction>& waiting_for_construction) {
+  if (waiting_for_construction != nullptr) return {nullptr, Continue};
+
   if (construction.type == LongComment && construction.state == Opened) {
-    return std::make_unique<Construction>(Closed, LongComment);
+    return {std::make_unique<Construction>(Closed, LongComment), Continue};
   }
 
-  return nullptr;
+  return {nullptr, Continue};
 }
 TryAddConstructionResult LongCommentHandler::TryAddConstructionTo(char character,
-                                                                  ConstructionStreamExtractorState& state,
+                                                                  const ConstructionStreamExtractorState& state,
                                                                   std::list<Construction>& constructions) {
   bool add_current_char = true;
-  if (state.buffer_.empty()) return {add_current_char};
+  if (state.buffer_.empty()) return {add_current_char, false};
 
   if (character == '/' && state.buffer_[0] == '*') {
     constructions.emplace_back(Closed, LongComment);
-    state.buffer_.pop_front();
     add_current_char = false;
   }
   else if (character == '*' && state.buffer_[0] == '/') {
     constructions.emplace_back(Opened, LongComment);
-    state.buffer_.pop_front();
     add_current_char = false;
   }
 
-  return {add_current_char};
+  return {add_current_char, false};
+}
+LongCommentHandler::LongCommentHandler() : IHandler({
+                                                        '*',
+                                                        '/'
+                                                    },
+                                                    {
+                                                          {Opened, LongComment},
+                                                    }) {
+
 }

@@ -29,7 +29,7 @@ static handlers_list_ptr getHandlersListPtr() {
   return handlers_ptr;
 }
 
-JavascriptAnalyzer::JavascriptAnalyzer(const Tokenizer& tokenizer)
-    : BraceAnalyzer(tokenizer, getHandlersListPtr()) {
+JavascriptAnalyzer::JavascriptAnalyzer(const Tokenizer& tokenizer, ScopeContext context)
+    : BraceAnalyzer(tokenizer, getHandlersListPtr(), context) {
 
 }

@@ -9,7 +9,7 @@
 
 class KotlinAnalyzer : public BraceAnalyzer {
  public:
-  explicit KotlinAnalyzer(const Tokenizer& tokenizer);
+  explicit KotlinAnalyzer(const Tokenizer& tokenizer, ScopeContext context);
 };
 
 #endif //RUNTIME_SRC_ANALYZERS_KOTLINANALYZER_H_

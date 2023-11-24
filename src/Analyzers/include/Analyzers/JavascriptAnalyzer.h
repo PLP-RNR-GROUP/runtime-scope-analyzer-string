@@ -9,7 +9,7 @@
 
 class JavascriptAnalyzer : public BraceAnalyzer {
  public:
-  explicit JavascriptAnalyzer(const Tokenizer& tokenizer);
+  explicit JavascriptAnalyzer(const Tokenizer& tokenizer, ScopeContext context);
 };
 
 #endif //RUNTIME_SRC_ANALYZERS_JAVASCRIPTANALYZERS_H_

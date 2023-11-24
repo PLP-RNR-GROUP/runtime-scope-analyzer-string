@@ -20,7 +20,7 @@ class AnalyzerFixture : public benchmark::Fixture
  public:
   ScopeAnalyzer analyzer_;
 
-  AnalyzerFixture() : analyzer_(slurp(std::ifstream(vocabPath)), ScopeContext(false, false, false, false, false), Java)
+  AnalyzerFixture() : analyzer_(slurp(std::ifstream(vocabPath)), ScopeContext(false, false, false, false, false, 4), Java)
   {
   }
 };
@@ -29,7 +29,7 @@ BENCHMARK_DEFINE_F(AnalyzerFixture, ScopeAnalyzerAdd_TheSameToken) (benchmark::S
   std::vector<int32_t> tokens = std::vector<int32_t>(state.range(0), state.range(1));
 
   for (auto _ : state) {
-    analyzer_.ResetState(ScopeContext(false, false, false, false, false), Java);
+    analyzer_.ResetState(ScopeContext(false, false, false, false, false, 4), Java);
 
     for (int32_t token: tokens) {
       if (analyzer_.AddToken(token) == Stop) {
@@ -61,7 +61,7 @@ BENCHMARK_DEFINE_F(AnalyzerFixture, ScopeAnalyzerAdd_BoostSourceCode) (benchmark
   };
 
   for (auto _ : state) {
-    analyzer_.ResetState(ScopeContext(false, false, false, false, false), Java);
+    analyzer_.ResetState(ScopeContext(false, false, false, false, false, 4), Java);
 
     for (int32_t token: tokens) {
       if (analyzer_.AddToken(token) == Stop) {

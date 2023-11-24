@@ -5,27 +5,33 @@
 #ifndef RUNTIME_LIB_INCLUDE_SCOPEANALYZER_SCOPECONTEXT_H_
 #define RUNTIME_LIB_INCLUDE_SCOPEANALYZER_SCOPECONTEXT_H_
 
-struct ScopeContext {
+class ScopeContext {
+ public:
   ScopeContext(bool in_string,
                bool in_character,
                bool in_short_comment,
                bool in_long_comment,
                bool scope_opened,
+               int start_indentation_level,
                int tab_in_spaces = 4)
       : in_string(in_string),
         in_character(in_character),
         in_short_comment(in_short_comment),
         in_long_comment(in_long_comment),
         scope_opened(scope_opened),
+        start_indentation_level(start_indentation_level),
         tab_in_spaces(tab_in_spaces)
         {}
+  bool IsValid() const {
+    return in_character + in_long_comment + in_short_comment + in_string <= 1;
+  }
 
   bool in_string;
   bool in_character;
   bool in_short_comment;
   bool in_long_comment;
   bool scope_opened;
-  // TODO: Divide in two different contexts?
+  int start_indentation_level;
   int tab_in_spaces;
 };
 

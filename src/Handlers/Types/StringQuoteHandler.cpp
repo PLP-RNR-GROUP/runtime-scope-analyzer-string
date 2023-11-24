@@ -3,20 +3,31 @@
 //
 
 #include "Handlers/Types/StringQuoteHandler.h"
+#include "Handlers/HandleResult.h"
 
-std::unique_ptr<Construction> StringQuoteHandler::Handle(const Construction& construction, ScopeAnalyzerState& state) {
+HandleResult StringQuoteHandler::Handle(const Construction& construction,
+                                                         const std::unique_ptr<Construction>& waiting_for_construction) {
+  if (waiting_for_construction != nullptr) return {nullptr, Continue};
+
   if (construction.type == DoubleQuote && construction.state == Undefined) {
-    return std::make_unique<Construction>(construction);
+    return {std::make_unique<Construction>(construction), Continue};
   }
 
-  return nullptr;
+  return {nullptr, Continue};
 }
+
 TryAddConstructionResult StringQuoteHandler::TryAddConstructionTo(char character,
-                                                                  ConstructionStreamExtractorState& state,
+                                                                  const ConstructionStreamExtractorState& state,
                                                                   std::list<Construction>& constructions) {
-  if (character != '"') return {true};
-  if (!state.buffer_.empty() && state.buffer_[0] == '\\') return {false};
+  if (character != '"') return {true, false};
+  if (!state.buffer_.empty() && state.buffer_[0] == '\\') return {false, false};
 
   constructions.emplace_back(Undefined, DoubleQuote);
-  return {true};
+  return {true, false};
 }
+
+StringQuoteHandler::StringQuoteHandler() : IHandler({
+                                                        '"',
+                                                    }, {
+                                                        {Undefined, DoubleQuote}
+                                                    }) {}

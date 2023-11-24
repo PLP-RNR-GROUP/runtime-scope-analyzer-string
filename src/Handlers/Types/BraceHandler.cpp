@@ -4,34 +4,51 @@
 
 #include "Handlers/Types/BraceHandler.h"
 
-std::unique_ptr<Construction> BraceHandler::Handle(const Construction& construction, ScopeAnalyzerState& state) {
+HandleResult BraceHandler::Handle(const Construction& construction,
+                                  const std::unique_ptr<Construction>& waiting_for_construction) {
+  if (waiting_for_construction != nullptr) return {nullptr, Continue};
+
   if (construction.type == Brace) {
     switch (construction.state) {
       case Undefined:
         throw std::invalid_argument("invalid state");
       case Closed:
-        --state.brace_balance;
+        --brace_balance_;
+        if (brace_balance_ <= 0) {
+          return {nullptr, Stop};
+        }
         break;
       case Opened:
-        ++state.brace_balance;
+        ++brace_balance_;
         break;
     }
   }
 
-  return nullptr;
+  return {nullptr, Continue};
 }
 
 TryAddConstructionResult BraceHandler::TryAddConstructionTo(char character,
-                                                            ConstructionStreamExtractorState& state,
+                                                            const ConstructionStreamExtractorState& state,
                                                             std::list<Construction>& constructions) {
+  if (!state.buffer_.empty() && state.buffer_[0] == '\\') return {false, false};
+
   if (character == '{') {
     constructions.emplace_back(Opened, Brace);
-    return {false};
+    return {false, false};
   }
   else if (character == '}') {
     constructions.emplace_back(Closed, Brace);
-    return {false};
+    return {false, false};
   }
 
-  return {true};
+  return {true, false};
 }
+
+BraceHandler::BraceHandler(int brace_balance) : brace_balance_(brace_balance), IHandler({
+                                                                                    '{',
+                                                                                    '}'
+                                                                                },
+                                                                                {
+                                                                                    {Opened, Brace},
+                                                                                    {Closed, Brace}
+                                                                                }) {}

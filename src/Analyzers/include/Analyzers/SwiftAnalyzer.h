@@ -9,7 +9,7 @@
 
 class SwiftAnalyzer : public BraceAnalyzer {
  public:
-  explicit SwiftAnalyzer(const Tokenizer& tokenizer);
+  explicit SwiftAnalyzer(const Tokenizer& tokenizer, ScopeContext context);
 };
 
 #endif //RUNTIME_SRC_ANALYZERS_SWIFTANALYZER_H_

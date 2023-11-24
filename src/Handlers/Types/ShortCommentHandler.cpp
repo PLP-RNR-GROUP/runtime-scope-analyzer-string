@@ -3,31 +3,42 @@
 //
 
 #include "Handlers/Types/ShortCommentHandler.h"
-std::unique_ptr<Construction> ShortCommentHandler::Handle(const Construction& construction, ScopeAnalyzerState& state) {
+HandleResult ShortCommentHandler::Handle(const Construction& construction,
+                                         const std::unique_ptr<Construction>& waiting_for_construction) {
+  if (waiting_for_construction != nullptr) return {nullptr, Continue};
+
   if (construction.type == ShortComment && construction.state == Opened) {
-    return std::make_unique<Construction>(Closed, ShortComment);
+    return {std::make_unique<Construction>(Closed, ShortComment), Continue};
   }
 
-  return nullptr;
+  return {nullptr, Continue};
 }
 TryAddConstructionResult ShortCommentHandler::TryAddConstructionTo(char character,
-                                                                   ConstructionStreamExtractorState& state,
+                                                                   const ConstructionStreamExtractorState& state,
                                                                    std::list<Construction>& constructions) {
   if (
       character == '\n' ||
       (character == 'n' && !state.buffer_.empty() && state.buffer_[0] == '\\')) {
     constructions.emplace_back(Closed, ShortComment);
-    return {false};
+    return {true, false};
   }
 
-  bool add_current_char = true;
-  if (character != '/') return {add_current_char};
+  if (character != '/') return {true, false};
 
   if (!state.buffer_.empty() && state.buffer_[0] == '/') {
-    add_current_char = false;
     constructions.emplace_back(Opened, ShortComment);
-    state.buffer_.pop_front();
+    return {false, false};
   }
 
-  return {add_current_char};
+  return {true, false};
+}
+ShortCommentHandler::ShortCommentHandler() : IHandler({
+                                                          '/',
+                                                          '\n',
+                                                          'n'
+                                                      },
+                                                      {
+                                                          {Opened, ShortComment},
+                                                      }) {
+
 }

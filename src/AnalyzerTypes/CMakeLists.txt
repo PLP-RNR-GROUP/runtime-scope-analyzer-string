@@ -1,6 +1,8 @@
 add_library(analyzer_types
-BraceAnalyzer.cpp
-IndentationAnalyzer.cpp)
+        BraceAnalyzer.cpp
+        IndentationAnalyzer.cpp
+        BaseAnalyzer.cpp
+)
 
 target_include_directories(analyzer_types PUBLIC include ${CMAKE_CURRENT_SOURCE_DIR})
 

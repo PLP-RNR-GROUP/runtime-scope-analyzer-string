@@ -30,6 +30,6 @@ static handlers_list_ptr getHandlersListPtr() {
   return handlers_ptr;
 }
 
-CSharpAnalyzer::CSharpAnalyzer(const Tokenizer& tokenizer)
-    : BraceAnalyzer(tokenizer, getHandlersListPtr()) {
+CSharpAnalyzer::CSharpAnalyzer(const Tokenizer& tokenizer, ScopeContext context)
+    : BraceAnalyzer(tokenizer, getHandlersListPtr(), context) {
 }

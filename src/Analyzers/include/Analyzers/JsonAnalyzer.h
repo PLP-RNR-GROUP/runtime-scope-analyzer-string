@@ -9,7 +9,7 @@
 
 class JsonAnalyzer : public BraceAnalyzer {
  public:
-  explicit JsonAnalyzer(const Tokenizer& tokenizer);
+  explicit JsonAnalyzer(const Tokenizer& tokenizer, ScopeContext context);
 };
 
 #endif //RUNTIME_SRC_ANALYZERS_JSONANALYZER_H_

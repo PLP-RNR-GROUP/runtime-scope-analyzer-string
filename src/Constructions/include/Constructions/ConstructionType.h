@@ -14,7 +14,7 @@ enum ConstructionType {
   LongComment,
   DollarSlashyString,
   Brace,
-  Backtick
+  Backtick,
 };
 
 #endif //RUNTIME_SRC_INCLUDE_SCOPEANALYZER_SPECIALSYMBOLS_SPECIALSYMBOLTYPE_H_

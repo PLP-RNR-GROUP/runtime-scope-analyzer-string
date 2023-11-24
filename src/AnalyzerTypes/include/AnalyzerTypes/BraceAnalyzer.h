@@ -5,19 +5,15 @@
 #ifndef RUNTIME_LIB_INCLUDE_SCOPEANALYZER_ANALYZERS_BRACEANALYZER_H_
 #define RUNTIME_LIB_INCLUDE_SCOPEANALYZER_ANALYZERS_BRACEANALYZER_H_
 
-#include "IAnalyzer.h"
 #include "Constructions/ConstructionsStreamExtractor.h"
-#include "AnalyzerTypes/Results/AddTokenResult.h"
+#include "Handlers/HandlersMap.h"
+#include "BaseAnalyzer.h"
 
-class BraceAnalyzer : public IAnalyzer {
+class BraceAnalyzer : public BaseAnalyzer {
  public:
   BraceAnalyzer(const Tokenizer& tokenizer,
-                handlers_list_ptr handlers);
-  AddTokenResult AddToken(int32_t token) override;
-  void ResetState(ScopeContext context, Language language) override;
-  void ApplyContext(ScopeContext context) override;
- private:
-  ScopeAnalyzerState state_;
+                handlers_list_ptr handlers,
+                ScopeContext context);
 };
 
 #endif //RUNTIME_LIB_INCLUDE_SCOPEANALYZER_ANALYZERS_BRACEANALYZER_H_
