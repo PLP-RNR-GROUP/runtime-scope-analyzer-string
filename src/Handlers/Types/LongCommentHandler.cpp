@@ -8,8 +8,8 @@ HandleResult LongCommentHandler::Handle(const Construction& construction,
                                                          const std::unique_ptr<Construction>& waiting_for_construction) {
   if (waiting_for_construction != nullptr) return {nullptr, Continue};
 
-  if (construction.type == LongComment && construction.state == Opened) {
-    return {std::make_unique<Construction>(Closed, LongComment), Continue};
+  if (construction == OpenedLongComment) {
+    return {std::make_unique<Construction>(ClosedLongComment), Continue};
   }
 
   return {nullptr, Continue};
@@ -21,11 +21,11 @@ TryAddConstructionResult LongCommentHandler::TryAddConstructionTo(char character
   if (state.buffer_.empty()) return {add_current_char, false};
 
   if (character == '/' && state.buffer_[0] == '*') {
-    constructions.emplace_back(Closed, LongComment);
+    constructions.emplace_back(ClosedLongComment);
     add_current_char = false;
   }
   else if (character == '*' && state.buffer_[0] == '/') {
-    constructions.emplace_back(Opened, LongComment);
+    constructions.emplace_back(OpenedLongComment);
     add_current_char = false;
   }
 
@@ -36,7 +36,7 @@ LongCommentHandler::LongCommentHandler() : IHandler({
                                                         '/'
                                                     },
                                                     {
-                                                          {Opened, LongComment},
+                                                          OpenedLongComment,
                                                     }) {
 
 }

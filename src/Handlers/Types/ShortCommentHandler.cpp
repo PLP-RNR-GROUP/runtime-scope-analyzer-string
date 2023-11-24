@@ -7,8 +7,8 @@ HandleResult ShortCommentHandler::Handle(const Construction& construction,
                                          const std::unique_ptr<Construction>& waiting_for_construction) {
   if (waiting_for_construction != nullptr) return {nullptr, Continue};
 
-  if (construction.type == ShortComment && construction.state == Opened) {
-    return {std::make_unique<Construction>(Closed, ShortComment), Continue};
+  if (construction == OpenedShortComment) {
+    return {std::make_unique<Construction>(ClosedShortComment), Continue};
   }
 
   return {nullptr, Continue};
@@ -19,14 +19,14 @@ TryAddConstructionResult ShortCommentHandler::TryAddConstructionTo(char characte
   if (
       character == '\n' ||
       (character == 'n' && !state.buffer_.empty() && state.buffer_[0] == '\\')) {
-    constructions.emplace_back(Closed, ShortComment);
+    constructions.emplace_back(ClosedShortComment);
     return {true, false};
   }
 
   if (character != '/') return {true, false};
 
   if (!state.buffer_.empty() && state.buffer_[0] == '/') {
-    constructions.emplace_back(Opened, ShortComment);
+    constructions.emplace_back(OpenedShortComment);
     return {false, false};
   }
 
@@ -38,7 +38,7 @@ ShortCommentHandler::ShortCommentHandler() : IHandler({
                                                           'n'
                                                       },
                                                       {
-                                                          {Opened, ShortComment},
+                                                          OpenedShortComment,
                                                       }) {
 
 }

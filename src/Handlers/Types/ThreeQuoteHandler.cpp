@@ -5,10 +5,9 @@
 #include "Handlers/Types/ThreeQuoteHandler.h"
 HandleResult ThreeQuoteHandler::Handle(const Construction& construction,
                                        const std::unique_ptr<Construction>& waiting_for_construction) {
-  if (waiting_for_construction != nullptr &&
-      (waiting_for_construction->type != Quote && waiting_for_construction->state != Undefined )) return {nullptr, Continue};
+  if (waiting_for_construction != nullptr && *waiting_for_construction != Quote) return {nullptr, Continue};
 
-  if (construction.type == ThreeQuote && construction.state == Undefined) {
+  if (construction == ThreeQuote) {
     return {std::make_unique<Construction>(construction), Continue};
   }
 
@@ -20,11 +19,11 @@ TryAddConstructionResult ThreeQuoteHandler::TryAddConstructionTo(char character,
   if (character != '\'') return {true, false};
 
   if (state.buffer_.size() >= 2 && state.buffer_[0] == '\'' && state.buffer_[1] == '\'') {
-    if (!constructions.empty() && constructions.back().type == Quote) {
+    if (!constructions.empty() && constructions.back() == Quote) {
       constructions.pop_back();
     }
 
-    constructions.emplace_back(Undefined, ThreeQuote);
+    constructions.emplace_back(ThreeQuote);
     return {false, false};
   }
 
@@ -34,7 +33,7 @@ ThreeQuoteHandler::ThreeQuoteHandler() : IHandler({
                                                       '\'',
                                                   },
                                                   {
-                                                        {Undefined, ThreeQuote}
+                                                        ThreeQuote
                                                   }) {
 
 }

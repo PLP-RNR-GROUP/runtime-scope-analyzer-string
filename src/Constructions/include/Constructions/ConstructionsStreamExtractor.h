@@ -20,8 +20,8 @@ class ConstructionsStreamExtractor {
   GetResult Get(int32_t token);
  private:
   const Tokenizer& tokenizer_;
-  ConstructionStreamExtractorState state_;
   const HandlersMap& handlers_map_;
+  ConstructionStreamExtractorState state_;
 };
 
 #endif //RUNTIME_SRC_CONSTRUCTIONS_INCLUDE_CONSTRUCTIONS_TOKENTOCONSTRUCTIONSCONVERTER_H_

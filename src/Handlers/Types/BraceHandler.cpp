@@ -8,19 +8,13 @@ HandleResult BraceHandler::Handle(const Construction& construction,
                                   const std::unique_ptr<Construction>& waiting_for_construction) {
   if (waiting_for_construction != nullptr) return {nullptr, Continue};
 
-  if (construction.type == Brace) {
-    switch (construction.state) {
-      case Undefined:
-        throw std::invalid_argument("invalid state");
-      case Closed:
-        --brace_balance_;
-        if (brace_balance_ <= 0) {
-          return {nullptr, Stop};
-        }
-        break;
-      case Opened:
-        ++brace_balance_;
-        break;
+  if (construction == OpenedBrace) {
+    ++brace_balance_;
+  }
+  else if (construction == ClosedBrace) {
+    --brace_balance_;
+    if (brace_balance_ <= 0) {
+      return {nullptr, Stop};
     }
   }
 
@@ -33,11 +27,11 @@ TryAddConstructionResult BraceHandler::TryAddConstructionTo(char character,
   if (!state.buffer_.empty() && state.buffer_[0] == '\\') return {false, false};
 
   if (character == '{') {
-    constructions.emplace_back(Opened, Brace);
+    constructions.emplace_back(OpenedBrace);
     return {false, false};
   }
   else if (character == '}') {
-    constructions.emplace_back(Closed, Brace);
+    constructions.emplace_back(ClosedBrace);
     return {false, false};
   }
 
@@ -49,6 +43,6 @@ BraceHandler::BraceHandler(int brace_balance) : brace_balance_(brace_balance), I
                                                                                     '}'
                                                                                 },
                                                                                 {
-                                                                                    {Opened, Brace},
-                                                                                    {Closed, Brace}
+                                                                                    OpenedBrace,
+                                                                                    ClosedBrace
                                                                                 }) {}
