@@ -20,4 +20,16 @@ class Tokenizer {
   std::unordered_map<int32_t, std::wstring> vocab_;
 };
 
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+Tokenizer* tokenizer_new(const char* json_vocab);
+void tokenizer_del(Tokenizer* tokenizer);
+
+#ifdef __cplusplus
+}
+#endif
+
 #endif //RUNTIME_SRC_TOKENIZER_TOKENIZER_H_

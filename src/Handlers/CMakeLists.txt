@@ -10,10 +10,10 @@ add_library(handlers
         Types/DollarSlashyStringHandler.cpp
         Types/IndentationHandler.cpp
 
-        HandlersMap.cpp
         IHandler.cpp
 )
 
 target_include_directories(handlers PUBLIC include ${CMAKE_CURRENT_SOURCE_DIR})
 
-target_link_libraries(handlers PUBLIC constructions analyzer_types)
+find_package(Boost REQUIRED)
+target_link_libraries(handlers PUBLIC Boost::boost constructions contexts)

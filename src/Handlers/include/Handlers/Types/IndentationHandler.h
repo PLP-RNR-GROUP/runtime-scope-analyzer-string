@@ -6,8 +6,7 @@
 #define RUNTIME_SRC_HANDLERS_TYPES_INDENTATIONHANDLER_H_
 
 #include "Handlers/IHandler.h"
-#include "AnalyzerTypes/IndentationAnalyzerState.h"
-#include "AnalyzerTypes/ScopeContext.h"
+#include "Contexts/ScopeContext.h"
 
 class IndentationHandler : public IHandler {
  public:
@@ -15,7 +14,7 @@ class IndentationHandler : public IHandler {
   HandleResult Handle(const Construction& construction,
                       const std::unique_ptr<Construction>& waiting_for_construction) override;
   TryAddConstructionResult TryAddConstructionTo(char character,
-                                                const ConstructionStreamExtractorState& state,
+                                                const boost::circular_buffer<char>& buffer,
                                                 std::list<Construction>& constructions) override;
  private:
   ScopeContext context_;

@@ -14,10 +14,10 @@ HandleResult CharacterQuoteHandler::Handle(const Construction& construction,
   return {nullptr, Continue};
 }
 TryAddConstructionResult CharacterQuoteHandler::TryAddConstructionTo(char character,
-                                                                     const ConstructionStreamExtractorState& state,
+                                                                     const boost::circular_buffer<char>& buffer,
                                                                      std::list<Construction>& constructions) {
   if (character != '\'') return {true, false};
-  if (!state.buffer_.empty() && state.buffer_[0] == '\\') return {false, false};
+  if (!buffer.empty() && buffer[0] == '\\') return {false, false};
 
   constructions.emplace_back(Quote);
   return {true, false};

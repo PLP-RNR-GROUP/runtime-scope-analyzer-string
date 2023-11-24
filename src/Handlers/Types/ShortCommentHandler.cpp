@@ -14,18 +14,18 @@ HandleResult ShortCommentHandler::Handle(const Construction& construction,
   return {nullptr, Continue};
 }
 TryAddConstructionResult ShortCommentHandler::TryAddConstructionTo(char character,
-                                                                   const ConstructionStreamExtractorState& state,
+                                                                   const boost::circular_buffer<char>& buffer,
                                                                    std::list<Construction>& constructions) {
   if (
       character == '\n' ||
-      (character == 'n' && !state.buffer_.empty() && state.buffer_[0] == '\\')) {
+      (character == 'n' && !buffer.empty() && buffer[0] == '\\')) {
     constructions.emplace_back(ClosedShortComment);
     return {true, false};
   }
 
   if (character != '/') return {true, false};
 
-  if (!state.buffer_.empty() && state.buffer_[0] == '/') {
+  if (!buffer.empty() && buffer[0] == '/') {
     constructions.emplace_back(OpenedShortComment);
     return {false, false};
   }

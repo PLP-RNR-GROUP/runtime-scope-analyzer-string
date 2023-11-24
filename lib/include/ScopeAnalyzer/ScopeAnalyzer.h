@@ -7,11 +7,11 @@
 
 #include "nlohmann/json.hpp"
 #include "Handlers/Results/AddTokenResult.h"
-#include "Constructions/ConstructionsStreamExtractor.h"
+#include "ConstructionsStreamExtractor/ConstructionsStreamExtractor.h"
 #include "AnalyzerTypes/BraceAnalyzerState.h"
 #include "AnalyzerTypes/IAnalyzer.h"
 
-#include "AnalyzerTypes/ScopeContext.h"
+#include "Contexts/ScopeContext.h"
 #include "Handlers/IHandler.h"
 #include "Languages/Language.h"
 

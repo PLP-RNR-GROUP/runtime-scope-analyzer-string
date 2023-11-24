@@ -3,7 +3,7 @@
 //
 
 #include "Handlers/Types/DollarSlashyStringHandler.h"
-#include "Handlers/HandleResult.h"
+#include "Handlers/Results/HandleResult.h"
 HandleResult DollarSlashyStringHandler::Handle(const Construction& construction,
                                                                 const std::unique_ptr<Construction>& waiting_for_construction) {
   if (waiting_for_construction != nullptr) return {nullptr, Continue};
@@ -15,16 +15,16 @@ HandleResult DollarSlashyStringHandler::Handle(const Construction& construction,
   return {nullptr, Continue};
 }
 TryAddConstructionResult DollarSlashyStringHandler::TryAddConstructionTo(char character,
-                                                                         const ConstructionStreamExtractorState& state,
+                                                                         const boost::circular_buffer<char>& buffer,
                                                                          std::list<Construction>& constructions) {
   bool add_current_char = true;
-  if (state.buffer_.empty()) return {add_current_char, false};
+  if (buffer.empty()) return {add_current_char, false};
 
-  if (character == '/' && state.buffer_[0] == '$') {
+  if (character == '/' && buffer[0] == '$') {
     constructions.emplace_back(OpenedDollarSlashyString);
     add_current_char = false;
   }
-  else if (character == '$' && state.buffer_[0] == '/') {
+  else if (character == '$' && buffer[0] == '/') {
     constructions.emplace_back(ClosedDollarSlashyString);
     add_current_char = false;
   }

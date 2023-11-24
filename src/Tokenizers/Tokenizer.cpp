@@ -295,3 +295,14 @@ Tokenizer::Tokenizer(const std::string& json_vocab) {
       {u'Ń', 173},
   };
 }
+
+
+// Обвязка методов
+
+Tokenizer* tokenizer_new(const char* json_vocab) {
+  return new Tokenizer(std::string(json_vocab));
+}
+
+void tokenizer_del(Tokenizer* tokenizer) {
+  delete tokenizer;
+}

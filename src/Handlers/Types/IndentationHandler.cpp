@@ -9,11 +9,11 @@ HandleResult IndentationHandler::Handle(const Construction& construction,
 }
 
 TryAddConstructionResult IndentationHandler::TryAddConstructionTo(char character,
-                                                                  const ConstructionStreamExtractorState& state,
+                                                                  const boost::circular_buffer<char>& buffer,
                                                                   std::list<Construction>& constructions) {
   if (
       character == '\n' ||
-          (character == 'n' && !state.buffer_.empty() && state.buffer_[0] == '\\')) {
+          (character == 'n' && !buffer.empty() && buffer[0] == '\\')) {
     line_no_chars_at_moment = true;
     current_indentation_level = 0;
     return {true, false};
@@ -22,7 +22,7 @@ TryAddConstructionResult IndentationHandler::TryAddConstructionTo(char character
   if (!line_no_chars_at_moment) return {true, false};
 
   if (character == '\t' ||
-      (character == 't' && !state.buffer_.empty() && state.buffer_[0] == '\\')) {
+      (character == 't' && !buffer.empty() && buffer[0] == '\\')) {
     current_indentation_level += context_.tab_in_spaces;
   }
   else if (character == ' ') {

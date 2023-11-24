@@ -5,12 +5,7 @@
 #ifndef RUNTIME_LIB_INCLUDE_SCOPEANALYZER_ANALYZERS_IANALYZER_H_
 #define RUNTIME_LIB_INCLUDE_SCOPEANALYZER_ANALYZERS_IANALYZER_H_
 
-#include "Languages/Language.h"
 #include "Handlers/Results/AddTokenResult.h"
-#include "ScopeContext.h"
-#include "Handlers/IHandlerList.h"
-#include "Tokenizers/Tokenizer.h"
-#include "Constructions/ConstructionsStreamExtractor.h"
 
 #include <cstdint>
 

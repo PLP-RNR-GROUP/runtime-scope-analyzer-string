@@ -8,6 +8,8 @@
 #include "Constructions/Construction.h"
 #include "Handlers/Results/AddTokenResult.h"
 
+#include <memory>
+
 struct HandleResult {
   HandleResult(std::unique_ptr<Construction> construction, AddTokenResult result)
       : construction(std::move(construction)), result(result) {}

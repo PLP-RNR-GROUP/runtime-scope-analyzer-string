@@ -1,0 +1,6 @@
+add_library(constructions_stream_extractor SHARED ConstructionsStreamExtractor.cpp)
+
+target_include_directories(constructions_stream_extractor PUBLIC include)
+
+find_package(Boost REQUIRED)
+target_link_libraries(constructions_stream_extractor PUBLIC Boost::boost tokenizers handlers_map)

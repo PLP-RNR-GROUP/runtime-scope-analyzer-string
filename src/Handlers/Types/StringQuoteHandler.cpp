@@ -3,7 +3,7 @@
 //
 
 #include "Handlers/Types/StringQuoteHandler.h"
-#include "Handlers/HandleResult.h"
+#include "Handlers/Results/HandleResult.h"
 
 HandleResult StringQuoteHandler::Handle(const Construction& construction,
                                                          const std::unique_ptr<Construction>& waiting_for_construction) {
@@ -17,10 +17,10 @@ HandleResult StringQuoteHandler::Handle(const Construction& construction,
 }
 
 TryAddConstructionResult StringQuoteHandler::TryAddConstructionTo(char character,
-                                                                  const ConstructionStreamExtractorState& state,
+                                                                  const boost::circular_buffer<char>& buffer,
                                                                   std::list<Construction>& constructions) {
   if (character != '"') return {true, false};
-  if (!state.buffer_.empty() && state.buffer_[0] == '\\') return {false, false};
+  if (!buffer.empty() && buffer[0] == '\\') return {false, false};
 
   constructions.emplace_back(DoubleQuote);
   return {true, false};
