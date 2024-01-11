@@ -14,6 +14,37 @@
 #include "Handlers/Types/IndentationHandler.h"
 #include "Handlers/Types/BraceHandler.h"
 
+template <typename Key>
+static std::unordered_map<Key, std::list<IHandler*>> clone_unordered_map(
+    const std::unordered_map<Key, std::list<IHandler*>>& map)
+{
+    std::unordered_map<Key, std::list<IHandler*>> new_map{};
+    for (const auto& [key, list] : map) {
+        std::list<IHandler*> new_list{};
+        for (const IHandler* handler : list) {
+            new_list.push_back(handler->clone());
+        }
+        new_map[key] = new_list;
+    }
+    return new_map;
+}
+
+static handlers_list_ptr copy_handlers_list_ptr(const handlers_list_ptr& handlers) {
+    handlers_list_ptr new_handlers = std::make_unique<handlers_list>();
+    for (const auto& handler_ptr : *handlers) {
+        new_handlers->push_back(handler(handler_ptr->clone()));
+    }
+    return new_handlers;
+}
+
+static std::list<IHandler*> clone_list(const std::list<IHandler*>& list) {
+    std::list<IHandler*> newList{};
+    for (auto iter : list) {
+        newList.push_back(iter->clone());
+    }
+    return newList;
+}
+
 HandlersMap::HandlersMap(handlers_list_ptr handlers, handlers_list_ptr required_handlers_for_char) {
   if (required_handlers_for_char != nullptr) {
     handlers_ = std::move(required_handlers_for_char);
@@ -29,6 +60,15 @@ HandlersMap::HandlersMap(handlers_list_ptr handlers, handlers_list_ptr required_
   for (auto& handler: *handlers) {
     Add(std::move(handler));
   }
+}
+
+HandlersMap::HandlersMap(const HandlersMap& handlersMap)
+    : char_handlers_map_(clone_unordered_map(handlersMap.char_handlers_map_))
+    , construction_handlers_map_(clone_unordered_map(handlersMap.construction_handlers_map_))
+    , handlers_(copy_handlers_list_ptr(handlersMap.handlers_))
+    , required_handlers_for_char_(clone_list(handlersMap.required_handlers_for_char_))
+    , empty_handlers_list_(clone_list(handlersMap.empty_handlers_list_))
+{
 }
 
 const std::list<IHandler*>& HandlersMap::GetHandlersFor(char character) const {

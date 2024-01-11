@@ -45,5 +45,18 @@ IndentationHandler::IndentationHandler(ScopeContext context)
                                                                                                  't',
                                                                                                  '\t',
                                                                                              },
-                                                                                             {}) {
+                                                                                             {}) {}
+IndentationHandler::IndentationHandler(const std::vector<char>& handling_text,
+                                       const std::vector<Construction>& handling_constructions,
+                                       const ScopeContext& context,
+                                       bool line_no_chars_at_moment,
+                                       int current_indentation_level)
+    : IHandler(handling_text, handling_constructions),
+      context_(context),
+      line_no_chars_at_moment(line_no_chars_at_moment),
+      current_indentation_level(current_indentation_level) {}
+
+IndentationHandler* IndentationHandler::clone() const {
+    return new IndentationHandler(handling_text, handling_constructions, context_,
+                                  line_no_chars_at_moment, current_indentation_level);
 }

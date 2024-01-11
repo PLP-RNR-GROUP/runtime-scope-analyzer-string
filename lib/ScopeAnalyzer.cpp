@@ -17,6 +17,13 @@
 #include "Analyzers/JsonAnalyzer.h"
 #include "Analyzers/PythonAnalyzer.h"
 
+
+ScopeAnalyzer::ScopeAnalyzer(const ScopeAnalyzer& scope_analyzer)
+:analyzer_(scope_analyzer.analyzer_->clone())
+,tokenizer_(scope_analyzer.tokenizer_)
+{
+}
+
 ScopeAnalyzer::ScopeAnalyzer(
     const std::string& json_vocab, ScopeContext context, Language selected_language)
     : tokenizer_(json_vocab) {

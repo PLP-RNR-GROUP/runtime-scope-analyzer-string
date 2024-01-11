@@ -13,6 +13,10 @@ class BraceAnalyzer : public BaseAnalyzer {
   BraceAnalyzer(const Tokenizer& tokenizer,
                 handlers_list_ptr handlers,
                 ScopeContext context);
+
+  BraceAnalyzer(const BraceAnalyzer& braceAnalyzer) = default;
+
+  [[nodiscard]] BraceAnalyzer* clone() const override;
 };
 
 #endif //RUNTIME_LIB_INCLUDE_SCOPEANALYZER_ANALYZERS_BRACEANALYZER_H_

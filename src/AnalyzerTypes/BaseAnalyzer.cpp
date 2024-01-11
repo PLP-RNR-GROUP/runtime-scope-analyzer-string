@@ -34,9 +34,20 @@ BaseAnalyzer::BaseAnalyzer(const Tokenizer& tokenizer,
                            ScopeContext context,
                            handlers_list_ptr handlers,
                            handlers_list_ptr required_handlers)
-    : handlers_map_(std::move(handlers), std::move(required_handlers)),
-      constructions_stream_extractor_(tokenizer, handlers_map_){
+    : handlers_map_(std::move(handlers), std::move(required_handlers))
+    , constructions_stream_extractor_(tokenizer, handlers_map_){
   ApplyContext(context);
+}
+
+BaseAnalyzer::BaseAnalyzer(const BaseAnalyzer& baseAnalyzer)
+    : handlers_map_(baseAnalyzer.handlers_map_)
+    , waiting_for_construction_(baseAnalyzer.waiting_for_construction_
+                                ? new Construction(*baseAnalyzer.waiting_for_construction_)
+                                : nullptr)
+    , constructions_stream_extractor_(baseAnalyzer.constructions_stream_extractor_) {}
+
+BaseAnalyzer* BaseAnalyzer::clone() const {
+    return new BaseAnalyzer(*this);
 }
 
 void BaseAnalyzer::ApplyContext(ScopeContext context) {

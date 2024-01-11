@@ -3,6 +3,8 @@
 //
 
 #include "Handlers/Types/BacktickHandler.h"
+
+
 HandleResult BacktickHandler::Handle(const Construction& construction,
                                      const std::unique_ptr<Construction>& waiting_for_construction) {
   if (waiting_for_construction != nullptr) return {nullptr, Continue};
@@ -12,6 +14,7 @@ HandleResult BacktickHandler::Handle(const Construction& construction,
 
   return {nullptr, Continue};
 }
+
 TryAddConstructionResult BacktickHandler::TryAddConstructionTo(char character,
                                                                const boost::circular_buffer<char>& buffer,
                                                                std::list<Construction>& constructions) {
@@ -21,6 +24,7 @@ TryAddConstructionResult BacktickHandler::TryAddConstructionTo(char character,
   constructions.emplace_back(Backtick);
   return {false, false};
 }
+
 BacktickHandler::BacktickHandler() : IHandler({
                                                   '`',
                                               },
@@ -28,4 +32,13 @@ BacktickHandler::BacktickHandler() : IHandler({
                                                   Backtick
                                               }) {
 
+}
+BacktickHandler::BacktickHandler(const std::vector<char> &handling_text,
+                                 const std::vector<Construction> &handling_constructions)
+    : IHandler(handling_text, handling_constructions)
+{
+}
+
+BacktickHandler* BacktickHandler::clone() const {
+    return new BacktickHandler(this->handling_text, this->handling_constructions);
 }

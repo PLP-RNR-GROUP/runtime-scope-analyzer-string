@@ -20,6 +20,10 @@ class BaseAnalyzer : public IAnalyzer {
                handlers_list_ptr handlers,
                handlers_list_ptr required_handlers);
 
+  BaseAnalyzer(const BaseAnalyzer& baseAnalyzer);
+
+  [[nodiscard]] BaseAnalyzer* clone() const override;
+
   HandlersMap handlers_map_;
   std::unique_ptr<Construction> waiting_for_construction_;
   ConstructionsStreamExtractor constructions_stream_extractor_;

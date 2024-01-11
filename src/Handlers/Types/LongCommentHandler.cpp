@@ -37,6 +37,11 @@ LongCommentHandler::LongCommentHandler() : IHandler({
                                                     },
                                                     {
                                                           OpenedLongComment,
-                                                    }) {
+                                                    }) {}
+LongCommentHandler::LongCommentHandler(const std::vector<char> &handling_text,
+                                       const std::vector<Construction> &handling_constructions)
+    : IHandler(handling_text, handling_constructions) {}
 
+LongCommentHandler* LongCommentHandler::clone() const {
+    return new LongCommentHandler(handling_text, handling_constructions);
 }

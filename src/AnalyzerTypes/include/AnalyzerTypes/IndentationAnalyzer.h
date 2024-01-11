@@ -14,6 +14,10 @@ class IndentationAnalyzer : public BaseAnalyzer {
                       const Tokenizer& tokenizer,
                       handlers_list_ptr handlers,
                       ScopeContext context);
+
+  IndentationAnalyzer(const IndentationAnalyzer& indentationAnalyzer) = default;
+
+  [[nodiscard]] IndentationAnalyzer* clone() const override;
 };
 
 #endif //RUNTIME_LIB_INCLUDE_SCOPEANALYZER_ANALYZERS_INDENTATIONANALYZER_H_

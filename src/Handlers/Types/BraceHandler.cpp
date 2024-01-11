@@ -46,3 +46,13 @@ BraceHandler::BraceHandler(int brace_balance) : brace_balance_(brace_balance), I
                                                                                     OpenedBrace,
                                                                                     ClosedBrace
                                                                                 }) {}
+
+BraceHandler::BraceHandler(const std::vector<char>& handling_text,
+                           const std::vector<Construction>& handling_constructions,
+                           int brace_balance)
+    : IHandler(handling_text, handling_constructions),
+      brace_balance_(brace_balance){}
+
+BraceHandler* BraceHandler::clone() const {
+    return new BraceHandler(handling_text, handling_constructions, brace_balance_);
+}

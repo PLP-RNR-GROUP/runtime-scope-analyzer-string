@@ -15,3 +15,7 @@ BraceAnalyzer::BraceAnalyzer(const Tokenizer& tokenizer,
   if (context.scope_opened) brace_balance = 1;
   handlers_map_.Add(handler(new BraceHandler(brace_balance)));
 }
+
+BraceAnalyzer* BraceAnalyzer::clone() const {
+    return new BraceAnalyzer(*this);
+}

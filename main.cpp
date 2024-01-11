@@ -5,16 +5,19 @@
 #include <fstream>
 #include <sstream>
 
+
 int main() {
-  const std::string vocabPath = "/Users/katsushooter/Projects/sber-scope/preprocessing-scope-analyzer-string/string_vocab.json";
+  const std::string vocabPath = "/home/akkyma/models/gpt_java_small/string_vocab.json";
 
   std::ifstream vocabFile = std::ifstream(vocabPath);
   std::stringstream buffer;
   buffer << vocabFile.rdbuf();
 
-  std::vector<int32_t> tokens {4690, 11192, 8228, 204, 264, 5967, 7, 936, 1272, 204, 37488, 7, 204, 264, 3901, 204};
+  std::vector<int32_t> tokens {
+      226, 372, 513, 433, 1286, 328, 349, 627, 1514, 14, 293, 204, 226, 308, 204, 98};
 
   ScopeAnalyzer analyzer(buffer.str(), ScopeContext(false, false, false, false, false, 0), Python);
+  ScopeAnalyzer analyzer2(analyzer);
   for (const auto token: tokens) {
     std::cout << analyzer.AddToken(token) << '\n';
   }

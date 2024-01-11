@@ -23,6 +23,9 @@ using json = nlohmann::json;
 
 class ScopeAnalyzer {
  public:
+
+  explicit ScopeAnalyzer(const ScopeAnalyzer& scope_analyzer);
+
   explicit ScopeAnalyzer(const std::string& json_vocab,
                          ScopeContext context,
                          Language selected_language);

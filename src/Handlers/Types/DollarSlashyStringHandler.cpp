@@ -37,6 +37,11 @@ DollarSlashyStringHandler::DollarSlashyStringHandler() : IHandler({
                                                                   },
                                                                   {
                                                                       OpenedDollarSlashyString,
-                                                                  }) {
+                                                                  }) {}
+DollarSlashyStringHandler::DollarSlashyStringHandler(const std::vector<char>& handling_text,
+                                                     const std::vector<Construction>& handling_constructions)
+    : IHandler(handling_text, handling_constructions) {}
 
+DollarSlashyStringHandler* DollarSlashyStringHandler::clone() const {
+    return new DollarSlashyStringHandler(handling_text, handling_constructions);
 }

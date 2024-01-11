@@ -39,6 +39,11 @@ ShortCommentHandler::ShortCommentHandler() : IHandler({
                                                       },
                                                       {
                                                           OpenedShortComment,
-                                                      }) {
+                                                      }) {}
+ShortCommentHandler::ShortCommentHandler(const std::vector<char> &handling_text,
+                                         const std::vector<Construction> &handling_constructions)
+    : IHandler(handling_text, handling_constructions) {}
 
+ShortCommentHandler *ShortCommentHandler::clone() const {
+    return new ShortCommentHandler(handling_text, handling_constructions);
 }

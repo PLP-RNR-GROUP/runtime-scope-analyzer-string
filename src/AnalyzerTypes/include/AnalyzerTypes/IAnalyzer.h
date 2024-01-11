@@ -20,6 +20,8 @@ class IAnalyzer {
  public:
   IAnalyzer& operator=(const IAnalyzer&) = delete;
 
+  [[nodiscard]] virtual IAnalyzer* clone() const = 0;
+
   virtual AddTokenResult AddToken(int32_t token) = 0;
 
   struct Deleter

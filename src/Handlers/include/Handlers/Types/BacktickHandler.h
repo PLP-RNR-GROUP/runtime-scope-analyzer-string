@@ -10,11 +10,14 @@
 class BacktickHandler : public IHandler {
  public:
   explicit BacktickHandler();
+  explicit BacktickHandler(const std::vector<char>& handling_text,
+                           const std::vector<Construction>& handling_constructions);
   HandleResult Handle(const Construction& construction,
                       const std::unique_ptr<Construction>& waiting_for_construction) override;
   TryAddConstructionResult TryAddConstructionTo(char character,
                                                 const boost::circular_buffer<char>& buffer,
                                                 std::list<Construction>& constructions) override;
+  [[nodiscard]] BacktickHandler* clone() const override;
 };
 
 #endif //RUNTIME_SRC_HANDLERS_TYPES_BACKTICKHANDLER_H_

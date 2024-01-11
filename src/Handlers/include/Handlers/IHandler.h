@@ -9,6 +9,7 @@
 #include "Handlers/Results/HandleResult.h"
 #include "boost/circular_buffer.hpp"
 
+#include <vector>
 #include <memory>
 #include <list>
 
@@ -31,6 +32,8 @@ class IHandler {
   virtual TryAddConstructionResult TryAddConstructionTo(char character,
                                                         const boost::circular_buffer<char>& buffer,
                                                         std::list<Construction>& constructions) = 0;
+  [[nodiscard]] virtual IHandler* clone() const = 0;
+
   const std::vector<char>& GetHandlingText() const;
   const std::vector<Construction>& GetHandlingConstructions() const;
 

@@ -11,11 +11,19 @@
 class BraceHandler : public IHandler {
  public:
   explicit BraceHandler(int brace_balance);
+  explicit BraceHandler(const std::vector<char>& handling_text,
+                        const std::vector<Construction>& handling_constructions,
+                        int brace_balance_);
+
   HandleResult Handle(const Construction& construction,
                       const std::unique_ptr<Construction>& waiting_for_construction) override;
+
   TryAddConstructionResult TryAddConstructionTo(char character,
                                                 const boost::circular_buffer<char>& buffer,
                                                 std::list<Construction>& constructions) override;
+
+  [[nodiscard]] BraceHandler* clone() const override;
+
  private:
   int brace_balance_;
 };

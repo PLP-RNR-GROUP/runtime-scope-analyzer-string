@@ -34,6 +34,11 @@ ThreeDoubleQuoteHandler::ThreeDoubleQuoteHandler() : IHandler({
                                                               },
                                                               {
                                                                   ThreeDoubleQuote
-                                                              }) {
+                                                              }) {}
+ThreeDoubleQuoteHandler::ThreeDoubleQuoteHandler(const std::vector<char> &handling_text,
+                                                 const std::vector<Construction> &handling_constructions)
+    : IHandler(handling_text, handling_constructions) {}
 
+ThreeDoubleQuoteHandler* ThreeDoubleQuoteHandler::clone() const {
+    return new ThreeDoubleQuoteHandler(handling_text, handling_constructions);
 }

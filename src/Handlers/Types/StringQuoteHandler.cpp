@@ -31,3 +31,10 @@ StringQuoteHandler::StringQuoteHandler() : IHandler({
                                                     }, {
                                                         DoubleQuote
                                                     }) {}
+StringQuoteHandler::StringQuoteHandler(const std::vector<char> &handling_text,
+                                       const std::vector<Construction> &handling_constructions)
+    : IHandler(handling_text, handling_constructions) {}
+
+StringQuoteHandler* StringQuoteHandler::clone() const {
+    return new StringQuoteHandler(handling_text, handling_constructions);
+}

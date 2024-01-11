@@ -22,5 +22,9 @@ static handlers_list_ptr getRequiredHandlers(ScopeContext context) {
 
 IndentationAnalyzer::IndentationAnalyzer(const Tokenizer& tokenizer,
                                          handlers_list_ptr handlers,
-                                         ScopeContext context) : BaseAnalyzer(tokenizer, context, std::move(handlers),
-                                                                              getRequiredHandlers(context)) {}
+                                         ScopeContext context)
+    : BaseAnalyzer(tokenizer, context, std::move(handlers), getRequiredHandlers(context)) {}
+
+IndentationAnalyzer* IndentationAnalyzer::clone() const {
+    return new IndentationAnalyzer(*this);
+}

@@ -10,9 +10,13 @@
 
 #include <map>
 #include <list>
+#include <unordered_map>
+
+
 class HandlersMap {
  public:
   explicit HandlersMap(handlers_list_ptr handlers, handlers_list_ptr required_handlers_for_char);
+  explicit HandlersMap(const HandlersMap& handlersMap);
 
   const std::list<IHandler*>& GetHandlersFor(char character) const;
   const std::list<IHandler*>& GetHandlersFor(Construction construction) const;

@@ -26,6 +26,11 @@ CharacterQuoteHandler::CharacterQuoteHandler() : IHandler({
                                                               '\'',
                                                           }, {
                                                               Quote
-                                                          }) {
+                                                          }) {}
+CharacterQuoteHandler::CharacterQuoteHandler(const std::vector<char>& handling_text,
+                                             const std::vector<Construction>& handling_constructions)
+    : IHandler(handling_text, handling_constructions) {};
 
+CharacterQuoteHandler* CharacterQuoteHandler::clone() const {
+    return new CharacterQuoteHandler(handling_text, handling_constructions);
 }
